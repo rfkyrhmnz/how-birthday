@@ -2,13 +2,13 @@ import React, { useState } from "react";
 
 const photos = [
   {
-    src: "/images/😔.png",
+    src: `${import.meta.env.BASE_URL}images/😔.png`
   },
   {
-    src: "/images/😔 (1).png",
+    src: `${import.meta.env.BASE_URL}images/😔 (1).png`,
   },
   {
-    src: "/images/=.png",
+    src: `${import.meta.env.BASE_URL}images/=.png`,
   },
 
 ];
@@ -416,7 +416,7 @@ export default function App() {
                   display: "block",
                 }}
               >
-                <source src="/videos/IMG_7966 (1).mp4" type="video/mp4" />
+                <source src={`${import.meta.env.BASE_URL}videos/IMG_7966 (1).mp4`} type="video/mp4" />
                 Browser kamu tidak mendukung video.
               </video>
             </div>
@@ -477,7 +477,7 @@ export default function App() {
                 Happy Birthday.
               </p>
               <img
-                src="/images/Untitled design.gif"
+                src={`${import.meta.env.BASE_URL}images/Untitled design.gif`}
                 alt="gif"
                 style={{
                   width: "180px",
