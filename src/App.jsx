@@ -1,55 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const photos = [
   {
-    src: `${import.meta.env.BASE_URL}images/😔.png`
+    src: `${import.meta.env.BASE_URL}images/😔.png`,
+    caption: " ",
   },
   {
     src: `${import.meta.env.BASE_URL}images/😔 (1).png`,
+    caption: " ",
   },
   {
     src: `${import.meta.env.BASE_URL}images/=.png`,
+    caption: " ",
   },
-
 ];
 
-function primaryButtonStyle(disabled = false) {
+function primaryButtonStyle(disabled = false, isMobile = false) {
   return {
-    padding: "12px 24px",
+    padding: isMobile ? "12px 20px" : "12px 24px",
     borderRadius: "999px",
     border: "none",
     background: "#cfa7b3",
     color: "white",
-    fontSize: "15px",
+    fontSize: isMobile ? "14px" : "15px",
     fontWeight: 600,
     cursor: disabled ? "not-allowed" : "pointer",
     opacity: disabled ? 0.55 : 1,
     transition: "0.2s ease",
+    width: isMobile ? "100%" : "auto",
   };
 }
 
-function secondaryButtonStyle(disabled = false) {
+function secondaryButtonStyle(disabled = false, isMobile = false) {
   return {
-    padding: "12px 24px",
+    padding: isMobile ? "12px 20px" : "12px 24px",
     borderRadius: "999px",
     border: "1px solid #e7d7dc",
     background: "white",
     color: "#7e6168",
-    fontSize: "15px",
+    fontSize: isMobile ? "14px" : "15px",
     fontWeight: 600,
     cursor: disabled ? "not-allowed" : "pointer",
     opacity: disabled ? 0.55 : 1,
     transition: "0.2s ease",
+    width: isMobile ? "100%" : "auto",
   };
 }
 
-function pageCardStyle() {
+function pageCardStyle(isMobile) {
   return {
     background: "rgba(255,255,255,0.96)",
     border: "1px solid #efe3e7",
-    borderRadius: "32px",
+    borderRadius: isMobile ? "22px" : "32px",
     boxShadow: "0 12px 35px rgba(0,0,0,0.04)",
-    padding: "40px",
+    padding: isMobile ? "22px" : "40px",
   };
 }
 
@@ -63,7 +67,7 @@ function indicator(page, currentPage) {
   };
 }
 
-function Navigation({ page, totalPages, onPrev, onNext }) {
+function Navigation({ page, totalPages, onPrev, onNext, isMobile }) {
   return (
     <div
       style={{
@@ -73,12 +77,13 @@ function Navigation({ page, totalPages, onPrev, onNext }) {
         alignItems: "center",
         gap: "14px",
         flexWrap: "wrap",
+        flexDirection: isMobile ? "column" : "row",
       }}
     >
       <button
         onClick={onPrev}
         disabled={page === 0}
-        style={secondaryButtonStyle(page === 0)}
+        style={secondaryButtonStyle(page === 0, isMobile)}
       >
         Sebelumnya
       </button>
@@ -92,7 +97,7 @@ function Navigation({ page, totalPages, onPrev, onNext }) {
       <button
         onClick={onNext}
         disabled={page === totalPages - 1}
-        style={primaryButtonStyle(page === totalPages - 1)}
+        style={primaryButtonStyle(page === totalPages - 1, isMobile)}
       >
         Selanjutnya
       </button>
@@ -103,14 +108,20 @@ function Navigation({ page, totalPages, onPrev, onNext }) {
 export default function App() {
   const [page, setPage] = useState(0);
   const totalPages = 4;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div
       style={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(180deg, #fcf8f9 0%, #faf4f6 100%)",
-        padding: "24px",
+        background: "linear-gradient(180deg, #fcf8f9 0%, #faf4f6 100%)",
+        padding: isMobile ? "14px" : "24px",
         boxSizing: "border-box",
         fontFamily: "'Quicksand', sans-serif",
         color: "#4f3d42",
@@ -120,11 +131,13 @@ export default function App() {
         {page === 0 && (
           <div
             style={{
-              ...pageCardStyle(),
-              minHeight: "82vh",
+              ...pageCardStyle(isMobile),
+              minHeight: isMobile ? "auto" : "82vh",
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: "36px",
+              gridTemplateColumns: isMobile
+                ? "1fr"
+                : "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: isMobile ? "24px" : "36px",
               alignItems: "center",
             }}
           >
@@ -145,8 +158,8 @@ export default function App() {
                 style={{
                   marginTop: "18px",
                   marginBottom: 0,
-                  fontSize: "clamp(42px, 7vw, 72px)",
-                  lineHeight: 1.08,
+                  fontSize: isMobile ? "38px" : "clamp(42px, 7vw, 72px)",
+                  lineHeight: isMobile ? 1.15 : 1.08,
                   fontWeight: 600,
                 }}
               >
@@ -168,7 +181,7 @@ export default function App() {
                 style={{
                   marginTop: "24px",
                   maxWidth: "530px",
-                  fontSize: "17px",
+                  fontSize: isMobile ? "15px" : "17px",
                   lineHeight: 1.9,
                   color: "#6d5a60",
                 }}
@@ -180,7 +193,7 @@ export default function App() {
               <div style={{ marginTop: "32px" }}>
                 <button
                   onClick={() => setPage(1)}
-                  style={primaryButtonStyle(false)}
+                  style={primaryButtonStyle(false, isMobile)}
                 >
                   Buka
                 </button>
@@ -191,19 +204,19 @@ export default function App() {
               <div
                 style={{
                   width: "100%",
-                  maxWidth: "390px",
+                  maxWidth: isMobile ? "100%" : "390px",
                   background: "#faf4f6",
                   border: "1px solid #efe3e7",
-                  borderRadius: "28px",
-                  padding: "22px",
+                  borderRadius: isMobile ? "22px" : "28px",
+                  padding: isMobile ? "16px" : "22px",
                 }}
               >
                 <div
                   style={{
                     background: "white",
                     border: "1px solid #eadde1",
-                    borderRadius: "22px",
-                    padding: "28px",
+                    borderRadius: isMobile ? "18px" : "22px",
+                    padding: isMobile ? "20px" : "28px",
                   }}
                 >
                   <p
@@ -222,7 +235,7 @@ export default function App() {
                     style={{
                       marginTop: "14px",
                       marginBottom: 0,
-                      fontSize: "30px",
+                      fontSize: isMobile ? "24px" : "30px",
                       fontWeight: 500,
                     }}
                   >
@@ -234,6 +247,7 @@ export default function App() {
                       marginTop: "18px",
                       lineHeight: 1.9,
                       color: "#6d5a60",
+                      fontSize: isMobile ? "15px" : "16px",
                     }}
                   >
                     Semoga saat kamu membuka website ini, kamu merasa tenang,
@@ -246,7 +260,7 @@ export default function App() {
         )}
 
         {page === 1 && (
-          <div style={pageCardStyle()}>
+          <div style={pageCardStyle(isMobile)}>
             <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }}>
               <p
                 style={{
@@ -264,7 +278,7 @@ export default function App() {
                 style={{
                   marginTop: "18px",
                   marginBottom: 0,
-                  fontSize: "clamp(30px, 5vw, 52px)",
+                  fontSize: isMobile ? "32px" : "clamp(30px, 5vw, 52px)",
                   fontWeight: 600,
                 }}
               >
@@ -276,7 +290,7 @@ export default function App() {
               <p
                 style={{
                   marginTop: "24px",
-                  fontSize: "17px",
+                  fontSize: isMobile ? "15px" : "17px",
                   lineHeight: 1.9,
                   color: "#6d5a60",
                 }}
@@ -290,7 +304,7 @@ export default function App() {
               <p
                 style={{
                   marginTop: "16px",
-                  fontSize: "17px",
+                  fontSize: isMobile ? "15px" : "17px",
                   lineHeight: 1.9,
                   color: "#6d5a60",
                 }}
@@ -305,7 +319,9 @@ export default function App() {
               style={{
                 marginTop: "42px",
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gridTemplateColumns: isMobile
+                  ? "1fr"
+                  : "repeat(auto-fit, minmax(220px, 1fr))",
                 gap: "20px",
               }}
             >
@@ -324,7 +340,7 @@ export default function App() {
                     alt={photo.caption}
                     style={{
                       width: "100%",
-                      height: "280px",
+                      height: isMobile ? "220px" : "280px",
                       objectFit: "cover",
                       borderRadius: "18px",
                       display: "block",
@@ -349,12 +365,13 @@ export default function App() {
               totalPages={totalPages}
               onPrev={() => setPage(0)}
               onNext={() => setPage(2)}
+              isMobile={isMobile}
             />
           </div>
         )}
 
         {page === 2 && (
-          <div style={pageCardStyle()}>
+          <div style={pageCardStyle(isMobile)}>
             <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }}>
               <p
                 style={{
@@ -372,7 +389,7 @@ export default function App() {
                 style={{
                   marginTop: "18px",
                   marginBottom: 0,
-                  fontSize: "clamp(30px, 5vw, 52px)",
+                  fontSize: isMobile ? "32px" : "clamp(30px, 5vw, 52px)",
                   fontWeight: 600,
                 }}
               >
@@ -384,7 +401,7 @@ export default function App() {
               <p
                 style={{
                   marginTop: "24px",
-                  fontSize: "17px",
+                  fontSize: isMobile ? "15px" : "17px",
                   lineHeight: 1.9,
                   color: "#6d5a60",
                 }}
@@ -396,13 +413,13 @@ export default function App() {
             <div
               style={{
                 marginTop: "36px",
-                maxWidth: "360px",
+                maxWidth: isMobile ? "100%" : "360px",
                 marginLeft: "auto",
                 marginRight: "auto",
                 background: "#faf7f8",
                 border: "1px solid #efe3e7",
-                borderRadius: "28px",
-                padding: "14px",
+                borderRadius: isMobile ? "22px" : "28px",
+                padding: isMobile ? "10px" : "14px",
               }}
             >
               <video
@@ -411,12 +428,15 @@ export default function App() {
                   width: "100%",
                   aspectRatio: "9 / 16",
                   objectFit: "cover",
-                  borderRadius: "20px",
+                  borderRadius: isMobile ? "16px" : "20px",
                   background: "#000",
                   display: "block",
                 }}
               >
-                <source src={`${import.meta.env.BASE_URL}videos/IMG_7966 (1).mp4`} type="video/mp4" />
+                <source
+                  src={`${import.meta.env.BASE_URL}videos/IMG_7966 (1).mp4`}
+                  type="video/mp4"
+                />
                 Browser kamu tidak mendukung video.
               </video>
             </div>
@@ -426,12 +446,13 @@ export default function App() {
               totalPages={totalPages}
               onPrev={() => setPage(1)}
               onNext={() => setPage(3)}
+              isMobile={isMobile}
             />
           </div>
         )}
 
         {page === 3 && (
-          <div style={{ ...pageCardStyle(), textAlign: "center" }}>
+          <div style={{ ...pageCardStyle(isMobile), textAlign: "center" }}>
             <div style={{ maxWidth: "680px", margin: "0 auto" }}>
               <p
                 style={{
@@ -449,7 +470,7 @@ export default function App() {
                 style={{
                   marginTop: "18px",
                   marginBottom: 0,
-                  fontSize: "clamp(30px, 5vw, 52px)",
+                  fontSize: isMobile ? "32px" : "clamp(30px, 5vw, 52px)",
                   fontWeight: 600,
                 }}
               >
@@ -461,30 +482,32 @@ export default function App() {
               <p
                 style={{
                   marginTop: "28px",
-                  fontSize: "17px",
+                  fontSize: isMobile ? "15px" : "17px",
                   lineHeight: 1.9,
                   color: "#6d5a60",
+                  whiteSpace: "pre-line",
                 }}
               >
-                Semoga di setiap langkahmu, kamu selalu diberi kekuatan, kesabaran, dan ketenangan dalam menjalani hari-harimu.
+                {`Semoga di setiap langkahmu, kamu selalu diberi kekuatan, kesabaran, dan ketenangan dalam menjalani hari-harimu.
 
-                Semoga semua yang sedang kamu perjuangkan di Solo dipermudah, dilancarkan, dan membawa hasil yang membanggakan untukmu.
+Semoga semua yang sedang kamu perjuangkan di Solo dipermudah, dilancarkan, dan membawa hasil yang membanggakan untukmu.
 
-                Aku akan selalu mendoakan yang terbaik untukmu, di mana pun kamu berada.
+Aku akan selalu mendoakan yang terbaik untukmu, di mana pun kamu berada.`}
               </p>
 
-              <p style={{ marginTop: "14px", fontSize: "20px", fontWeight: 600 }}>
+              <p style={{ marginTop: "14px", fontSize: isMobile ? "18px" : "20px", fontWeight: 600 }}>
                 Happy Birthday.
               </p>
+
               <img
                 src={`${import.meta.env.BASE_URL}images/Untitled design.gif`}
                 alt="gif"
                 style={{
-                  width: "180px",
+                  width: isMobile ? "130px" : "180px",
                   marginTop: "20px",
                   display: "block",
                   marginLeft: "auto",
-                  marginRight: "auto"
+                  marginRight: "auto",
                 }}
               />
 
@@ -510,18 +533,19 @@ export default function App() {
                 justifyContent: "center",
                 gap: "12px",
                 flexWrap: "wrap",
+                flexDirection: isMobile ? "column" : "row",
               }}
             >
               <button
                 onClick={() => setPage(2)}
-                style={secondaryButtonStyle(false)}
+                style={secondaryButtonStyle(false, isMobile)}
               >
                 Sebelumnya
               </button>
 
               <button
                 onClick={() => setPage(0)}
-                style={primaryButtonStyle(false)}
+                style={primaryButtonStyle(false, isMobile)}
               >
                 Kembali ke awal
               </button>
