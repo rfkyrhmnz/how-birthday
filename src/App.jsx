@@ -118,7 +118,7 @@ export default function App() {
       {/* Audio Element */}
       <audio
         ref={audioRef}
-        src="/music/shape-of-my-heart.mp3"
+        src={`${import.meta.env.BASE_URL}music/shape-of-my-heart.mp3`}
         onTimeUpdate={handleTimeUpdate}
         preload="auto"
         loop
@@ -287,7 +287,7 @@ export default function App() {
                   return (
                     <img 
                       key={`bg-${i}`} 
-                      src={photo.src} 
+                      src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`} 
                       className="bg-photo" 
                       style={{ ...bgStyles[i], animationDelay: `${i * 0.15}s` }} 
                       alt="" 
@@ -317,9 +317,9 @@ export default function App() {
                   }}
                 >
                   <img
-                    src={photo.src}
+                    src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
                     alt={`Memory ${index + 1}`}
-                    onClick={() => { setLightboxSrc(photo.src); setLightboxIndex(index); }}
+                    onClick={() => { setLightboxSrc(`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`); setLightboxIndex(index); }}
                     onError={(e) => {
                       e.target.style.display = "none";
                       e.target.parentElement.innerHTML = `
@@ -403,7 +403,7 @@ export default function App() {
                 Happy Birthday.
               </p>
               <img
-                src="/images/Untitled design.gif"
+                src={`${import.meta.env.BASE_URL}images/Untitled design.gif`}
                 alt="gif"
                 style={{
                   width: "180px",
@@ -412,7 +412,10 @@ export default function App() {
                   marginLeft: "auto",
                   marginRight: "auto"
                 }}
-                onError={(e) => e.target.style.display = 'none'}
+                onError={(e) => {
+                  console.error("GIF failed to load", e);
+                  e.target.style.display = 'none';
+                }}
               />
 
               <div
