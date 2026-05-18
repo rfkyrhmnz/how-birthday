@@ -66,6 +66,17 @@ export default function App() {
   const audioRef = useRef(null);
   const [lightboxSrc, setLightboxSrc] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (audioRef.current.paused) {
+        audioRef.current.play().catch(e => console.error("Play failed:", e));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  };
 
   // Play music when entering page 1
   useEffect(() => {
@@ -104,6 +115,8 @@ export default function App() {
         ref={audioRef}
         src="/music/shape-of-my-heart.mp3"
         onTimeUpdate={handleTimeUpdate}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
         loop
       />
 
@@ -115,6 +128,17 @@ export default function App() {
         <div className="heart"></div>
         <div className="heart"></div>
       </div>
+
+      {/* Floating Music Controller */}
+      {page > 0 && (
+        <button
+          onClick={togglePlay}
+          className={`music-toggle ${isPlaying ? "playing" : ""}`}
+          aria-label="Toggle Music"
+        >
+          {isPlaying ? "🎵" : "🔇"}
+        </button>
+      )}
 
       <div style={{ maxWidth: "1100px", width: "100%", margin: "0 auto", padding: "24px", position: "relative", zIndex: 10 }}>
         {page === 0 && (
