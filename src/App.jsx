@@ -113,6 +113,63 @@ export default function App() {
     ? photoData
     : photoData.filter((photo) => currentTime >= photo.time || maxTime >= photo.time);
 
+  // Determine camera focus state dynamically based on playback time
+  let focusIndex = -1;
+  if (page === 1) {
+    if (lyricsFinished) {
+      focusIndex = -1; // Center and frame all photos
+    } else if (currentTime >= 17.0) {
+      focusIndex = 4;
+    } else if (currentTime >= 13.0) {
+      focusIndex = 3;
+    } else if (currentTime >= 9.0) {
+      focusIndex = 2;
+    } else if (currentTime >= 5.0) {
+      focusIndex = 1;
+    } else if (currentTime >= 1.0) {
+      focusIndex = 0;
+    }
+  }
+
+  const getCameraStyle = () => {
+    if (focusIndex === -1) {
+      return {
+        transform: "scale(1) translate(0, 0)"
+      };
+    }
+    
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
+    
+    // Negative offset coordinate of each card's transform to focus it perfectly in the viewport center
+    const offsets = isMobile ? [
+      { x: 90, y: 50 },   // Card 1: translate(-90px, -50px)
+      { x: -80, y: 60 },  // Card 2: translate(80px, -60px)
+      { x: 70, y: -70 },  // Card 3: translate(-70px, 70px)
+      { x: -85, y: -80 }, // Card 4: translate(85px, 80px)
+      { x: 0, y: -15 }    // Card 5: translate(0px, 15px)
+    ] : [
+      { x: 240, y: 70 },   // Card 1: translate(-240px, -70px)
+      { x: -220, y: 90 },  // Card 2: translate(220px, -90px)
+      { x: 200, y: -110 }, // Card 3: translate(-200px, 110px)
+      { x: -210, y: -130 },// Card 4: translate(210px, 130px)
+      { x: 0, y: -20 }     // Card 5: translate(0px, 20px)
+    ];
+    
+    const offset = offsets[focusIndex] || { x: 0, y: 0 };
+    const scale = isMobile ? 1.4 : 1.45;
+    
+    return {
+      transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`
+    };
+  };
+
+  const getLyricStyle = () => {
+    // Stably centered at the top: no erratic left-right movement. Completely structured and smooth!
+    return {
+      transform: "translate(-50%, -50%)"
+    };
+  };
+
   return (
     <div className="app-container">
       {/* Audio Element */}
@@ -208,7 +265,7 @@ export default function App() {
                   }}
                   style={primaryButtonStyle(false)}
                 >
-                  Buka
+                  Open
                 </button>
               </div>
             </div>
@@ -276,62 +333,71 @@ export default function App() {
             {/* Faded Background Photos during Happy Birthday */}
             {currentLyricIndex === lyricsData.length - 1 && (
               <div className="cinematic-bg">
-                {photoData.map((photo, i) => {
-                  const bgStyles = [
-                    { top: "-50px", left: "-100px", width: "40vw", minWidth: "300px", height: "40vw", minHeight: "300px" },
-                    { top: "20px", right: "-120px", width: "35vw", minWidth: "250px", height: "35vw", minHeight: "250px" },
-                    { bottom: "-80px", left: "10px", width: "45vw", minWidth: "350px", height: "45vw", minHeight: "350px" },
-                    { bottom: "40px", right: "-60px", width: "38vw", minWidth: "280px", height: "38vw", minHeight: "280px" },
-                    { top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "50vw", minWidth: "400px", height: "50vw", minHeight: "400px" },
-                  ];
-                  return (
+                {[...photoData, photoData[0]].map((photo, i) => (
+                  <div key={`bg-${i}`} className="bg-photo-wrapper">
                     <img 
-                      key={`bg-${i}`} 
                       src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`} 
                       className="bg-photo" 
-                      style={{ ...bgStyles[i], animationDelay: `${i * 0.15}s` }} 
+                      style={{ animationDelay: `${i * 0.12}s` }} 
                       alt="" 
                     />
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             )}
 
             <div className="main-content" style={{ padding: 0, justifyContent: "center", position: "relative" }}>
-            
-            {/* Lyrics Layer (On top of photos) */}
-            <div className="lyrics-overlay">
+                       {/* Lyrics Layer (On top of photos) */}
+            <div className="lyrics-overlay" style={getLyricStyle()}>
               <h2 className="lyric-text" key={currentLyricIndex}>
-                {currentLyric}
+                {currentLyric ? (
+                  currentLyric.split(" ").map((word, i) => (
+                    <span 
+                      key={i} 
+                      className="word-span" 
+                      style={{ animationDelay: `${i * 0.15}s` }}
+                    >
+                      {word}
+                    </span>
+                  ))
+                ) : (
+                  ""
+                )}
               </h2>
             </div>
-
+ 
             {/* Photo Gallery Layer (Under lyrics) */}
-            <div className="photo-gallery">
-              {visiblePhotos.map((photo, index) => (
-                <div
-                  key={index}
-                  className="photo-card"
-                  style={{
-                    animationDelay: `${(index % 5) * 0.1}s`,
-                  }}
-                >
-                  <img
-                    src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
-                    alt={`Memory ${index + 1}`}
-                    onClick={() => { setLightboxSrc(`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`); setLightboxIndex(index); }}
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                      e.target.parentElement.innerHTML = `
-                        <div class="photo-placeholder">
-                          <span class="emoji">📸</span>
-                          <p>Photo ${index + 1}</p>
-                        </div>
-                      `;
+            <div className="photo-gallery" style={getCameraStyle()}>
+              {visiblePhotos.map((photo, index) => {
+                const isActive = focusIndex === index;
+                const isBlur = focusIndex !== -1 && !isActive;
+                const cardClass = `photo-card ${isActive ? "active-focus" : ""} ${isBlur ? "blurred-out" : ""}`;
+                return (
+                  <div
+                    key={index}
+                    className={cardClass}
+                    style={{
+                      animationDelay: `${(index % 5) * 0.1}s`,
                     }}
-                  />
-                </div>
-              ))}
+                  >
+                    <div className="photo-card-tape"></div>
+                    <img
+                      src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
+                      alt={`Memory ${index + 1}`}
+                      onClick={() => { setLightboxSrc(`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`); setLightboxIndex(index); }}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        e.target.parentElement.innerHTML = `
+                          <div class="photo-placeholder">
+                            <span class="emoji">📸</span>
+                            <p>Photo ${index + 1}</p>
+                          </div>
+                        `;
+                      }}
+                    />
+                  </div>
+                );
+              })}
             </div>
 
             {lightboxSrc && (
@@ -348,7 +414,7 @@ export default function App() {
                   onClick={() => setPage(2)} 
                   style={primaryButtonStyle(false)}
                 >
-                  Halaman Selanjutnya
+                  Next
                 </button>
               )}
             </div>
@@ -446,14 +512,14 @@ export default function App() {
                 onClick={() => setPage(1)}
                 style={secondaryButtonStyle(false)}
               >
-                Kembali ke Lagu
+                Back
               </button>
 
               <button
                 onClick={() => setPage(0)}
                 style={primaryButtonStyle(false)}
               >
-                Kembali ke awal
+                Home
               </button>
             </div>
           </div>
