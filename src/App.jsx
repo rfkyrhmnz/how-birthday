@@ -155,7 +155,7 @@ export default function App() {
                   color: "#b38c97",
                 }}
               >
-                04 April
+                04 Juni
               </p>
 
               <h1
@@ -429,7 +429,7 @@ export default function App() {
               </div>
 
               <p style={{ marginTop: "16px", color: "#8a747a", fontSize: "14px" }}>
-                04 April
+                04 Juni
               </p>
             </div>
 
