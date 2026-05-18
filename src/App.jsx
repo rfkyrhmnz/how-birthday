@@ -1,33 +1,75 @@
+<<<<<<< HEAD
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 
 function primaryButtonStyle(disabled = false) {
   return {
     padding: "12px 24px",
+=======
+import React, { useEffect, useState } from "react";
+
+const photos = [
+  {
+    src: `${import.meta.env.BASE_URL}images/😔.png`,
+    caption: " ",
+  },
+  {
+    src: `${import.meta.env.BASE_URL}images/😔 (1).png`,
+    caption: " ",
+  },
+  {
+    src: `${import.meta.env.BASE_URL}images/=.png`,
+    caption: " ",
+  },
+];
+
+function primaryButtonStyle(disabled = false, isMobile = false) {
+  return {
+    padding: isMobile ? "12px 20px" : "12px 24px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
     borderRadius: "999px",
     border: "none",
     background: "#cfa7b3",
     color: "white",
+<<<<<<< HEAD
     fontSize: "15px",
+=======
+    fontSize: isMobile ? "14px" : "15px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
     fontWeight: 600,
     cursor: disabled ? "not-allowed" : "pointer",
     opacity: disabled ? 0.55 : 1,
     transition: "0.2s ease",
+<<<<<<< HEAD
   };
 }
 
 function secondaryButtonStyle(disabled = false) {
   return {
     padding: "12px 24px",
+=======
+    width: isMobile ? "100%" : "auto",
+  };
+}
+
+function secondaryButtonStyle(disabled = false, isMobile = false) {
+  return {
+    padding: isMobile ? "12px 20px" : "12px 24px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
     borderRadius: "999px",
     border: "1px solid #e7d7dc",
     background: "white",
     color: "#7e6168",
+<<<<<<< HEAD
     fontSize: "15px",
+=======
+    fontSize: isMobile ? "14px" : "15px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
     fontWeight: 600,
     cursor: disabled ? "not-allowed" : "pointer",
     opacity: disabled ? 0.55 : 1,
     transition: "0.2s ease",
+<<<<<<< HEAD
   };
 }
 
@@ -124,6 +166,103 @@ export default function App() {
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
               gap: "36px",
+=======
+    width: isMobile ? "100%" : "auto",
+  };
+}
+
+function pageCardStyle(isMobile) {
+  return {
+    background: "rgba(255,255,255,0.96)",
+    border: "1px solid #efe3e7",
+    borderRadius: isMobile ? "22px" : "32px",
+    boxShadow: "0 12px 35px rgba(0,0,0,0.04)",
+    padding: isMobile ? "22px" : "40px",
+  };
+}
+
+function indicator(page, currentPage) {
+  return {
+    height: "8px",
+    width: currentPage === page ? "28px" : "8px",
+    borderRadius: "999px",
+    background: currentPage === page ? "#cfa7b3" : "#ead8de",
+    transition: "0.2s ease",
+  };
+}
+
+function Navigation({ page, totalPages, onPrev, onNext, isMobile }) {
+  return (
+    <div
+      style={{
+        marginTop: "40px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: "14px",
+        flexWrap: "wrap",
+        flexDirection: isMobile ? "column" : "row",
+      }}
+    >
+      <button
+        onClick={onPrev}
+        disabled={page === 0}
+        style={secondaryButtonStyle(page === 0, isMobile)}
+      >
+        Sebelumnya
+      </button>
+
+      <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+        {Array.from({ length: totalPages }).map((_, i) => (
+          <div key={i} style={indicator(i, page)} />
+        ))}
+      </div>
+
+      <button
+        onClick={onNext}
+        disabled={page === totalPages - 1}
+        style={primaryButtonStyle(page === totalPages - 1, isMobile)}
+      >
+        Selanjutnya
+      </button>
+    </div>
+  );
+}
+
+export default function App() {
+  const [page, setPage] = useState(0);
+  const totalPages = 4;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(180deg, #fcf8f9 0%, #faf4f6 100%)",
+        padding: isMobile ? "14px" : "24px",
+        boxSizing: "border-box",
+        fontFamily: "'Quicksand', sans-serif",
+        color: "#4f3d42",
+      }}
+    >
+      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+        {page === 0 && (
+          <div
+            style={{
+              ...pageCardStyle(isMobile),
+              minHeight: isMobile ? "auto" : "82vh",
+              display: "grid",
+              gridTemplateColumns: isMobile
+                ? "1fr"
+                : "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: isMobile ? "24px" : "36px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
               alignItems: "center",
             }}
           >
@@ -137,15 +276,24 @@ export default function App() {
                   color: "#b38c97",
                 }}
               >
+<<<<<<< HEAD
                 04 Juni
+=======
+                04 Juni 2005
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
               </p>
 
               <h1
                 style={{
                   marginTop: "18px",
                   marginBottom: 0,
+<<<<<<< HEAD
                   fontSize: "clamp(42px, 7vw, 72px)",
                   lineHeight: 1.08,
+=======
+                  fontSize: isMobile ? "38px" : "clamp(42px, 7vw, 72px)",
+                  lineHeight: isMobile ? 1.15 : 1.08,
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                   fontWeight: 600,
                 }}
               >
@@ -167,7 +315,11 @@ export default function App() {
                 style={{
                   marginTop: "24px",
                   maxWidth: "530px",
+<<<<<<< HEAD
                   fontSize: "17px",
+=======
+                  fontSize: isMobile ? "15px" : "17px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                   lineHeight: 1.9,
                   color: "#6d5a60",
                 }}
@@ -179,7 +331,11 @@ export default function App() {
               <div style={{ marginTop: "32px" }}>
                 <button
                   onClick={() => setPage(1)}
+<<<<<<< HEAD
                   style={primaryButtonStyle(false)}
+=======
+                  style={primaryButtonStyle(false, isMobile)}
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                 >
                   Buka
                 </button>
@@ -190,19 +346,32 @@ export default function App() {
               <div
                 style={{
                   width: "100%",
+<<<<<<< HEAD
                   maxWidth: "390px",
                   background: "#faf4f6",
                   border: "1px solid #efe3e7",
                   borderRadius: "28px",
                   padding: "22px",
+=======
+                  maxWidth: isMobile ? "100%" : "390px",
+                  background: "#faf4f6",
+                  border: "1px solid #efe3e7",
+                  borderRadius: isMobile ? "22px" : "28px",
+                  padding: isMobile ? "16px" : "22px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                 }}
               >
                 <div
                   style={{
                     background: "white",
                     border: "1px solid #eadde1",
+<<<<<<< HEAD
                     borderRadius: "22px",
                     padding: "28px",
+=======
+                    borderRadius: isMobile ? "18px" : "22px",
+                    padding: isMobile ? "20px" : "28px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                   }}
                 >
                   <p
@@ -221,7 +390,11 @@ export default function App() {
                     style={{
                       marginTop: "14px",
                       marginBottom: 0,
+<<<<<<< HEAD
                       fontSize: "30px",
+=======
+                      fontSize: isMobile ? "24px" : "30px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                       fontWeight: 500,
                     }}
                   >
@@ -233,6 +406,10 @@ export default function App() {
                       marginTop: "18px",
                       lineHeight: 1.9,
                       color: "#6d5a60",
+<<<<<<< HEAD
+=======
+                      fontSize: isMobile ? "15px" : "16px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                     }}
                   >
                     Semoga saat kamu membuka website ini, kamu merasa tenang,
@@ -245,6 +422,7 @@ export default function App() {
         )}
 
         {page === 1 && (
+<<<<<<< HEAD
           <>
             {/* Faded Background Photos during Happy Birthday */}
             {currentLyricIndex === lyricsData.length - 1 && (
@@ -287,10 +465,86 @@ export default function App() {
                   className="photo-card"
                   style={{
                     animationDelay: `${(index % 5) * 0.1}s`,
+=======
+          <div style={pageCardStyle(isMobile)}>
+            <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "12px",
+                  letterSpacing: "0.25em",
+                  textTransform: "uppercase",
+                  color: "#b38c97",
+                }}
+              >
+                A little note
+              </p>
+
+              <h2
+                style={{
+                  marginTop: "18px",
+                  marginBottom: 0,
+                  fontSize: isMobile ? "32px" : "clamp(30px, 5vw, 52px)",
+                  fontWeight: 600,
+                }}
+              >
+                <span style={{ fontFamily: "'Pacifico', cursive" }}>
+                  Untuk kamu
+                </span>
+              </h2>
+
+              <p
+                style={{
+                  marginTop: "24px",
+                  fontSize: isMobile ? "15px" : "17px",
+                  lineHeight: 1.9,
+                  color: "#6d5a60",
+                }}
+              >
+                Selamat ulang tahun. Terima kasih sudah hadir di hidupku dan
+                menjadi salah satu bagian paling indah di dalamnya. Aku
+                bersyukur bisa punya banyak cerita, tawa, dan kenangan bareng
+                kamu.
+              </p>
+
+              <p
+                style={{
+                  marginTop: "16px",
+                  fontSize: isMobile ? "15px" : "17px",
+                  lineHeight: 1.9,
+                  color: "#6d5a60",
+                }}
+              >
+                Di umurmu yang baru, aku berharap kamu selalu sehat, tenang,
+                dan dikelilingi banyak hal baik. Aku bangga sama semua usaha
+                dan perjuanganmu, dan aku akan selalu mendukung kamu.
+              </p>
+            </div>
+
+            <div
+              style={{
+                marginTop: "42px",
+                display: "grid",
+                gridTemplateColumns: isMobile
+                  ? "1fr"
+                  : "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: "20px",
+              }}
+            >
+              {photos.map((photo, index) => (
+                <div
+                  key={index}
+                  style={{
+                    background: "#faf7f8",
+                    border: "1px solid #efe3e7",
+                    borderRadius: "24px",
+                    padding: "12px",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                   }}
                 >
                   <img
                     src={photo.src}
+<<<<<<< HEAD
                     alt={`Memory ${index + 1}`}
                     onClick={() => { setLightboxSrc(photo.src); setLightboxIndex(index); }}
                     onError={(e) => {
@@ -303,10 +557,32 @@ export default function App() {
                       `;
                     }}
                   />
+=======
+                    alt={photo.caption}
+                    style={{
+                      width: "100%",
+                      height: isMobile ? "220px" : "280px",
+                      objectFit: "cover",
+                      borderRadius: "18px",
+                      display: "block",
+                    }}
+                  />
+                  <p
+                    style={{
+                      marginTop: "14px",
+                      marginBottom: "4px",
+                      textAlign: "center",
+                      color: "#7a666d",
+                    }}
+                  >
+                    {photo.caption}
+                  </p>
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                 </div>
               ))}
             </div>
 
+<<<<<<< HEAD
             {lightboxSrc && (
               <div className="lightbox" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }}>
                 <img src={lightboxSrc} alt="Enlarged" onClick={(e) => e.stopPropagation()} />
@@ -331,6 +607,101 @@ export default function App() {
 
         {page === 2 && (
           <div style={{ ...pageCardStyle(), textAlign: "center" }}>
+=======
+            <Navigation
+              page={page}
+              totalPages={totalPages}
+              onPrev={() => setPage(0)}
+              onNext={() => setPage(2)}
+              isMobile={isMobile}
+            />
+          </div>
+        )}
+
+        {page === 2 && (
+          <div style={pageCardStyle(isMobile)}>
+            <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "12px",
+                  letterSpacing: "0.25em",
+                  textTransform: "uppercase",
+                  color: "#b38c97",
+                }}
+              >
+                Our video
+              </p>
+
+              <h2
+                style={{
+                  marginTop: "18px",
+                  marginBottom: 0,
+                  fontSize: isMobile ? "32px" : "clamp(30px, 5vw, 52px)",
+                  fontWeight: 600,
+                }}
+              >
+                <span style={{ fontFamily: "'Pacifico', cursive" }}>
+                  Our Moment
+                </span>
+              </h2>
+
+              <p
+                style={{
+                  marginTop: "24px",
+                  fontSize: isMobile ? "15px" : "17px",
+                  lineHeight: 1.9,
+                  color: "#6d5a60",
+                }}
+              >
+                21 - 03 - 2026, Murakabe 🍜😋
+              </p>
+            </div>
+
+            <div
+              style={{
+                marginTop: "36px",
+                maxWidth: isMobile ? "100%" : "360px",
+                marginLeft: "auto",
+                marginRight: "auto",
+                background: "#faf7f8",
+                border: "1px solid #efe3e7",
+                borderRadius: isMobile ? "22px" : "28px",
+                padding: isMobile ? "10px" : "14px",
+              }}
+            >
+              <video
+                controls
+                style={{
+                  width: "100%",
+                  aspectRatio: "9 / 16",
+                  objectFit: "cover",
+                  borderRadius: isMobile ? "16px" : "20px",
+                  background: "#000",
+                  display: "block",
+                }}
+              >
+                <source
+                  src={`${import.meta.env.BASE_URL}videos/IMG_7966 (1).mp4`}
+                  type="video/mp4"
+                />
+                Browser kamu tidak mendukung video.
+              </video>
+            </div>
+
+            <Navigation
+              page={page}
+              totalPages={totalPages}
+              onPrev={() => setPage(1)}
+              onNext={() => setPage(3)}
+              isMobile={isMobile}
+            />
+          </div>
+        )}
+
+        {page === 3 && (
+          <div style={{ ...pageCardStyle(isMobile), textAlign: "center" }}>
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
             <div style={{ maxWidth: "680px", margin: "0 auto" }}>
               <p
                 style={{
@@ -348,7 +719,11 @@ export default function App() {
                 style={{
                   marginTop: "18px",
                   marginBottom: 0,
+<<<<<<< HEAD
                   fontSize: "clamp(30px, 5vw, 52px)",
+=======
+                  fontSize: isMobile ? "32px" : "clamp(30px, 5vw, 52px)",
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
                   fontWeight: 600,
                 }}
               >
@@ -360,6 +735,7 @@ export default function App() {
               <p
                 style={{
                   marginTop: "28px",
+<<<<<<< HEAD
                   fontSize: "17px",
                   lineHeight: 1.9,
                   color: "#6d5a60",
@@ -386,6 +762,35 @@ export default function App() {
                   marginRight: "auto"
                 }}
                 onError={(e) => e.target.style.display = 'none'}
+=======
+                  fontSize: isMobile ? "15px" : "17px",
+                  lineHeight: 1.9,
+                  color: "#6d5a60",
+                  whiteSpace: "pre-line",
+                }}
+              >
+                {`Semoga di setiap langkahmu, kamu selalu diberi kekuatan, kesabaran, dan ketenangan dalam menjalani hari-harimu.
+
+Semoga semua yang sedang kamu perjuangkan di Solo dipermudah, dilancarkan, dan membawa hasil yang membanggakan untukmu.
+
+Aku akan selalu mendoakan yang terbaik untukmu, di mana pun kamu berada.`}
+              </p>
+
+              <p style={{ marginTop: "14px", fontSize: isMobile ? "18px" : "20px", fontWeight: 600 }}>
+                Happy Birthday.
+              </p>
+
+              <img
+                src={`${import.meta.env.BASE_URL}images/Untitled design.gif`}
+                alt="gif"
+                style={{
+                  width: isMobile ? "130px" : "180px",
+                  marginTop: "20px",
+                  display: "block",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
               />
 
               <div
@@ -399,7 +804,11 @@ export default function App() {
               </div>
 
               <p style={{ marginTop: "16px", color: "#8a747a", fontSize: "14px" }}>
+<<<<<<< HEAD
                 04 Juni
+=======
+                04 Juni 2005
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
               </p>
             </div>
 
@@ -410,6 +819,7 @@ export default function App() {
                 justifyContent: "center",
                 gap: "12px",
                 flexWrap: "wrap",
+<<<<<<< HEAD
               }}
             >
               <button
@@ -417,11 +827,25 @@ export default function App() {
                 style={secondaryButtonStyle(false)}
               >
                 Kembali ke Lagu
+=======
+                flexDirection: isMobile ? "column" : "row",
+              }}
+            >
+              <button
+                onClick={() => setPage(2)}
+                style={secondaryButtonStyle(false, isMobile)}
+              >
+                Sebelumnya
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
               </button>
 
               <button
                 onClick={() => setPage(0)}
+<<<<<<< HEAD
                 style={primaryButtonStyle(false)}
+=======
+                style={primaryButtonStyle(false, isMobile)}
+>>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
               >
                 Kembali ke awal
               </button>
