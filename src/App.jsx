@@ -63,20 +63,11 @@ const photoData = [
 export default function App() {
   const [page, setPage] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [maxTime, setMaxTime] = useState(0);
+  const [lyricsFinished, setLyricsFinished] = useState(false);
   const audioRef = useRef(null);
   const [lightboxSrc, setLightboxSrc] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (audioRef.current.paused) {
-        audioRef.current.play().catch(e => console.error("Play failed:", e));
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  };
 
   // Play music when entering page 1
   useEffect(() => {
@@ -87,26 +78,40 @@ export default function App() {
     } else if (page === 0 && audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
+      setCurrentTime(0);
+      setMaxTime(0);
+      setLyricsFinished(false);
     }
   }, [page]);
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime);
+      const time = audioRef.current.currentTime;
+      setCurrentTime(time);
+      if (time > maxTime) {
+        setMaxTime(time);
+      }
+      if (time >= 19.0 || maxTime >= 19.0) {
+        setLyricsFinished(true);
+      }
     }
   };
 
   // Find the current lyric based on time
-  const currentLyricIndex = lyricsData.findIndex((lyric, index) => {
-    const nextLyricTime = lyricsData[index + 1]?.time || Infinity;
-    return currentTime >= lyric.time && currentTime < nextLyricTime;
-  });
+  const currentLyricIndex = lyricsFinished 
+    ? lyricsData.length - 1 
+    : lyricsData.findIndex((lyric, index) => {
+        const nextLyricTime = lyricsData[index + 1]?.time || Infinity;
+        return currentTime >= lyric.time && currentTime < nextLyricTime;
+      });
 
   const currentLyric =
     currentLyricIndex !== -1 ? lyricsData[currentLyricIndex].text : "";
 
   // Find photos that should be visible up to the current time
-  const visiblePhotos = photoData.filter((photo) => currentTime >= photo.time);
+  const visiblePhotos = lyricsFinished
+    ? photoData
+    : photoData.filter((photo) => currentTime >= photo.time || maxTime >= photo.time);
 
   return (
     <div className="app-container">
@@ -115,8 +120,7 @@ export default function App() {
         ref={audioRef}
         src="/music/shape-of-my-heart.mp3"
         onTimeUpdate={handleTimeUpdate}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
+        preload="auto"
         loop
       />
 
@@ -128,17 +132,6 @@ export default function App() {
         <div className="heart"></div>
         <div className="heart"></div>
       </div>
-
-      {/* Floating Music Controller */}
-      {page > 0 && (
-        <button
-          onClick={togglePlay}
-          className={`music-toggle ${isPlaying ? "playing" : ""}`}
-          aria-label="Toggle Music"
-        >
-          {isPlaying ? "🎵" : "🔇"}
-        </button>
-      )}
 
       <div style={{ maxWidth: "1100px", width: "100%", margin: "0 auto", padding: "24px", position: "relative", zIndex: 10 }}>
         {page === 0 && (
@@ -205,6 +198,9 @@ export default function App() {
                 <button
                   onClick={() => {
                     setPage(1);
+                    setCurrentTime(0);
+                    setMaxTime(0);
+                    setLyricsFinished(false);
                     if (audioRef.current) {
                       audioRef.current.currentTime = 0;
                       audioRef.current.play().catch(e => console.error("Play failed:", e));
