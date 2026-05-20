@@ -406,15 +406,15 @@
 }
 
 .lyric-text {
-  font-size: clamp(32px, 6vw, 56px);
+  font-size: clamp(22px, 4.5vw, 56px);
   font-family: 'Pacifico', cursive;
   text-align: center;
-  padding: 20px;
+  padding: 20px 10px;
   margin: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px 16px;
+  gap: 4px 10px;
   line-height: 1.4;
   z-index: 10;
   animation: floatLyrics 4s ease-in-out infinite;
