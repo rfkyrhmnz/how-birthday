@@ -207,7 +207,7 @@ export default function App() {
         <div className="heart"></div>
       </div>
 
-      <div style={{ maxWidth: "1100px", width: "100%", margin: "0 auto", padding: "24px", position: "relative", zIndex: 10 }}>
+      <div className="content-scaler">
         {page === 0 && (
           <div
             className="page-card-enter scrapbook-card"
