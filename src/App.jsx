@@ -58,6 +58,19 @@ export default function App() {
   const audioRef = useRef(null);
   const [lightboxSrc, setLightboxSrc] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [fadeTransition, setFadeTransition] = useState(false);
+
+  // Preload all images so they appear instantly during the animation
+  useEffect(() => {
+    const imagesToPreload = [
+      ...photoData.map(p => p.src),
+      "/images/cute_cloud.png"
+    ];
+    imagesToPreload.forEach(src => {
+      const img = new Image();
+      img.src = `${import.meta.env.BASE_URL}${src.replace(/^\//, '')}`;
+    });
+  }, []);
 
   // Play music when entering page 1
   useEffect(() => {
@@ -209,7 +222,7 @@ export default function App() {
             {/* Scrapbook Background Dots & Tapes */}
             <div className="scrapbook-tape-tl"></div>
             <div className="scrapbook-tape-br"></div>
-            
+
             {/* Decorative Doodle Star (Top Left) */}
             <svg className="doodle-star" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ top: '30px', left: '40px', transform: 'rotate(15deg)' }}>
               <path d="M20 5 L20 35 M5 20 L35 20 M10 10 L30 30 M10 30 L30 10" />
@@ -358,6 +371,24 @@ export default function App() {
 
         {page === 1 && (
           <>
+            <div className="page-fade-out" />
+
+            {/* Side Clouds Overlay */}
+            <div className={`side-clouds ${currentLyricIndex === lyricsData.length - 1 ? 'hidden' : ''}`}>
+              <svg className="cloud-corner tl-cloud" viewBox="0 0 24 24" fill="#ffffff" opacity="0.6">
+                <path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5 0-2.435-1.92-4.417-4.331-4.495.361-3.69-2.585-6.903-6.27-7.005-3.32-.092-6.19 2.21-6.837 5.438-2.616.48-4.562 2.766-4.562 5.562 0 3.037 2.463 5.5 5.5 5.5h12z" />
+              </svg>
+              <svg className="cloud-corner tr-cloud" viewBox="0 0 24 24" fill="#ffffff" opacity="0.4">
+                <path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5 0-2.435-1.92-4.417-4.331-4.495.361-3.69-2.585-6.903-6.27-7.005-3.32-.092-6.19 2.21-6.837 5.438-2.616.48-4.562 2.766-4.562 5.562 0 3.037 2.463 5.5 5.5 5.5h12z" />
+              </svg>
+              <svg className="cloud-corner bl-cloud" viewBox="0 0 24 24" fill="#fcf0f3" opacity="0.7">
+                <path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5 0-2.435-1.92-4.417-4.331-4.495.361-3.69-2.585-6.903-6.27-7.005-3.32-.092-6.19 2.21-6.837 5.438-2.616.48-4.562 2.766-4.562 5.562 0 3.037 2.463 5.5 5.5 5.5h12z" />
+              </svg>
+              <svg className="cloud-corner br-cloud" viewBox="0 0 24 24" fill="#ffffff" opacity="0.5">
+                <path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5 0-2.435-1.92-4.417-4.331-4.495.361-3.69-2.585-6.903-6.27-7.005-3.32-.092-6.19 2.21-6.837 5.438-2.616.48-4.562 2.766-4.562 5.562 0 3.037 2.463 5.5 5.5 5.5h12z" />
+              </svg>
+            </div>
+
             {/* Faded Background Photos during Happy Birthday */}
             {currentLyricIndex === lyricsData.length - 1 && (
               <div className="cinematic-bg">
@@ -471,7 +502,7 @@ export default function App() {
           <div className="page-card-enter scrapbook-card" style={{ textAlign: "center" }}>
             <div className="scrapbook-tape-tl"></div>
             <div className="scrapbook-tape-br"></div>
-            
+
             {/* Decorative Elements for Page 2 */}
             <svg className="doodle-star" width="50" height="50" viewBox="0 0 40 40" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ top: '40px', right: '50px', transform: 'rotate(-10deg)' }}>
               <path d="M20 5 L20 35 M5 20 L35 20 M10 10 L30 30 M10 30 L30 10" />
@@ -517,8 +548,8 @@ export default function App() {
                   color: "#6d5a60",
                 }}
               >
-                Semoga di setiap langkahmu, kamu selalu diberi kekuatan, kesabaran, dan ketenangan dalam menjalani hari-harimu.<br/><br/>
-                Semoga semua yang sedang kamu perjuangkan di Solo dipermudah, dilancarkan, dan membawa hasil yang membanggakan untukmu.<br/><br/>
+                Semoga di setiap langkahmu, kamu selalu diberi kekuatan, kesabaran, dan ketenangan dalam menjalani hari-harimu.<br /><br />
+                Semoga semua yang sedang kamu perjuangkan di Solo dipermudah, dilancarkan, dan membawa hasil yang membanggakan untukmu.<br /><br />
                 Aku akan selalu mendoakan yang terbaik untukmu, di mana pun kamu berada.
               </p>
 
