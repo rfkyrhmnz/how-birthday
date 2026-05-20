@@ -207,6 +207,8 @@ export default function App() {
         <div className="heart"></div>
       </div>
 
+      {page === 1 && <div className="page-fade-out" />}
+      
       <div className="content-scaler">
         {page === 0 && (
           <div
@@ -371,8 +373,6 @@ export default function App() {
 
         {page === 1 && (
           <>
-            <div className="page-fade-out" />
-
             {/* Side Clouds Overlay */}
             <div className={`side-clouds ${currentLyricIndex === lyricsData.length - 1 ? 'hidden' : ''}`}>
               <svg className="cloud-corner tl-cloud" viewBox="0 0 24 24" fill="#ffffff" opacity="0.6">
