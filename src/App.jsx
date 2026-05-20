@@ -208,6 +208,22 @@ export default function App() {
       </div>
 
       {page === 1 && <div className="page-fade-out" />}
+
+      {/* Faded Background Photos during Happy Birthday */}
+      {page === 1 && currentLyricIndex === lyricsData.length - 1 && (
+        <div className="cinematic-bg">
+          {[...photoData, photoData[0]].map((photo, i) => (
+            <div key={`bg-${i}`} className="bg-photo-wrapper">
+              <img
+                src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
+                className="bg-photo"
+                style={{ animationDelay: `${i * 0.12}s` }}
+                alt=""
+              />
+            </div>
+          ))}
+        </div>
+      )}
       
       <div className="content-scaler">
         {page === 0 && (
@@ -388,22 +404,6 @@ export default function App() {
                 <path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5 0-2.435-1.92-4.417-4.331-4.495.361-3.69-2.585-6.903-6.27-7.005-3.32-.092-6.19 2.21-6.837 5.438-2.616.48-4.562 2.766-4.562 5.562 0 3.037 2.463 5.5 5.5 5.5h12z" />
               </svg>
             </div>
-
-            {/* Faded Background Photos during Happy Birthday */}
-            {currentLyricIndex === lyricsData.length - 1 && (
-              <div className="cinematic-bg">
-                {[...photoData, photoData[0]].map((photo, i) => (
-                  <div key={`bg-${i}`} className="bg-photo-wrapper">
-                    <img
-                      src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
-                      className="bg-photo"
-                      style={{ animationDelay: `${i * 0.12}s` }}
-                      alt=""
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
 
             <div className="main-content" style={{ padding: 0, justifyContent: "center", position: "relative" }}>
               {/* Lyrics Layer (On top of photos) */}
