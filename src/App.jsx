@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import "./App.css";
 
 function primaryButtonStyle(disabled = false) {
@@ -31,17 +31,7 @@ function secondaryButtonStyle(disabled = false) {
   };
 }
 
-function pageCardStyle() {
-  return {
-    background: "rgba(255,255,255,0.96)",
-    border: "1px solid #efe3e7",
-    borderRadius: "32px",
-    boxShadow: "0 12px 35px rgba(0,0,0,0.04)",
-    padding: "40px",
-    position: "relative",
-    zIndex: 10,
-  };
-}
+
 
 // Approximate lyrics timings for the short chorus snippet
 const lyricsData = [
@@ -73,7 +63,7 @@ export default function App() {
   useEffect(() => {
     if (page === 1 && audioRef.current && audioRef.current.paused) {
       // Start from 0 since the audio file itself starts at the chorus
-      audioRef.current.currentTime = 0; 
+      audioRef.current.currentTime = 0;
       audioRef.current.play().catch(e => console.error("Auto-play failed:", e));
     } else if (page === 0 && audioRef.current) {
       audioRef.current.pause();
@@ -98,15 +88,29 @@ export default function App() {
   };
 
   // Find the current lyric based on time
-  const currentLyricIndex = lyricsFinished 
-    ? lyricsData.length - 1 
+  const currentLyricIndex = lyricsFinished
+    ? lyricsData.length - 1
     : lyricsData.findIndex((lyric, index) => {
-        const nextLyricTime = lyricsData[index + 1]?.time || Infinity;
-        return currentTime >= lyric.time && currentTime < nextLyricTime;
-      });
+      const nextLyricTime = lyricsData[index + 1]?.time || Infinity;
+      return currentTime >= lyric.time && currentTime < nextLyricTime;
+    });
 
   const currentLyric =
     currentLyricIndex !== -1 ? lyricsData[currentLyricIndex].text : "";
+
+  // Generate floating notes that only change when the current lyric changes
+  const currentNotes = useMemo(() => {
+    if (!currentLyric) return [];
+    return [...Array(6)].map((_, i) => ({
+      id: `note-${currentLyricIndex}-${i}`,
+      left: Math.random() * 100, // 0 to 100%
+      top: 30 + Math.random() * 70, // 30% to 100%
+      duration: 1.5 + Math.random() * 1.5,
+      delay: Math.random() * 0.4,
+      size: 16 + Math.random() * 14,
+      emoji: ["🎵", "🎶", "✨", "💖", "💫"][Math.floor(Math.random() * 5)]
+    }));
+  }, [currentLyricIndex, currentLyric]);
 
   // Find photos that should be visible up to the current time
   const visiblePhotos = lyricsFinished
@@ -137,9 +141,9 @@ export default function App() {
         transform: "scale(1) translate(0, 0)"
       };
     }
-    
+
     const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
-    
+
     // Negative offset coordinate of each card's transform to focus it perfectly in the viewport center
     const offsets = isMobile ? [
       { x: 90, y: 50 },   // Card 1: translate(-90px, -50px)
@@ -154,10 +158,10 @@ export default function App() {
       { x: -210, y: -130 },// Card 4: translate(210px, 130px)
       { x: 0, y: -20 }     // Card 5: translate(0px, 20px)
     ];
-    
+
     const offset = offsets[focusIndex] || { x: 0, y: 0 };
     const scale = isMobile ? 1.4 : 1.45;
-    
+
     return {
       transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`
     };
@@ -193,8 +197,8 @@ export default function App() {
       <div style={{ maxWidth: "1100px", width: "100%", margin: "0 auto", padding: "24px", position: "relative", zIndex: 10 }}>
         {page === 0 && (
           <div
+            className="page-card-enter scrapbook-card"
             style={{
-              ...pageCardStyle(),
               minHeight: "82vh",
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
@@ -202,7 +206,24 @@ export default function App() {
               alignItems: "center",
             }}
           >
-            <div>
+            {/* Scrapbook Background Dots & Tapes */}
+            <div className="scrapbook-tape-tl"></div>
+            <div className="scrapbook-tape-br"></div>
+            
+            {/* Decorative Doodle Star (Top Left) */}
+            <svg className="doodle-star" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ top: '30px', left: '40px', transform: 'rotate(15deg)' }}>
+              <path d="M20 5 L20 35 M5 20 L35 20 M10 10 L30 30 M10 30 L30 10" />
+            </svg>
+
+            {/* Decorative Botanical Branch (Bottom Left) */}
+            <svg className="botanical-branch" width="80" height="120" viewBox="0 0 60 100" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ bottom: '20px', left: '20px', transform: 'rotate(15deg)' }}>
+              <path d="M30 100 Q 30 50, 45 0" />
+              <path d="M30 80 Q 15 70, 10 50 Q 20 50, 30 70" />
+              <path d="M32 60 Q 50 50, 55 30 Q 40 30, 35 50" />
+              <path d="M35 40 Q 20 30, 15 10 Q 30 15, 38 30" />
+            </svg>
+
+            <div style={{ position: "relative", zIndex: 10 }}>
               <p
                 style={{
                   margin: 0,
@@ -230,8 +251,12 @@ export default function App() {
                 <span
                   style={{
                     display: "block",
-                    marginTop: "10px",
-                    color: "#c69ca8",
+                    marginTop: "5px",
+                    color: "#cfa7b3",
+                    fontFamily: "'Pacifico', cursive",
+                    fontSize: "clamp(54px, 12vw, 82px)",
+                    fontWeight: 400,
+                    letterSpacing: "2px",
                   }}
                 >
                   Cindy.
@@ -240,15 +265,15 @@ export default function App() {
 
               <p
                 style={{
-                  marginTop: "24px",
-                  maxWidth: "530px",
-                  fontSize: "17px",
-                  lineHeight: 1.9,
-                  color: "#6d5a60",
+                  marginTop: "30px",
+                  maxWidth: "480px",
+                  fontSize: "clamp(14px, 4vw, 16px)",
+                  lineHeight: 2.1,
+                  color: "#8a747a",
+                  fontWeight: 500,
                 }}
               >
-                Sebuah halaman kecil yang aku buat khusus untuk kamu. Isinya
-                sederhana, lembut, dan penuh rasa sayang untuk hari spesialmu.
+                Sebuah halaman kecil yang aku buat khusus untuk kamu. Isinya sederhana, lembut, dan penuh rasa sayang untuk hari spesialmu.
               </p>
 
               <div style={{ marginTop: "32px" }}>
@@ -274,25 +299,27 @@ export default function App() {
               <div
                 style={{
                   width: "100%",
-                  maxWidth: "390px",
-                  background: "#faf4f6",
-                  border: "1px solid #efe3e7",
+                  maxWidth: "400px",
+                  background: "rgba(250, 244, 246, 0.6)",
+                  border: "1px solid #f5eaed",
                   borderRadius: "28px",
-                  padding: "22px",
+                  padding: "16px",
+                  boxShadow: "0 15px 40px rgba(200, 150, 160, 0.08)",
                 }}
               >
                 <div
                   style={{
-                    background: "white",
-                    border: "1px solid #eadde1",
-                    borderRadius: "22px",
-                    padding: "28px",
+                    background: "linear-gradient(135deg, #ffffff 0%, #fdf9fa 100%)",
+                    border: "1px solid #f0e1e5",
+                    borderRadius: "20px",
+                    padding: "36px 30px",
+                    position: "relative",
                   }}
                 >
                   <p
                     style={{
                       margin: 0,
-                      fontSize: "12px",
+                      fontSize: "clamp(10px, 3vw, 12px)",
                       letterSpacing: "0.22em",
                       textTransform: "uppercase",
                       color: "#b38c97",
@@ -303,13 +330,14 @@ export default function App() {
 
                   <h2
                     style={{
-                      marginTop: "14px",
+                      marginTop: "16px",
                       marginBottom: 0,
-                      fontSize: "30px",
-                      fontWeight: 500,
+                      fontSize: "clamp(24px, 6vw, 32px)",
+                      fontWeight: 600,
+                      color: "#6d5a60",
                     }}
                   >
-                    on your special day
+                    on your <span style={{ fontFamily: "'Pacifico', cursive", color: "#cfa7b3", fontWeight: 400, letterSpacing: "1px" }}>special</span> day
                   </h2>
 
                   <p
@@ -335,11 +363,11 @@ export default function App() {
               <div className="cinematic-bg">
                 {[...photoData, photoData[0]].map((photo, i) => (
                   <div key={`bg-${i}`} className="bg-photo-wrapper">
-                    <img 
-                      src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`} 
-                      className="bg-photo" 
-                      style={{ animationDelay: `${i * 0.12}s` }} 
-                      alt="" 
+                    <img
+                      src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
+                      className="bg-photo"
+                      style={{ animationDelay: `${i * 0.12}s` }}
+                      alt=""
                     />
                   </div>
                 ))}
@@ -347,84 +375,115 @@ export default function App() {
             )}
 
             <div className="main-content" style={{ padding: 0, justifyContent: "center", position: "relative" }}>
-                       {/* Lyrics Layer (On top of photos) */}
-            <div className="lyrics-overlay" style={getLyricStyle()}>
-              <h2 className="lyric-text" key={currentLyricIndex}>
-                {currentLyric ? (
-                  currentLyric.split(" ").map((word, i) => (
-                    <span 
-                      key={i} 
-                      className="word-span" 
-                      style={{ animationDelay: `${i * 0.15}s` }}
-                    >
-                      {word}
-                    </span>
-                  ))
-                ) : (
-                  ""
-                )}
-              </h2>
-            </div>
- 
-            {/* Photo Gallery Layer (Under lyrics) */}
-            <div className="photo-gallery" style={getCameraStyle()}>
-              {visiblePhotos.map((photo, index) => {
-                const isActive = focusIndex === index;
-                const isBlur = focusIndex !== -1 && !isActive;
-                const cardClass = `photo-card ${isActive ? "active-focus" : ""} ${isBlur ? "blurred-out" : ""}`;
-                return (
+              {/* Lyrics Layer (On top of photos) */}
+              <div className="lyrics-overlay" style={getLyricStyle()}>
+                <h2 className="lyric-text" key={currentLyricIndex}>
+                  {currentLyric ? (
+                    currentLyric.split(" ").map((word, i) => (
+                      <span
+                        key={i}
+                        className="word-span"
+                        style={{ animationDelay: `${i * 0.12}s` }}
+                      >
+                        {word}
+                      </span>
+                    ))
+                  ) : (
+                    ""
+                  )}
+                </h2>
+
+                {/* Floating Notes/Sparkles */}
+                {page === 1 && currentNotes.map(note => (
                   <div
-                    key={index}
-                    className={cardClass}
+                    key={note.id}
+                    className="music-note"
                     style={{
-                      animationDelay: `${(index % 5) * 0.1}s`,
+                      left: `${note.left}%`,
+                      top: `${note.top}%`,
+                      animationDuration: `${note.duration}s`,
+                      animationDelay: `${note.delay}s`,
+                      fontSize: `${note.size}px`
                     }}
                   >
-                    <div className="photo-card-tape"></div>
-                    <img
-                      src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
-                      alt={`Memory ${index + 1}`}
-                      onClick={() => { setLightboxSrc(`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`); setLightboxIndex(index); }}
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                        e.target.parentElement.innerHTML = `
+                    {note.emoji}
+                  </div>
+                ))}
+              </div>
+
+              {/* Photo Gallery Layer (Under lyrics) */}
+              <div className="photo-gallery" style={getCameraStyle()}>
+                {visiblePhotos.map((photo, index) => {
+                  const isActive = focusIndex === index;
+                  const isBlur = focusIndex !== -1 && !isActive;
+                  const cardClass = `photo-card ${isActive ? "active-focus" : ""} ${isBlur ? "blurred-out" : ""}`;
+                  return (
+                    <div
+                      key={index}
+                      className={cardClass}
+                      style={{
+                        animationDelay: `${(index % 5) * 0.1}s`,
+                      }}
+                    >
+                      <div className="photo-card-tape"></div>
+                      <img
+                        src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
+                        alt={`Memory ${index + 1}`}
+                        onClick={() => { setLightboxSrc(`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`); setLightboxIndex(index); }}
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          e.target.parentElement.innerHTML = `
                           <div class="photo-placeholder">
                             <span class="emoji">📸</span>
                             <p>Photo ${index + 1}</p>
                           </div>
                         `;
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
-            {lightboxSrc && (
-              <div className="lightbox" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }}>
-                <img src={lightboxSrc} alt="Enlarged" onClick={(e) => e.stopPropagation()} />
-                <button className="lightbox-close" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }} aria-label="Close">×</button>
+                        }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
-            )}
 
-            {/* Button to go to the final page */}
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", marginBottom: "20px", minHeight: "50px", position: "relative", zIndex: 20 }}>
-              {currentLyricIndex === lyricsData.length - 1 && (
-                <button 
-                  onClick={() => setPage(2)} 
-                  style={primaryButtonStyle(false)}
-                >
-                  Next
-                </button>
+              {lightboxSrc && (
+                <div className="lightbox" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }}>
+                  <img src={lightboxSrc} alt="Enlarged" onClick={(e) => e.stopPropagation()} />
+                  <button className="lightbox-close" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }} aria-label="Close">×</button>
+                </div>
               )}
+
+              {/* Button to go to the final page */}
+              <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", marginBottom: "20px", minHeight: "50px", position: "relative", zIndex: 20 }}>
+                {currentLyricIndex === lyricsData.length - 1 && (
+                  <button
+                    onClick={() => setPage(2)}
+                    style={primaryButtonStyle(false)}
+                  >
+                    Next
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
           </>
         )}
 
         {page === 2 && (
-          <div style={{ ...pageCardStyle(), textAlign: "center" }}>
-            <div style={{ maxWidth: "680px", margin: "0 auto" }}>
+          <div className="page-card-enter scrapbook-card" style={{ textAlign: "center" }}>
+            <div className="scrapbook-tape-tl"></div>
+            <div className="scrapbook-tape-br"></div>
+            
+            {/* Decorative Elements for Page 2 */}
+            <svg className="doodle-star" width="50" height="50" viewBox="0 0 40 40" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ top: '40px', right: '50px', transform: 'rotate(-10deg)' }}>
+              <path d="M20 5 L20 35 M5 20 L35 20 M10 10 L30 30 M10 30 L30 10" />
+            </svg>
+            <svg className="botanical-branch" width="100" height="150" viewBox="0 0 60 100" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ top: '50px', left: '20px', transform: 'rotate(165deg)' }}>
+              <path d="M30 100 Q 30 50, 45 0" />
+              <path d="M30 80 Q 15 70, 10 50 Q 20 50, 30 70" />
+              <path d="M32 60 Q 50 50, 55 30 Q 40 30, 35 50" />
+              <path d="M35 40 Q 20 30, 15 10 Q 30 15, 38 30" />
+            </svg>
+
+            <div style={{ maxWidth: "680px", margin: "0 auto", position: "relative", zIndex: 10 }}>
               <p
                 style={{
                   margin: 0,
@@ -453,15 +512,13 @@ export default function App() {
               <p
                 style={{
                   marginTop: "28px",
-                  fontSize: "17px",
+                  fontSize: "clamp(14px, 4vw, 16px)",
                   lineHeight: 1.9,
                   color: "#6d5a60",
                 }}
               >
-                Semoga di setiap langkahmu, kamu selalu diberi kekuatan, kesabaran, dan ketenangan dalam menjalani hari-harimu.
-
-                Semoga semua yang sedang kamu perjuangkan di Solo dipermudah, dilancarkan, dan membawa hasil yang membanggakan untukmu.
-
+                Semoga di setiap langkahmu, kamu selalu diberi kekuatan, kesabaran, dan ketenangan dalam menjalani hari-harimu.<br/><br/>
+                Semoga semua yang sedang kamu perjuangkan di Solo dipermudah, dilancarkan, dan membawa hasil yang membanggakan untukmu.<br/><br/>
                 Aku akan selalu mendoakan yang terbaik untukmu, di mana pun kamu berada.
               </p>
 
