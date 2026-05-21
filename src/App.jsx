@@ -45,8 +45,8 @@ const lyricsData = [
 const photoData = [
   { time: 1, src: "/images/Untitled design (83).png" },
   { time: 5, src: "/images/Untitled design (85).png" },
-  { time: 9, src: "/images/Untitled design (85).png" },
-  { time: 13, src: "/images/Untitled design (84).png" },
+  { time: 9, src: "/images/Untitled design (87).png" },
+  { time: 13, src: "/images/Untitled design (86).png" },
   { time: 17, src: "/images/Untitled design (84).png" },
 ];
 
