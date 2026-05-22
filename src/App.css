@@ -53,13 +53,7 @@
     display: none;
   }
 
-  /* Closing page: smaller gif */
-  .closing-gif {
-    width: 110px !important;
-    margin-top: 12px !important;
-  }
-
-  /* Scale down on short screens (most mobile phones in portrait) */
+  /* Welcome page font tweaks */
   .welcome-title {
     font-size: clamp(26px, 8vw, 52px) !important;
     margin-top: 8px !important;
@@ -68,28 +62,76 @@
   .welcome-name {
     font-size: clamp(32px, 11vw, 62px) !important;
   }
+
+  /* ---- Closing page (Doa) aggressive mobile shrink ---- */
+  .closing-page {
+    padding: 20px 16px !important;
+  }
+
+  .closing-page h2 {
+    font-size: 22px !important;
+    margin-top: 8px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .closing-page p {
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+    margin-top: 10px !important;
+  }
+
+  /* "Happy Birthday." line */
+  .closing-page p:last-of-type {
+    font-size: 15px !important;
+    margin-top: 6px !important;
+  }
+
+  /* Gif */
+  .closing-gif {
+    width: 90px !important;
+    margin-top: 8px !important;
+  }
+
+  /* Divider + date + buttons spacing */
+  .closing-page > div {
+    margin-top: 10px !important;
+  }
+
+  /* Decorative elements on closing page — hide on mobile to save space */
+  .closing-page .botanical-branch,
+  .closing-page .doodle-star {
+    display: none;
+  }
 }
 
-/* Height-based scale for pages 0 & 2 on mobile — keeps everything visible */
-@media (max-width: 600px) and (max-height: 760px) {
+/* Height-based scale for pages 0 & 2 on mobile — accounts for Chrome iOS bar */
+@media (max-width: 600px) and (max-height: 820px) {
   .content-scaler {
-    transform: scale(0.92);
+    transform: scale(0.95);
     transform-origin: center top;
     align-items: flex-start;
   }
 }
 
-@media (max-width: 600px) and (max-height: 660px) {
+@media (max-width: 600px) and (max-height: 700px) {
   .content-scaler {
-    transform: scale(0.82);
+    transform: scale(0.85);
     transform-origin: center top;
     align-items: flex-start;
   }
 }
 
-@media (max-width: 600px) and (max-height: 560px) {
+@media (max-width: 600px) and (max-height: 600px) {
   .content-scaler {
-    transform: scale(0.7);
+    transform: scale(0.75);
+    transform-origin: center top;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) and (max-height: 500px) {
+  .content-scaler {
+    transform: scale(0.65);
     transform-origin: center top;
     align-items: flex-start;
   }

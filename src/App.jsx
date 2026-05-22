@@ -769,7 +769,7 @@ export default function App() {
         )}
 
         {page === 2 && (
-          <div className="page-card-enter scrapbook-card" style={{ textAlign: "center" }}>
+          <div className="page-card-enter scrapbook-card closing-page" style={{ textAlign: "center" }}>
             <div className="scrapbook-tape-tl"></div>
             <div className="scrapbook-tape-br"></div>
 
