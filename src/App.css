@@ -2,6 +2,7 @@
 
 .app-container {
   width: 100vw;
+  width: 100svw;
   height: 100vh;
   height: 100dvh;
   background-image: linear-gradient(rgba(252, 248, 249, 0.82), rgba(244, 220, 227, 0.88)), url('/images/crumpled_pink_newspaper.png');
@@ -13,29 +14,40 @@
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* iOS safe area support */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  box-sizing: border-box;
 }
 
 .content-scaler {
   max-width: 1100px;
   width: 100%;
   margin: 0 auto;
-  padding: 24px;
+  padding: 16px;
   position: relative;
   z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
   height: 100%;
+  box-sizing: border-box;
+  /* Do NOT set overflow here — let app-container clip it.
+     Polaroid photos use large translate() values and need to overflow freely. */
 }
 
-@media (max-height: 800px) { .content-scaler { transform: scale(0.9); } }
-@media (max-height: 700px) { .content-scaler { transform: scale(0.8); } }
-@media (max-height: 600px) { .content-scaler { transform: scale(0.65); } }
-@media (max-height: 500px) { .content-scaler { transform: scale(0.5); } }
+@media (max-width: 600px) {
+  .content-scaler {
+    padding: 10px 8px;
+  }
+}
 
 /* Floating Hearts Background */
 .floating-hearts {
@@ -216,10 +228,17 @@
 .scrapbook-card {
   position: relative;
   z-index: 10;
-  padding: 50px 40px;
+  padding: 40px 36px;
   background: transparent;
   width: 100%;
   filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.06));
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .scrapbook-card {
+    padding: 28px 18px;
+  }
 }
 
 .scrapbook-card::before {
@@ -781,12 +800,6 @@
 
 
 @media (max-width: 600px) {
-  .scrapbook-card {
-    padding: 30px 20px;
-    width: 100%;
-    margin: 0;
-  }
-
   .botanical-branch,
   .doodle-star {
     transform: scale(0.6) rotate(15deg) !important;
@@ -798,23 +811,23 @@
   }
 
   .photo-gallery {
-    min-height: 440px;
+    min-height: 350px;
   }
 
   .photo-card {
-    width: 150px;
-    height: 180px;
-    padding: 8px 8px 36px 8px;
+    width: 120px;
+    height: 150px;
+    padding: 7px 7px 30px 7px;
     border-radius: 8px;
   }
 
   .photo-card img {
-    height: 140px;
+    height: 115px;
     border-radius: 6px;
   }
 
   .photo-placeholder {
-    height: 140px;
+    height: 115px;
     border-radius: 6px;
   }
 
@@ -832,53 +845,64 @@
   }
 
   .photo-card:nth-child(1) {
-    transform: translate(-90px, -50px) rotate(-16deg);
+    transform: translate(-70px, -40px) rotate(-16deg);
     animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     z-index: 1;
   }
 
   .photo-card:nth-child(2) {
-    transform: translate(80px, -60px) rotate(14deg);
+    transform: translate(65px, -48px) rotate(14deg);
     animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     z-index: 2;
   }
 
   .photo-card:nth-child(3) {
-    transform: translate(-70px, 70px) rotate(-8deg);
+    transform: translate(-55px, 56px) rotate(-8deg);
     animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     z-index: 3;
   }
 
   .photo-card:nth-child(4) {
-    transform: translate(85px, 80px) rotate(16deg);
+    transform: translate(60px, 62px) rotate(16deg);
     animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     z-index: 4;
   }
 
   .photo-card:nth-child(5) {
-    transform: translate(0px, 15px) rotate(-2deg);
+    transform: translate(0px, 10px) rotate(-2deg);
     animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     z-index: 5;
   }
 
   .photo-card:nth-child(1):hover {
-    transform: translate(-90px, -50px) scale(1.05) rotate(0deg) !important;
+    transform: translate(-70px, -40px) scale(1.05) rotate(0deg) !important;
   }
 
   .photo-card:nth-child(2):hover {
-    transform: translate(80px, -60px) scale(1.05) rotate(0deg) !important;
+    transform: translate(65px, -48px) scale(1.05) rotate(0deg) !important;
   }
 
   .photo-card:nth-child(3):hover {
-    transform: translate(-70px, 70px) scale(1.05) rotate(0deg) !important;
+    transform: translate(-55px, 56px) scale(1.05) rotate(0deg) !important;
   }
 
   .photo-card:nth-child(4):hover {
-    transform: translate(85px, 80px) scale(1.05) rotate(0deg) !important;
+    transform: translate(60px, 62px) scale(1.05) rotate(0deg) !important;
   }
 
   .photo-card:nth-child(5):hover {
-    transform: translate(0px, 15px) scale(1.05) rotate(0deg) !important;
+    transform: translate(0px, 10px) scale(1.05) rotate(0deg) !important;
+  }
+
+  /* Runner game mobile */
+  .runner-cat {
+    font-size: 44px !important;
+  }
+
+  @keyframes jumpAnim {
+    0% { bottom: 0px; }
+    50% { bottom: 90px; }
+    100% { bottom: 0px; }
   }
 }
 
@@ -967,4 +991,30 @@
 .tr-cloud,
 .br-cloud {
   --mirror: -1;
+}
+
+/* Runner Game CSS */
+.runner-cat {
+  transition: bottom 0.2s ease-out;
+}
+
+.runner-cat.jumping {
+  animation: jumpAnim 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes jumpAnim {
+  0% { bottom: 0px; }
+  50% { bottom: 130px; }
+  100% { bottom: 0px; }
+}
+
+.runner-cat.hit {
+  animation: hitAnim 0.5s ease-in-out;
+}
+
+@keyframes hitAnim {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg); }
+  75% { transform: rotate(20deg); }
+  100% { transform: rotate(0deg); }
 }

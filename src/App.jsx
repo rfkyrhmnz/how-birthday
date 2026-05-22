@@ -50,8 +50,272 @@ const photoData = [
   { time: 17, src: "/images/Untitled design (84).png" },
 ];
 
+function RunnerGame({ onComplete }) {
+  const [isJumping, setIsJumping] = useState(false);
+  const [score, setScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [obstaclePos, setObstaclePos] = useState(100);
+  
+  const gameLoopRef = useRef(null);
+  const audioCtxRef = useRef(null);
+  
+  // Game difficulty (speed increases as score gets higher)
+  const currentSpeed = 1.6 + (score * 0.3);
+  const maxScore = 10;
+
+  const initAudio = () => {
+    if (!audioCtxRef.current) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtxRef.current = new AudioContext();
+    }
+    if (audioCtxRef.current.state === "suspended") {
+      audioCtxRef.current.resume();
+    }
+  };
+
+  const playJumpSound = () => {
+    if (!audioCtxRef.current) return;
+    const osc = audioCtxRef.current.createOscillator();
+    const gainNode = audioCtxRef.current.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(400, audioCtxRef.current.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, audioCtxRef.current.currentTime + 0.1);
+    gainNode.gain.setValueAtTime(0.1, audioCtxRef.current.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtxRef.current.currentTime + 0.1);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtxRef.current.destination);
+    osc.start();
+    osc.stop(audioCtxRef.current.currentTime + 0.1);
+  };
+
+  const playHitSound = () => {
+    if (!audioCtxRef.current) return;
+    const osc = audioCtxRef.current.createOscillator();
+    const gainNode = audioCtxRef.current.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(150, audioCtxRef.current.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(50, audioCtxRef.current.currentTime + 0.2);
+    gainNode.gain.setValueAtTime(0.1, audioCtxRef.current.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtxRef.current.currentTime + 0.2);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtxRef.current.destination);
+    osc.start();
+    osc.stop(audioCtxRef.current.currentTime + 0.2);
+  };
+
+  const playWinSound = () => {
+    if (!audioCtxRef.current) return;
+    const osc = audioCtxRef.current.createOscillator();
+    const gainNode = audioCtxRef.current.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(523.25, audioCtxRef.current.currentTime); // C5
+    osc.frequency.setValueAtTime(659.25, audioCtxRef.current.currentTime + 0.1); // E5
+    osc.frequency.setValueAtTime(783.99, audioCtxRef.current.currentTime + 0.2); // G5
+    gainNode.gain.setValueAtTime(0.1, audioCtxRef.current.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0, audioCtxRef.current.currentTime + 0.5);
+    osc.connect(gainNode);
+    gainNode.connect(audioCtxRef.current.destination);
+    osc.start();
+    osc.stop(audioCtxRef.current.currentTime + 0.5);
+  };
+
+  const bgmRef = useRef(null);
+
+  // Chiptune melody: a cheerful looping 8-bit tune using Web Audio API
+  const startBgm = () => {
+    if (!audioCtxRef.current) return;
+    if (bgmRef.current) return; // already playing
+
+    const ctx = audioCtxRef.current;
+    // Notes in Hz: a simple happy loop (C D E G A pattern)
+    const melody = [
+      523.25, 587.33, 659.25, 783.99, 880,
+      783.99, 659.25, 587.33, 523.25, 523.25,
+      659.25, 783.99, 880, 1046.5, 880,
+      783.99, 659.25, 523.25
+    ];
+    const noteDuration = 0.13; // seconds per note
+    let noteIndex = 0;
+    let startTime = ctx.currentTime;
+
+    const scheduleNote = () => {
+      if (!bgmRef.current) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "square";
+      const freq = melody[noteIndex % melody.length];
+      osc.frequency.setValueAtTime(freq, startTime);
+      gain.gain.setValueAtTime(0.04, startTime);
+      gain.gain.setValueAtTime(0.04, startTime + noteDuration * 0.7);
+      gain.gain.linearRampToValueAtTime(0, startTime + noteDuration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + noteDuration);
+      noteIndex++;
+      startTime += noteDuration;
+      bgmRef.current = setTimeout(scheduleNote, (startTime - ctx.currentTime) * 1000 - 20);
+    };
+
+    bgmRef.current = setTimeout(scheduleNote, 0);
+  };
+
+  const stopBgm = () => {
+    if (bgmRef.current) {
+      clearTimeout(bgmRef.current);
+      bgmRef.current = null;
+    }
+  };
+
+  const jump = () => {
+    initAudio();
+    if (!gameStarted) {
+      setGameStarted(true);
+      setGameOver(false);
+      setScore(0);
+      setObstaclePos(100);
+      startBgm();
+      return;
+    }
+    if (isJumping || gameOver) return;
+    
+    setIsJumping(true);
+    playJumpSound();
+    
+    setTimeout(() => {
+      setIsJumping(false);
+    }, 450); // Shorter jump, requires better timing
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === "Space") {
+        e.preventDefault(); // Prevent scrolling
+        jump();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isJumping, gameOver, gameStarted]);
+
+  useEffect(() => {
+    if (gameStarted && !gameOver && score < maxScore) {
+      gameLoopRef.current = setInterval(() => {
+        setObstaclePos((prev) => {
+          if (prev <= -10) {
+            setScore(s => {
+              const newScore = s + 1;
+              if (newScore >= maxScore) {
+                stopBgm();
+                playWinSound();
+                setTimeout(() => onComplete(), 1500);
+              }
+              return newScore;
+            });
+            return 100;
+          }
+          return prev - currentSpeed;
+        });
+      }, 20);
+    }
+    return () => clearInterval(gameLoopRef.current);
+  }, [gameStarted, gameOver, score, currentSpeed]);
+
+  // Collision detection
+  useEffect(() => {
+    // Tighter/wider hitbox for more challenge. The cat must jump exactly when the obstacle is near.
+    if (obstaclePos > 8 && obstaclePos < 28 && !isJumping) {
+      stopBgm();
+      setGameOver(true);
+      setGameStarted(false);
+      playHitSound();
+    }
+  }, [obstaclePos, isJumping]);
+
+  // Cleanup bgm on unmount
+  useEffect(() => {
+    return () => stopBgm();
+  }, []);
+
+  return (
+    <div 
+      className="page-card-enter scrapbook-card" 
+      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto", padding: "40px", cursor: "pointer", userSelect: "none" }} 
+      onClick={jump}
+    >
+      <div className="scrapbook-tape-tl"></div>
+      <div className="scrapbook-tape-br"></div>
+      
+      <p style={{ margin: 0, fontSize: "12px", letterSpacing: "0.28em", textTransform: "uppercase", color: "#b38c97" }}>
+        Mini Game
+      </p>
+      <h2 style={{ fontFamily: "'Pacifico', cursive", fontSize: "32px", color: "#cfa7b3", margin: "10px 0 15px" }}>
+        Bantu Kucing Berlari! 🐈
+      </h2>
+      <p style={{ color: "#8a747a", marginBottom: "30px", fontSize: "15px" }}>
+        {score >= maxScore ? "Yeay berhasil! Tunggu sebentar... 🎉" : `Makin lama makin cepat lho! Lewati ${maxScore} kado!`}
+      </p>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+        <div style={{ background: "#ffeaef", padding: "8px 24px", borderRadius: "20px", fontWeight: "bold", color: "#cfa7b3", fontSize: "18px" }}>
+          Score: {score} / {maxScore}
+        </div>
+      </div>
+
+      <div className="runner-container" style={{ position: "relative", width: "100%", height: "clamp(130px, 28vw, 200px)", borderBottom: "4px solid #f0e1e5", overflow: "hidden", borderRadius: "8px", background: "linear-gradient(to bottom, #fdf9fa 0%, #fff 100%)" }}>
+        
+        {/* Decorative Background Elements */}
+        <div style={{ position: "absolute", top: "20px", right: "20px", fontSize: "40px", opacity: 0.6 }}>☁️</div>
+        <div style={{ position: "absolute", top: "50px", left: "40px", fontSize: "30px", opacity: 0.6 }}>☁️</div>
+
+        {/* Cat */}
+        <div 
+          className={`runner-cat ${isJumping ? 'jumping' : ''} ${gameOver ? 'hit' : ''}`}
+          style={{ 
+            position: "absolute", 
+            bottom: "0px", 
+            left: "15%", 
+            fontSize: "60px",
+            lineHeight: 1,
+            zIndex: 10
+          }}
+        >
+          {gameOver ? "🙀" : (score >= maxScore ? "😻" : "🐈")}
+        </div>
+
+        {/* Obstacle Gift */}
+        {gameStarted && !gameOver && score < maxScore && (
+          <div 
+            style={{ 
+              position: "absolute", 
+              bottom: "0px", 
+              left: `${obstaclePos}%`, 
+              fontSize: "50px",
+              lineHeight: 1,
+              zIndex: 5
+            }}
+          >
+            🎁
+          </div>
+        )}
+
+        {/* Status Overlay */}
+        {(!gameStarted || gameOver) && score < maxScore && (
+          <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.7)", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", zIndex: 20 }}>
+            <h3 style={{ margin: 0, color: gameOver ? "#e74c3c" : "#cfa7b3", fontSize: "24px" }}>
+              {gameOver ? "Aduh Nabrak Kado! 💥" : "Siap?"}
+            </h3>
+            <p style={{ margin: "10px 0 0", color: "#8a747a", fontWeight: "bold" }}>Tap untuk mulai berlari</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(-1);
   const [currentTime, setCurrentTime] = useState(0);
   const [maxTime, setMaxTime] = useState(0);
   const [lyricsFinished, setLyricsFinished] = useState(false);
@@ -224,17 +488,21 @@ export default function App() {
           ))}
         </div>
       )}
-      
+
       <div className="content-scaler">
+        {page === -1 && (
+          <RunnerGame onComplete={() => setPage(0)} />
+        )}
+        
         {page === 0 && (
           <div
             className="page-card-enter scrapbook-card"
             style={{
-              minHeight: "82vh",
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: "36px",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
+              gap: "24px",
               alignItems: "center",
+              width: "100%",
             }}
           >
             {/* Scrapbook Background Dots & Tapes */}
