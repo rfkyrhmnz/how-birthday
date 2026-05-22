@@ -47,7 +47,54 @@
   .content-scaler {
     padding: 10px 8px;
   }
+
+  /* Hide secondary "For you" card on mobile — saves a lot of vertical space */
+  .for-you-card {
+    display: none;
+  }
+
+  /* Closing page: smaller gif */
+  .closing-gif {
+    width: 110px !important;
+    margin-top: 12px !important;
+  }
+
+  /* Scale down on short screens (most mobile phones in portrait) */
+  .welcome-title {
+    font-size: clamp(26px, 8vw, 52px) !important;
+    margin-top: 8px !important;
+  }
+
+  .welcome-name {
+    font-size: clamp(32px, 11vw, 62px) !important;
+  }
 }
+
+/* Height-based scale for pages 0 & 2 on mobile — keeps everything visible */
+@media (max-width: 600px) and (max-height: 760px) {
+  .content-scaler {
+    transform: scale(0.92);
+    transform-origin: center top;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) and (max-height: 660px) {
+  .content-scaler {
+    transform: scale(0.82);
+    transform-origin: center top;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) and (max-height: 560px) {
+  .content-scaler {
+    transform: scale(0.7);
+    transform-origin: center top;
+    align-items: flex-start;
+  }
+}
+
 
 /* Floating Hearts Background */
 .floating-hearts {
@@ -996,6 +1043,8 @@
 /* Runner Game CSS */
 .runner-cat {
   transition: bottom 0.2s ease-out;
+  transform: scaleX(-1);
+  display: inline-block;
 }
 
 .runner-cat.jumping {
@@ -1013,8 +1062,8 @@
 }
 
 @keyframes hitAnim {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(-20deg); }
-  75% { transform: rotate(20deg); }
-  100% { transform: rotate(0deg); }
+  0% { transform: scaleX(-1) rotate(0deg); }
+  25% { transform: scaleX(-1) rotate(-20deg); }
+  75% { transform: scaleX(-1) rotate(20deg); }
+  100% { transform: scaleX(-1) rotate(0deg); }
 }

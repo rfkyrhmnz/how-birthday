@@ -536,10 +536,11 @@ export default function App() {
               </p>
 
               <h1
+                className="welcome-title"
                 style={{
-                  marginTop: "18px",
+                  marginTop: "12px",
                   marginBottom: 0,
-                  fontSize: "clamp(42px, 7vw, 72px)",
+                  fontSize: "clamp(32px, 7vw, 72px)",
                   lineHeight: 1.08,
                   fontWeight: 600,
                 }}
@@ -548,12 +549,13 @@ export default function App() {
                   Happy Birthday,
                 </span>
                 <span
+                  className="welcome-name"
                   style={{
                     display: "block",
                     marginTop: "5px",
                     color: "#cfa7b3",
                     fontFamily: "'Pacifico', cursive",
-                    fontSize: "clamp(54px, 12vw, 82px)",
+                    fontSize: "clamp(40px, 12vw, 82px)",
                     fontWeight: 400,
                     letterSpacing: "2px",
                   }}
@@ -564,10 +566,10 @@ export default function App() {
 
               <p
                 style={{
-                  marginTop: "30px",
+                  marginTop: "16px",
                   maxWidth: "480px",
-                  fontSize: "clamp(14px, 4vw, 16px)",
-                  lineHeight: 2.1,
+                  fontSize: "clamp(13px, 4vw, 16px)",
+                  lineHeight: 1.9,
                   color: "#8a747a",
                   fontWeight: 500,
                 }}
@@ -575,7 +577,7 @@ export default function App() {
                 Sebuah halaman kecil yang aku buat khusus untuk kamu. Isinya sederhana, lembut, dan penuh rasa sayang untuk hari spesialmu.
               </p>
 
-              <div style={{ marginTop: "32px" }}>
+              <div style={{ marginTop: "20px" }}>
                 <button
                   onClick={() => {
                     setPage(1);
@@ -594,7 +596,7 @@ export default function App() {
               </div>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div className="for-you-card" style={{ display: "flex", justifyContent: "center" }}>
               <div
                 style={{
                   width: "100%",
@@ -825,6 +827,7 @@ export default function App() {
                 Happy Birthday.
               </p>
               <img
+                className="closing-gif"
                 src={`${import.meta.env.BASE_URL}images/Untitled design.gif`}
                 alt="gif"
                 style={{
