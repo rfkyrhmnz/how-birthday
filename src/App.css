@@ -837,7 +837,8 @@
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  filter: grayscale(15%) sepia(5%) brightness(0.95);
+  filter: grayscale(20%) sepia(10%) brightness(1.1);
+  mix-blend-mode: multiply;
   animation: fadeInBg 2.5s ease-in-out forwards;
 }
 
@@ -848,11 +849,9 @@
   }
 
   100% {
-    opacity: 0.12;
+    opacity: 0.45;
     transform: scale(1);
   }
-
-  /* Faded beautifully, zero gaps! */
 }
 
 .page-card-enter {
