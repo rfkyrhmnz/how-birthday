@@ -1,20 +1,140 @@
-<<<<<<< HEAD
-# React + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🎂 Happy Birthday, Cindy! 🎂
 
-Currently, two official plugins are available:
+<img src="https://readme-typing-svg.demolab.com?font=Pacifico&size=28&pause=1000&color=CFA7B3&center=true&vCenter=true&width=600&lines=A+Birthday+Gift+Built+With+Love+%F0%9F%92%96;Happy+Birthday%2C+Cindy!+%F0%9F%8E%82;04+Juni+%E2%9C%A8" alt="Typing SVG" />
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+<br/>
 
-## React Compiler
+[![Live Demo](https://img.shields.io/badge/🌸_Live_Demo-Visit_Website-CFA7B3?style=for-the-badge&labelColor=fdf4f6)](https://rfkyrhmnz.github.io/how-birthday/)
+[![Made with Love](https://img.shields.io/badge/Made_with-💖_Love-e8b4c0?style=for-the-badge)](https://github.com/rfkyrhmnz)
+[![React](https://img.shields.io/badge/React-Vite-61DAFB?style=for-the-badge&logo=react&logoColor=white&labelColor=20232a)](https://vitejs.dev/)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+<br/>
 
-## Expanding the ESLint configuration
+> *"Sebuah halaman kecil yang aku buat khusus untuk kamu.  
+> Isinya sederhana, lembut, dan penuh rasa sayang untuk hari spesialmu."*
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# how-birthday
->>>>>>> 9c1918e7236927e5a40b6bbd8e233596eda8babc
+</div>
+
+---
+
+## ✨ What Is This?
+
+A handcrafted, cinematic **birthday scrapbook website** built especially for **Cindy's birthday on 04 Juni** — featuring a fully interactive experience with music, animations, photos, and a mini-game. This isn't just a webpage, it's a love letter turned into code. 💌
+
+---
+
+## 🎮 Features
+
+### 🐈 Runner Mini-Game (Pre-Loader)
+> Help the cat jump over birthday gift boxes before entering the scrapbook!
+- Difficulty scales dynamically — **gets faster as your score climbs**
+- Chiptune **8-bit background music** generated entirely via Web Audio API
+- Sound effects: **jump**, **hit**, and a **win jingle** 🎵
+- Score target: **10 boxes** to unlock the scrapbook
+
+### 📰 Cinematic Newspaper Landing Page
+- Vintage **"The Morning Post Times"** aesthetic
+- Handwritten typography with **Pacifico** font
+- Scrapbook polaroid tape details & botanical doodles
+- Fully responsive for **mobile & desktop**
+
+### 🎵 Lyric Sync Page
+- Song lyrics sync to the audio — **word by word, in real time**
+- **5 polaroid photo cards** scattered across the screen, each with a personal memory
+- Cinematic full-screen **background photos** with `mix-blend-mode: multiply` blended into the newspaper texture
+- Floating musical notes 🎵 drift across the screen
+- **Lightbox** on photo tap/click
+
+### 🌸 Happy Birthday Finale
+- When the last lyric hits — **16 flower & heart decorations burst from behind** each polaroid frame
+- Each bloom pops out with a bouncy spring animation, then **gently sways or floats** forever
+- `🌸 🌷 💖 ✨ 🌺 💐 🌼 💕 🌿 🍃 💫`
+
+### 💌 Closing "Doa" Page
+- A heartfelt prayer/wish page
+- Personal photo with a custom GIF
+- Back & Home navigation
+
+---
+
+## 🛠️ Tech Stack
+
+| Tech | Purpose |
+|------|---------|
+| ⚛️ **React + Vite** | Frontend framework & build tool |
+| 🎨 **Vanilla CSS** | Animations, glassmorphism, layout |
+| 🎵 **Web Audio API** | Chiptune BGM & SFX — no libraries |
+| 🖼️ **CSS Custom Properties** | Dynamic bloom animation positions |
+| 📱 **dvh / safe-area-inset** | iOS fullscreen & notch support |
+| 🚀 **GitHub Pages** | Deployment |
+
+---
+
+## 🎨 Design Highlights
+
+```
+✦ Vintage newspaper aesthetic (grayscale + sepia tones)
+✦ Pink & rose color palette (#cfa7b3, #f5d0dc, #8a747a)
+✦ Pacifico + Playfair Display + Lato typography
+✦ Polaroid photo cards with scotch tape detail
+✦ Glassmorphism scrapbook cards
+✦ Smooth page transitions with blur + slide
+✦ Micro-animations on every interactive element
+✦ multiply blend mode for photo-newspaper fusion
+```
+
+---
+
+## 📁 Project Structure
+
+```
+how-birthday/
+├── public/
+│   └── images/          # Photos, GIF, newspaper background
+├── src/
+│   ├── App.jsx          # Main app — pages, game, audio logic
+│   ├── App.css          # All animations & styles
+│   └── main.jsx
+├── index.html           # Viewport + safe-area meta
+└── vite.config.js
+```
+
+---
+
+## 🚀 Run Locally
+
+```bash
+# Clone the repo
+git clone https://github.com/rfkyrhmnz/how-birthday.git
+cd how-birthday
+
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+```
+
+---
+
+## 💝 Made For
+
+<div align="center">
+
+**Cindy** — on your birthday, 04 Juni 🎂
+
+*Semoga saat kamu membuka website ini,*  
+*kamu merasa tenang, bahagia, dan tahu*  
+*kalau kamu sangat berarti.*
+
+<br/>
+
+**Happy Birthday! 💖**
+
+---
+
+<sub>Built with 🩷 using React, Vite & a lot of love</sub>
+
+</div>
