@@ -744,7 +744,40 @@ export default function App() {
                     </div>
                   );
                 })}
+
+                {/* Birthday Bloom Decorations — placed AFTER photos, nth-child intact.
+                    --px/--py = photo center (burst start), --ex/--ey = final pos outside frame */}
+                {lyricsFinished && (
+                  <div className="birthday-blooms">
+                    {/* Photo 1 center(-240,-70) → blooms to left/top-left/above */}
+                    <span className="bloom bloom-1" style={{"--px":"-240px","--py":"-70px","--ex":"-385px","--ey":"-70px","--delay":"0s"}}>🌸</span>
+                    <span className="bloom bloom-2" style={{"--px":"-240px","--py":"-70px","--ex":"-348px","--ey":"-210px","--delay":"0.08s"}}>🌿</span>
+                    <span className="bloom bloom-3" style={{"--px":"-240px","--py":"-70px","--ex":"-238px","--ey":"-215px","--delay":"0.16s"}}>💖</span>
+
+                    {/* Photo 2 center(220,-90) → blooms to right/top-right/above */}
+                    <span className="bloom bloom-4" style={{"--px":"220px","--py":"-90px","--ex":"360px","--ey":"-90px","--delay":"0.05s"}}>🌷</span>
+                    <span className="bloom bloom-5" style={{"--px":"220px","--py":"-90px","--ex":"325px","--ey":"-225px","--delay":"0.12s"}}>🍃</span>
+                    <span className="bloom bloom-6" style={{"--px":"220px","--py":"-90px","--ex":"218px","--ey":"-232px","--delay":"0.20s"}}>💫</span>
+
+                    {/* Photo 3 center(-200,110) → blooms to left/bottom-left/below */}
+                    <span className="bloom bloom-7" style={{"--px":"-200px","--py":"110px","--ex":"-338px","--ey":"110px","--delay":"0.10s"}}>🌺</span>
+                    <span className="bloom bloom-8" style={{"--px":"-200px","--py":"110px","--ex":"-308px","--ey":"252px","--delay":"0.18s"}}>💐</span>
+                    <span className="bloom bloom-9" style={{"--px":"-200px","--py":"110px","--ex":"-198px","--ey":"262px","--delay":"0.26s"}}>🌸</span>
+
+                    {/* Photo 4 center(210,130) → blooms to right/bottom-right/below */}
+                    <span className="bloom bloom-10" style={{"--px":"210px","--py":"130px","--ex":"348px","--ey":"130px","--delay":"0.07s"}}>🌼</span>
+                    <span className="bloom bloom-11" style={{"--px":"210px","--py":"130px","--ex":"318px","--ey":"270px","--delay":"0.15s"}}>💕</span>
+                    <span className="bloom bloom-12" style={{"--px":"210px","--py":"130px","--ex":"208px","--ey":"278px","--delay":"0.23s"}}>🌿</span>
+
+                    {/* Photo 5 center(0,-20) → blooms in gaps between photos */}
+                    <span className="bloom bloom-13" style={{"--px":"0px","--py":"-20px","--ex":"0px","--ey":"-168px","--delay":"0.30s"}}>✨</span>
+                    <span className="bloom bloom-14" style={{"--px":"0px","--py":"-20px","--ex":"0px","--ey":"152px","--delay":"0.36s"}}>🌸</span>
+                    <span className="bloom bloom-15" style={{"--px":"0px","--py":"-20px","--ex":"-150px","--ey":"-20px","--delay":"0.42s"}}>💖</span>
+                    <span className="bloom bloom-16" style={{"--px":"0px","--py":"-20px","--ex":"158px","--ey":"-20px","--delay":"0.48s"}}>🌷</span>
+                  </div>
+                )}
               </div>
+
 
               {lightboxSrc && (
                 <div className="lightbox" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }}>

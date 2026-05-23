@@ -1109,3 +1109,61 @@
   75% { transform: scaleX(-1) rotate(20deg); }
   100% { transform: scaleX(-1) rotate(0deg); }
 }
+
+/* ============================
+   Birthday Bloom Decorations
+   ============================ */
+.birthday-blooms {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.bloom {
+  position: absolute;
+  font-size: 26px;
+  opacity: 0;
+  display: inline-block;
+  will-change: transform, opacity;
+  /* Burst: from photo center (--px,--py) to outside frame edge (--ex,--ey) */
+  animation:
+    bloom-burst 0.65s var(--delay, 0s) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+    bloom-sway  2.8s  calc(var(--delay, 0s) + 0.65s) ease-in-out infinite alternate;
+}
+
+/* Odd blooms float instead of sway */
+.bloom-3, .bloom-6, .bloom-9, .bloom-12, .bloom-15 {
+  animation:
+    bloom-burst 0.65s var(--delay, 0s) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+    bloom-float 3.2s  calc(var(--delay, 0s) + 0.65s) ease-in-out infinite alternate;
+}
+
+/* === Burst: scale(0) at photo center → scale(1) at outside-frame edge === */
+@keyframes bloom-burst {
+  0%   { opacity: 0; transform: translate(var(--px), var(--py)) scale(0) rotate(-20deg); }
+  65%  { opacity: 1; transform: translate(var(--ex), var(--ey)) scale(1.22) rotate(10deg); }
+  85%  { opacity: 1; transform: translate(var(--ex), var(--ey)) scale(0.92) rotate(-4deg); }
+  100% { opacity: 1; transform: translate(var(--ex), var(--ey)) scale(1)    rotate(0deg); }
+}
+
+/* === Sway: gentle rotation at the final resting position === */
+@keyframes bloom-sway {
+  0%   { opacity: 1; transform: translate(var(--ex), var(--ey)) scale(1)    rotate(-7deg); }
+  100% { opacity: 1; transform: translate(var(--ex), var(--ey)) scale(1.08) rotate(7deg); }
+}
+
+/* === Float: gentle up-down at the final resting position === */
+@keyframes bloom-float {
+  0%   { opacity: 1; transform: translate(var(--ex), var(--ey)) scale(1)    translateY(0px); }
+  100% { opacity: 1; transform: translate(var(--ex), var(--ey)) scale(1.06) translateY(-7px); }
+}
+
+/* Mobile: smaller blooms */
+@media (max-width: 600px) {
+  .bloom { font-size: 16px; }
+}
+
