@@ -6,7 +6,7 @@
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/🌸_Live_Demo-Visit_Website-CFA7B3?style=for-the-badge&labelColor=fdf4f6)](https://rfkyrhmnz.github.io/how-birthday/)
+[![Live Demo](https://img.shields.io/badge/🌸_Live_Demo-Visit_Website-CFA7B3?style=for-the-badge&labelColor=fdf4f6)](https://rfkyrhmnz.github.io/cindys-birthday/)
 [![Made with Love](https://img.shields.io/badge/Made_with-💖_Love-e8b4c0?style=for-the-badge)](https://github.com/rfkyrhmnz)
 [![React](https://img.shields.io/badge/React-Vite-61DAFB?style=for-the-badge&logo=react&logoColor=white&labelColor=20232a)](https://vitejs.dev/)
 
@@ -105,8 +105,8 @@ how-birthday/
 ## 🚀 Run Locally
 
 ```bash
-git clone https://github.com/rfkyrhmnz/how-birthday.git
-cd how-birthday
+git clone https://github.com/rfkyrhmnz/cindys-birthday.git
+cd cindys-birthday
 npm install
 npm run dev
 ```
