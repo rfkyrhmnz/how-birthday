@@ -5,9 +5,8 @@
   width: 100svw;
   height: 100vh;
   height: 100dvh;
-  background-image: linear-gradient(rgba(252, 248, 249, 0.82), rgba(244, 220, 227, 0.88)), url('/images/crumpled_pink_newspaper.png');
-  background-size: cover;
-  background-position: center;
+  /* Pink-tinted newspaper overlay */
+  background: linear-gradient(rgba(220, 185, 198, 0.82), rgba(210, 168, 185, 0.88));
   font-family: 'Quicksand', sans-serif;
   color: #4f3d42;
   overflow: hidden;
@@ -26,6 +25,21 @@
   padding-right: env(safe-area-inset-right);
   box-sizing: border-box;
 }
+
+/* Newspaper background — sepia shifted to pink (hue-rotate 292°) for rosy vintage feel */
+.app-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/crumpled_pink_newspaper.png');
+  background-size: cover;
+  background-position: center;
+  /* sepia → pink: hue-rotate shifts yellow-brown sepia toward rose/pink */
+  filter: sepia(45%) hue-rotate(292deg) saturate(1.0) brightness(0.72);
+  z-index: 0;
+  pointer-events: none;
+}
+
 
 .content-scaler {
   max-width: 1100px;
