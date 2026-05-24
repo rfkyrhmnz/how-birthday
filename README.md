@@ -1,140 +1,84 @@
 <div align="center">
 
-# 🎂 Happy Birthday, Cindy! 🎂
+<br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Pacifico&size=28&pause=1000&color=CFA7B3&center=true&vCenter=true&width=600&lines=A+Birthday+Gift+Built+With+Love+%F0%9F%92%96;Happy+Birthday%2C+Cindy!+%F0%9F%8E%82;04+Juni+%E2%9C%A8" alt="Typing SVG" />
+```
+H A P P Y   B I R T H D A Y
+```
+
+**04 Juni — for Cindy**
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/🌸_Live_Demo-Visit_Website-CFA7B3?style=for-the-badge&labelColor=fdf4f6)](https://rfkyrhmnz.github.io/how-birthday/)
-[![Made with Love](https://img.shields.io/badge/Made_with-💖_Love-e8b4c0?style=for-the-badge)](https://github.com/rfkyrhmnz)
-[![React](https://img.shields.io/badge/React-Vite-61DAFB?style=for-the-badge&logo=react&logoColor=white&labelColor=20232a)](https://vitejs.dev/)
-
-<br/>
-
-> *"Sebuah halaman kecil yang aku buat khusus untuk kamu.  
-> Isinya sederhana, lembut, dan penuh rasa sayang untuk hari spesialmu."*
+[![Live](https://img.shields.io/badge/Live-rfkyrhmnz.github.io%2Fhow--birthday-c9a0b0?style=flat-square)](https://rfkyrhmnz.github.io/how-birthday/)
+&nbsp;
+[![React](https://img.shields.io/badge/React-Vite-61DAFB?style=flat-square&logo=react&logoColor=white&labelColor=20232a)](https://vitejs.dev/)
+&nbsp;
+[![GitHub Pages](https://img.shields.io/badge/Deployed-GitHub%20Pages-222?style=flat-square&logo=github)](https://pages.github.com/)
 
 </div>
 
 ---
 
-## ✨ What Is This?
+A small website, built quietly, for someone's birthday.
 
-A handcrafted, cinematic **birthday scrapbook website** built especially for **Cindy's birthday on 04 Juni** — featuring a fully interactive experience with music, animations, photos, and a mini-game. This isn't just a webpage, it's a love letter turned into code. 💌
-
----
-
-## 🎮 Features
-
-### 🐈 Runner Mini-Game (Pre-Loader)
-> Help the cat jump over birthday gift boxes before entering the scrapbook!
-- Difficulty scales dynamically — **gets faster as your score climbs**
-- Chiptune **8-bit background music** generated entirely via Web Audio API
-- Sound effects: **jump**, **hit**, and a **win jingle** 🎵
-- Score target: **10 boxes** to unlock the scrapbook
-
-### 📰 Cinematic Newspaper Landing Page
-- Vintage **"The Morning Post Times"** aesthetic
-- Handwritten typography with **Pacifico** font
-- Scrapbook polaroid tape details & botanical doodles
-- Fully responsive for **mobile & desktop**
-
-### 🎵 Lyric Sync Page
-- Song lyrics sync to the audio — **word by word, in real time**
-- **5 polaroid photo cards** scattered across the screen, each with a personal memory
-- Cinematic full-screen **background photos** with `mix-blend-mode: multiply` blended into the newspaper texture
-- Floating musical notes 🎵 drift across the screen
-- **Lightbox** on photo tap/click
-
-### 🌸 Happy Birthday Finale
-- When the last lyric hits — **16 flower & heart decorations burst from behind** each polaroid frame
-- Each bloom pops out with a bouncy spring animation, then **gently sways or floats** forever
-- `🌸 🌷 💖 ✨ 🌺 💐 🌼 💕 🌿 🍃 💫`
-
-### 💌 Closing "Doa" Page
-- A heartfelt prayer/wish page
-- Personal photo with a custom GIF
-- Back & Home navigation
+Nothing too grand — just a scrapbook of moments, a song, and a few words that felt right to say.
 
 ---
 
-## 🛠️ Tech Stack
+## Pages
 
-| Tech | Purpose |
-|------|---------|
-| ⚛️ **React + Vite** | Frontend framework & build tool |
-| 🎨 **Vanilla CSS** | Animations, glassmorphism, layout |
-| 🎵 **Web Audio API** | Chiptune BGM & SFX — no libraries |
-| 🖼️ **CSS Custom Properties** | Dynamic bloom animation positions |
-| 📱 **dvh / safe-area-inset** | iOS fullscreen & notch support |
-| 🚀 **GitHub Pages** | Deployment |
+**Runner Game** — A short mini-game before entering. Jump over the obstacles to unlock the scrapbook. The cat faces right, as it should.
 
----
+**Welcome** — Newspaper aesthetic. The date. A button that opens everything.
 
-## 🎨 Design Highlights
+**Lyrics** — A song plays. Words appear line by line. Photos surface slowly. When it ends, small flowers bloom around the frames.
 
-```
-✦ Vintage newspaper aesthetic (grayscale + sepia tones)
-✦ Pink & rose color palette (#cfa7b3, #f5d0dc, #8a747a)
-✦ Pacifico + Playfair Display + Lato typography
-✦ Polaroid photo cards with scotch tape detail
-✦ Glassmorphism scrapbook cards
-✦ Smooth page transitions with blur + slide
-✦ Micro-animations on every interactive element
-✦ multiply blend mode for photo-newspaper fusion
-```
+**Closing** — A few honest words. Nothing more.
 
 ---
 
-## 📁 Project Structure
+## Stack
 
-```
-how-birthday/
-├── public/
-│   └── images/          # Photos, GIF, newspaper background
-├── src/
-│   ├── App.jsx          # Main app — pages, game, audio logic
-│   ├── App.css          # All animations & styles
-│   └── main.jsx
-├── index.html           # Viewport + safe-area meta
-└── vite.config.js
-```
+| | |
+|---|---|
+| Framework | React + Vite |
+| Styling | Vanilla CSS, custom animations |
+| Audio | Web Audio API — no libraries |
+| Deployment | GitHub Pages |
+| Images | Compressed PNG + WebP (~6.8 MB total) |
 
 ---
 
-## 🚀 Run Locally
+## Design Notes
+
+The background is a crumpled newspaper image filtered with `sepia → hue-rotate(292deg)` to give it a warm pink tone without losing the paper texture.
+
+Photos use `mix-blend-mode: multiply` when in cinematic background mode — so they blend into the paper rather than float above it.
+
+Bloom decorations animate from each photo's center outward, landing just outside the polaroid frame. Sixteen in total.
+
+The romantic piano BGM on the welcome page is generated entirely via Web Audio API — C–Am–F–G, 76 BPM, looped every ~25 seconds.
+
+---
+
+## Run Locally
 
 ```bash
-# Clone the repo
 git clone https://github.com/rfkyrhmnz/how-birthday.git
 cd how-birthday
-
-# Install dependencies
 npm install
-
-# Start dev server
 npm run dev
 ```
 
 ---
 
-## 💝 Made For
-
 <div align="center">
-
-**Cindy** — on your birthday, 04 Juni 🎂
-
-*Semoga saat kamu membuka website ini,*  
-*kamu merasa tenang, bahagia, dan tahu*  
-*kalau kamu sangat berarti.*
 
 <br/>
 
-**Happy Birthday! 💖**
+*Made for 04 Juni.*
 
----
-
-<sub>Built with 🩷 using React, Vite & a lot of love</sub>
+<br/>
 
 </div>
