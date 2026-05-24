@@ -56,10 +56,10 @@ function RunnerGame({ onComplete }) {
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [obstaclePos, setObstaclePos] = useState(100);
-  
+
   const gameLoopRef = useRef(null);
   const audioCtxRef = useRef(null);
-  
+
   // Game difficulty (speed increases as score gets higher)
   const currentSpeed = 1.6 + (score * 0.3);
   const maxScore = 10;
@@ -179,10 +179,10 @@ function RunnerGame({ onComplete }) {
       return;
     }
     if (isJumping || gameOver) return;
-    
+
     setIsJumping(true);
     playJumpSound();
-    
+
     setTimeout(() => {
       setIsJumping(false);
     }, 450); // Shorter jump, requires better timing
@@ -239,14 +239,14 @@ function RunnerGame({ onComplete }) {
   }, []);
 
   return (
-    <div 
-      className="page-card-enter scrapbook-card" 
-      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto", padding: "40px", cursor: "pointer", userSelect: "none" }} 
+    <div
+      className="page-card-enter scrapbook-card"
+      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto", padding: "40px", cursor: "pointer", userSelect: "none" }}
       onClick={jump}
     >
       <div className="scrapbook-tape-tl"></div>
       <div className="scrapbook-tape-br"></div>
-      
+
       <p style={{ margin: 0, fontSize: "12px", letterSpacing: "0.28em", textTransform: "uppercase", color: "#b38c97" }}>
         Mini Game
       </p>
@@ -264,18 +264,18 @@ function RunnerGame({ onComplete }) {
       </div>
 
       <div className="runner-container" style={{ position: "relative", width: "100%", height: "clamp(130px, 28vw, 200px)", borderBottom: "4px solid #f0e1e5", overflow: "hidden", borderRadius: "8px", background: "linear-gradient(to bottom, #fdf9fa 0%, #fff 100%)" }}>
-        
+
         {/* Decorative Background Elements */}
         <div style={{ position: "absolute", top: "20px", right: "20px", fontSize: "40px", opacity: 0.6 }}>☁️</div>
         <div style={{ position: "absolute", top: "50px", left: "40px", fontSize: "30px", opacity: 0.6 }}>☁️</div>
 
         {/* Cat */}
-        <div 
+        <div
           className={`runner-cat ${isJumping ? 'jumping' : ''} ${gameOver ? 'hit' : ''}`}
-          style={{ 
-            position: "absolute", 
-            bottom: "0px", 
-            left: "15%", 
+          style={{
+            position: "absolute",
+            bottom: "0px",
+            left: "15%",
             fontSize: "60px",
             lineHeight: 1,
             zIndex: 10
@@ -286,11 +286,11 @@ function RunnerGame({ onComplete }) {
 
         {/* Obstacle Gift */}
         {gameStarted && !gameOver && score < maxScore && (
-          <div 
-            style={{ 
-              position: "absolute", 
-              bottom: "0px", 
-              left: `${obstaclePos}%`, 
+          <div
+            style={{
+              position: "absolute",
+              bottom: "0px",
+              left: `${obstaclePos}%`,
               fontSize: "50px",
               lineHeight: 1,
               zIndex: 5
@@ -493,169 +493,155 @@ export default function App() {
         {page === -1 && (
           <RunnerGame onComplete={() => setPage(0)} />
         )}
-        
+
         {page === 0 && (
           <div
             className="page-card-enter scrapbook-card"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))",
-              gap: "24px",
+              display: "flex",
+              flexDirection: "column",
               alignItems: "center",
+              textAlign: "center",
               width: "100%",
+              padding: "clamp(24px, 5vw, 52px) clamp(20px, 6vw, 56px)",
+              position: "relative",
             }}
           >
-            {/* Scrapbook Background Dots & Tapes */}
+            {/* Scrapbook Tapes */}
             <div className="scrapbook-tape-tl"></div>
             <div className="scrapbook-tape-br"></div>
 
-            {/* Decorative Doodle Star (Top Left) */}
-            <svg className="doodle-star" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ top: '30px', left: '40px', transform: 'rotate(15deg)' }}>
+            {/* Corner star decorations */}
+            <svg className="doodle-star" width="36" height="36" viewBox="0 0 40 40" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ top: '22px', right: '28px', transform: 'rotate(20deg)' }}>
+              <path d="M20 5 L20 35 M5 20 L35 20 M10 10 L30 30 M10 30 L30 10" />
+            </svg>
+            <svg className="doodle-star" width="28" height="28" viewBox="0 0 40 40" fill="none" stroke="#e4c8d0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ top: '22px', left: '28px', transform: 'rotate(-12deg)', opacity: 0.7 }}>
               <path d="M20 5 L20 35 M5 20 L35 20 M10 10 L30 30 M10 30 L30 10" />
             </svg>
 
-            {/* Decorative Botanical Branch (Bottom Left) */}
-            <svg className="botanical-branch" width="80" height="120" viewBox="0 0 60 100" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ bottom: '20px', left: '20px', transform: 'rotate(15deg)' }}>
+            {/* Botanical branch bottom-left */}
+            <svg className="botanical-branch" width="70" height="110" viewBox="0 0 60 100" fill="none" stroke="#d1b1bb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ bottom: '16px', left: '16px', transform: 'rotate(10deg)', opacity: 0.6 }}>
               <path d="M30 100 Q 30 50, 45 0" />
               <path d="M30 80 Q 15 70, 10 50 Q 20 50, 30 70" />
               <path d="M32 60 Q 50 50, 55 30 Q 40 30, 35 50" />
               <path d="M35 40 Q 20 30, 15 10 Q 30 15, 38 30" />
             </svg>
 
-            <div style={{ position: "relative", zIndex: 10 }}>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "12px",
-                  letterSpacing: "0.28em",
-                  textTransform: "uppercase",
-                  color: "#b38c97",
-                }}
-              >
+            {/* Date badge */}
+            <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "18px" }}>
+              <div style={{ width: "36px", height: "1px", background: "linear-gradient(to right, transparent, #d4b8c0)" }} />
+              <p style={{ margin: 0, fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase", color: "#b38c97", fontWeight: 500 }}>
                 04 Juni
               </p>
-
-              <h1
-                className="welcome-title"
-                style={{
-                  marginTop: "12px",
-                  marginBottom: 0,
-                  fontSize: "clamp(32px, 7vw, 72px)",
-                  lineHeight: 1.08,
-                  fontWeight: 600,
-                }}
-              >
-                <span style={{ fontFamily: "'Pacifico', cursive" }}>
-                  Happy Birthday,
-                </span>
-                <span
-                  className="welcome-name"
-                  style={{
-                    display: "block",
-                    marginTop: "5px",
-                    color: "#cfa7b3",
-                    fontFamily: "'Pacifico', cursive",
-                    fontSize: "clamp(40px, 12vw, 82px)",
-                    fontWeight: 400,
-                    letterSpacing: "2px",
-                  }}
-                >
-                  Cindy.
-                </span>
-              </h1>
-
-              <p
-                style={{
-                  marginTop: "16px",
-                  maxWidth: "480px",
-                  fontSize: "clamp(13px, 4vw, 16px)",
-                  lineHeight: 1.9,
-                  color: "#8a747a",
-                  fontWeight: 500,
-                }}
-              >
-                Sebuah halaman kecil yang aku buat khusus untuk kamu. Isinya sederhana, lembut, dan penuh rasa sayang untuk hari spesialmu.
-              </p>
-
-              <div style={{ marginTop: "20px" }}>
-                <button
-                  onClick={() => {
-                    setPage(1);
-                    setCurrentTime(0);
-                    setMaxTime(0);
-                    setLyricsFinished(false);
-                    if (audioRef.current) {
-                      audioRef.current.currentTime = 0;
-                      audioRef.current.play().catch(e => console.error("Play failed:", e));
-                    }
-                  }}
-                  style={primaryButtonStyle(false)}
-                >
-                  Open
-                </button>
-              </div>
+              <div style={{ width: "36px", height: "1px", background: "linear-gradient(to left, transparent, #d4b8c0)" }} />
             </div>
 
-            <div className="for-you-card" style={{ display: "flex", justifyContent: "center" }}>
-              <div
+            {/* Main title — font unchanged */}
+            <h1
+              className="welcome-title"
+              style={{
+                margin: 0,
+                fontSize: "clamp(32px, 7vw, 72px)",
+                lineHeight: 1.08,
+                fontWeight: 600,
+              }}
+            >
+              <span style={{ fontFamily: "'Pacifico', cursive" }}>
+                Happy Birthday,
+              </span>
+              <span
+                className="welcome-name"
                 style={{
-                  width: "100%",
-                  maxWidth: "400px",
-                  background: "rgba(250, 244, 246, 0.6)",
-                  border: "1px solid #f5eaed",
-                  borderRadius: "28px",
-                  padding: "16px",
-                  boxShadow: "0 15px 40px rgba(200, 150, 160, 0.08)",
+                  display: "block",
+                  marginTop: "5px",
+                  color: "#cfa7b3",
+                  fontFamily: "'Pacifico', cursive",
+                  fontSize: "clamp(40px, 12vw, 82px)",
+                  fontWeight: 400,
+                  letterSpacing: "2px",
                 }}
               >
-                <div
-                  style={{
-                    background: "linear-gradient(135deg, #ffffff 0%, #fdf9fa 100%)",
-                    border: "1px solid #f0e1e5",
-                    borderRadius: "20px",
-                    padding: "36px 30px",
-                    position: "relative",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "clamp(10px, 3vw, 12px)",
-                      letterSpacing: "0.22em",
-                      textTransform: "uppercase",
-                      color: "#b38c97",
-                    }}
-                  >
-                    For you
-                  </p>
+                Cindy.
+              </span>
+            </h1>
 
-                  <h2
-                    style={{
-                      marginTop: "16px",
-                      marginBottom: 0,
-                      fontSize: "clamp(24px, 6vw, 32px)",
-                      fontWeight: 600,
-                      color: "#6d5a60",
-                    }}
-                  >
-                    on your <span style={{ fontFamily: "'Pacifico', cursive", color: "#cfa7b3", fontWeight: 400, letterSpacing: "1px" }}>special</span> day
-                  </h2>
+            {/* Ornamental divider */}
+            <div style={{ display: "flex", alignItems: "center", gap: "14px", margin: "22px 0 18px", width: "100%", maxWidth: "340px" }}>
+              <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, #e4c8d0)" }} />
+              <span style={{ color: "#cfa7b3", fontSize: "16px", lineHeight: 1 }}>♡</span>
+              <div style={{ flex: 1, height: "1px", background: "linear-gradient(to left, transparent, #e4c8d0)" }} />
+            </div>
 
-                  <p
-                    style={{
-                      marginTop: "18px",
-                      lineHeight: 1.9,
-                      color: "#6d5a60",
-                    }}
-                  >
-                    Semoga saat kamu membuka website ini, kamu merasa tenang,
-                    bahagia, dan tahu kalau kamu sangat berarti buat aku.
+            {/* Description */}
+            <p style={{
+              maxWidth: "360px",
+              fontSize: "clamp(13px, 3.5vw, 15px)",
+              lineHeight: 1.95,
+              color: "#8a747a",
+              fontStyle: "italic",
+              margin: "0 0 28px",
+            }}>
+              "Sebuah halaman kecil yang aku buat khusus untuk kamu.<br />
+              Isinya sederhana, lembut, dan penuh rasa sayang."
+            </p>
+
+            {/* Open button */}
+            <button
+              onClick={() => {
+                setPage(1);
+                setCurrentTime(0);
+                setMaxTime(0);
+                setLyricsFinished(false);
+                if (audioRef.current) {
+                  audioRef.current.currentTime = 0;
+                  audioRef.current.play().catch(e => console.error("Play failed:", e));
+                }
+              }}
+              style={{
+                padding: "13px 40px",
+                borderRadius: "999px",
+                border: "none",
+                background: "linear-gradient(135deg, #d4a0b0, #cfa7b3)",
+                color: "white",
+                fontSize: "15px",
+                fontWeight: 600,
+                cursor: "pointer",
+                letterSpacing: "0.08em",
+                boxShadow: "0 6px 24px rgba(207,167,179,0.35)",
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              }}
+              onMouseEnter={e => { e.target.style.transform = "translateY(-2px)"; e.target.style.boxShadow = "0 10px 30px rgba(207,167,179,0.45)"; }}
+              onMouseLeave={e => { e.target.style.transform = ""; e.target.style.boxShadow = "0 6px 24px rgba(207,167,179,0.35)"; }}
+            >
+              Open ✉
+            </button>
+
+            {/* For you card — horizontal strip at bottom, hidden on mobile */}
+            <div className="for-you-card" style={{ width: "100%", marginTop: "32px" }}>
+              <div style={{
+                background: "linear-gradient(135deg, #fdf6f8 0%, #fff 100%)",
+                border: "1px solid #f0e1e5",
+                borderRadius: "18px",
+                padding: "20px 28px",
+                display: "flex",
+                alignItems: "center",
+                gap: "20px",
+                textAlign: "left",
+              }}>
+                <div style={{ fontSize: "28px", flexShrink: 0 }}>🌸</div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: 0, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#b38c97" }}>For you</p>
+                  <p style={{ margin: "4px 0 0", fontSize: "clamp(13px, 3vw, 15px)", lineHeight: 1.7, color: "#6d5a60" }}>
+                    on your <span style={{ fontFamily: "'Pacifico', cursive", color: "#cfa7b3", fontWeight: 400 }}>special</span> day —
+                    Semoga kamu merasa tenang, bahagia, dan tahu kalau kamu sangat berarti. 💖
                   </p>
                 </div>
               </div>
             </div>
           </div>
         )}
+
+
 
         {page === 1 && (
           <>
@@ -750,30 +736,30 @@ export default function App() {
                 {lyricsFinished && (
                   <div className="birthday-blooms">
                     {/* Photo 1 center(-240,-70) → blooms to left/top-left/above */}
-                    <span className="bloom bloom-1" style={{"--px":"-240px","--py":"-70px","--ex":"-385px","--ey":"-70px","--delay":"0s"}}>🌸</span>
-                    <span className="bloom bloom-2" style={{"--px":"-240px","--py":"-70px","--ex":"-348px","--ey":"-210px","--delay":"0.08s"}}>🌿</span>
-                    <span className="bloom bloom-3" style={{"--px":"-240px","--py":"-70px","--ex":"-238px","--ey":"-215px","--delay":"0.16s"}}>💖</span>
+                    <span className="bloom bloom-1" style={{ "--px": "-240px", "--py": "-70px", "--ex": "-385px", "--ey": "-70px", "--delay": "0s" }}>🌸</span>
+                    <span className="bloom bloom-2" style={{ "--px": "-240px", "--py": "-70px", "--ex": "-348px", "--ey": "-210px", "--delay": "0.08s" }}>🌿</span>
+                    <span className="bloom bloom-3" style={{ "--px": "-240px", "--py": "-70px", "--ex": "-238px", "--ey": "-215px", "--delay": "0.16s" }}>💖</span>
 
                     {/* Photo 2 center(220,-90) → blooms to right/top-right/above */}
-                    <span className="bloom bloom-4" style={{"--px":"220px","--py":"-90px","--ex":"360px","--ey":"-90px","--delay":"0.05s"}}>🌷</span>
-                    <span className="bloom bloom-5" style={{"--px":"220px","--py":"-90px","--ex":"325px","--ey":"-225px","--delay":"0.12s"}}>🍃</span>
-                    <span className="bloom bloom-6" style={{"--px":"220px","--py":"-90px","--ex":"218px","--ey":"-232px","--delay":"0.20s"}}>💫</span>
+                    <span className="bloom bloom-4" style={{ "--px": "220px", "--py": "-90px", "--ex": "360px", "--ey": "-90px", "--delay": "0.05s" }}>🌷</span>
+                    <span className="bloom bloom-5" style={{ "--px": "220px", "--py": "-90px", "--ex": "325px", "--ey": "-225px", "--delay": "0.12s" }}>🍃</span>
+                    <span className="bloom bloom-6" style={{ "--px": "220px", "--py": "-90px", "--ex": "218px", "--ey": "-232px", "--delay": "0.20s" }}>💫</span>
 
                     {/* Photo 3 center(-200,110) → blooms to left/bottom-left/below */}
-                    <span className="bloom bloom-7" style={{"--px":"-200px","--py":"110px","--ex":"-338px","--ey":"110px","--delay":"0.10s"}}>🌺</span>
-                    <span className="bloom bloom-8" style={{"--px":"-200px","--py":"110px","--ex":"-308px","--ey":"252px","--delay":"0.18s"}}>💐</span>
-                    <span className="bloom bloom-9" style={{"--px":"-200px","--py":"110px","--ex":"-198px","--ey":"262px","--delay":"0.26s"}}>🌸</span>
+                    <span className="bloom bloom-7" style={{ "--px": "-200px", "--py": "110px", "--ex": "-338px", "--ey": "110px", "--delay": "0.10s" }}>🌺</span>
+                    <span className="bloom bloom-8" style={{ "--px": "-200px", "--py": "110px", "--ex": "-308px", "--ey": "252px", "--delay": "0.18s" }}>💐</span>
+                    <span className="bloom bloom-9" style={{ "--px": "-200px", "--py": "110px", "--ex": "-198px", "--ey": "262px", "--delay": "0.26s" }}>🌸</span>
 
                     {/* Photo 4 center(210,130) → blooms to right/bottom-right/below */}
-                    <span className="bloom bloom-10" style={{"--px":"210px","--py":"130px","--ex":"348px","--ey":"130px","--delay":"0.07s"}}>🌼</span>
-                    <span className="bloom bloom-11" style={{"--px":"210px","--py":"130px","--ex":"318px","--ey":"270px","--delay":"0.15s"}}>💕</span>
-                    <span className="bloom bloom-12" style={{"--px":"210px","--py":"130px","--ex":"208px","--ey":"278px","--delay":"0.23s"}}>🌿</span>
+                    <span className="bloom bloom-10" style={{ "--px": "210px", "--py": "130px", "--ex": "348px", "--ey": "130px", "--delay": "0.07s" }}>🌼</span>
+                    <span className="bloom bloom-11" style={{ "--px": "210px", "--py": "130px", "--ex": "318px", "--ey": "270px", "--delay": "0.15s" }}>💕</span>
+                    <span className="bloom bloom-12" style={{ "--px": "210px", "--py": "130px", "--ex": "208px", "--ey": "278px", "--delay": "0.23s" }}>🌿</span>
 
                     {/* Photo 5 center(0,-20) → blooms in gaps between photos */}
-                    <span className="bloom bloom-13" style={{"--px":"0px","--py":"-20px","--ex":"0px","--ey":"-168px","--delay":"0.30s"}}>✨</span>
-                    <span className="bloom bloom-14" style={{"--px":"0px","--py":"-20px","--ex":"0px","--ey":"152px","--delay":"0.36s"}}>🌸</span>
-                    <span className="bloom bloom-15" style={{"--px":"0px","--py":"-20px","--ex":"-150px","--ey":"-20px","--delay":"0.42s"}}>💖</span>
-                    <span className="bloom bloom-16" style={{"--px":"0px","--py":"-20px","--ex":"158px","--ey":"-20px","--delay":"0.48s"}}>🌷</span>
+                    <span className="bloom bloom-13" style={{ "--px": "0px", "--py": "-20px", "--ex": "0px", "--ey": "-168px", "--delay": "0.30s" }}>✨</span>
+                    <span className="bloom bloom-14" style={{ "--px": "0px", "--py": "-20px", "--ex": "0px", "--ey": "152px", "--delay": "0.36s" }}>🌸</span>
+                    <span className="bloom bloom-15" style={{ "--px": "0px", "--py": "-20px", "--ex": "-150px", "--ey": "-20px", "--delay": "0.42s" }}>💖</span>
+                    <span className="bloom bloom-16" style={{ "--px": "0px", "--py": "-20px", "--ex": "158px", "--ey": "-20px", "--delay": "0.48s" }}>🌷</span>
                   </div>
                 )}
               </div>
