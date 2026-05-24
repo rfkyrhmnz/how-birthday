@@ -847,7 +847,7 @@ export default function App() {
               </p>
               <img
                 className="closing-gif"
-                src={`${import.meta.env.BASE_URL}images/Untitled design.gif`}
+                src={`${import.meta.env.BASE_URL}images/Untitled design.webp`}
                 alt="gif"
                 style={{
                   width: "180px",
