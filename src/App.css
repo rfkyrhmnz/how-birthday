@@ -577,29 +577,29 @@
 .word-span {
   display: inline-block;
   opacity: 0;
-  transform: translateY(30px) scale(0.6) rotate(-10deg);
+  transform: translateY(18px) scale(0.85);
   color: #ffffff;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
-  animation: popWord 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+  animation: popWord 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes popWord {
   0% {
     opacity: 0;
-    transform: translateY(30px) scale(0.6) rotate(-10deg);
-    filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0)) blur(8px);
+    transform: translateY(18px) scale(0.85);
+    filter: blur(6px) drop-shadow(0 0 0 rgba(0,0,0,0));
   }
 
-  60% {
+  55% {
     opacity: 1;
-    transform: translateY(-10px) scale(1.1) rotate(5deg);
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4)) blur(0);
+    transform: translateY(-4px) scale(1.04);
+    filter: blur(0) drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
   }
 
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1) rotate(0deg);
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 15px rgba(255, 209, 220, 0.7));
+    transform: translateY(0) scale(1);
+    filter: blur(0) drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35)) drop-shadow(0 0 12px rgba(255, 209, 220, 0.6));
   }
 }
 
@@ -661,9 +661,15 @@
   box-shadow: 0 16px 38px rgba(186, 118, 134, 0.25), 0 6px 18px rgba(0, 0, 0, 0.07);
   border-radius: 12px;
   opacity: 0;
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease, border-color 0.5s ease;
+  transition:
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.5s ease;
   border: 1px solid #ffd1dc;
   box-sizing: content-box;
+  will-change: transform, filter;
 }
 
 /* Washi tape effect at the top of polaroids */
@@ -722,9 +728,14 @@
 
 /* DSLR Focal Bokeh Effects */
 .photo-card.blurred-out {
-  filter: blur(4px) brightness(0.8) grayscale(25%);
-  opacity: 0.38 !important;
+  filter: blur(3px) brightness(0.85) grayscale(20%);
+  opacity: 0.42 !important;
   pointer-events: none;
+  /* Smooth blur-in */
+  transition:
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .photo-card.active-focus {
@@ -733,11 +744,17 @@
   z-index: 40 !important;
   box-shadow: 0 35px 80px rgba(186, 118, 134, 0.48), 0 15px 35px rgba(0, 0, 0, 0.15);
   border-color: #ffcbd5;
+  transition:
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .photo-card.active-focus img {
   transform: scale(1.04);
   filter: contrast(1.03) brightness(1.02) saturate(1.08);
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s ease;
 }
 
 .photo-card:hover img,
