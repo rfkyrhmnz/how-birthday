@@ -581,8 +581,7 @@ export default function App() {
               fontStyle: "italic",
               margin: "0 0 28px",
             }}>
-              "Sebuah halaman kecil yang aku buat khusus untuk kamu.<br />
-              Isinya sederhana, lembut, dan penuh rasa sayang."
+              Ini dibuat untukmu — sederhana, tapi dengan niat yang serius.
             </p>
 
             {/* Open button */}
@@ -632,8 +631,8 @@ export default function App() {
                 <div style={{ flex: 1 }}>
                   <p style={{ margin: 0, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#b38c97" }}>For you</p>
                   <p style={{ margin: "4px 0 0", fontSize: "clamp(13px, 3vw, 15px)", lineHeight: 1.7, color: "#6d5a60" }}>
-                    on your <span style={{ fontFamily: "'Pacifico', cursive", color: "#cfa7b3", fontWeight: 400 }}>special</span> day —
-                    Semoga kamu merasa tenang, bahagia, dan tahu kalau kamu sangat berarti. 💖
+                    on your <span style={{ fontFamily: "'Pacifico', cursive", color: "#cfa7b3", fontWeight: 400 }}>special</span> day —{" "}
+                    Semoga hari ini jadi satu dari banyak hari baik yang masih menunggumu.
                   </p>
                 </div>
               </div>
@@ -837,9 +836,10 @@ export default function App() {
                   color: "#6d5a60",
                 }}
               >
-                Semoga di setiap langkahmu, kamu selalu diberi kekuatan, kesabaran, dan ketenangan dalam menjalani hari-harimu.<br /><br />
-                Semoga semua yang sedang kamu perjuangkan di Solo dipermudah, dilancarkan, dan membawa hasil yang membanggakan untukmu.<br /><br />
-                Aku akan selalu mendoakan yang terbaik untukmu, di mana pun kamu berada.
+                Selamat ulang tahun, Cindy.<br /><br />
+                Semoga tahun ini lebih ringan dari sebelumnya — bukan berarti tanpa tantangan, tapi karena kamu sudah lebih tahu cara menghadapinya.<br /><br />
+                Semoga apa yang sedang kamu perjuangkan di Solo perlahan menemukan jalannya. Dan di sela-sela itu semua, semoga kamu masih punya waktu untuk beristirahat dan merasa cukup.<br /><br />
+                Kamu layak untuk semua hal baik yang sedang menuju ke arahmu.
               </p>
 
               <p style={{ marginTop: "14px", fontSize: "20px", fontWeight: 600 }}>
