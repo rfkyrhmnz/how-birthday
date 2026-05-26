@@ -26,22 +26,28 @@
   box-sizing: border-box;
 }
 
-/* Newspaper background moved to .parallax-bg real div for JS parallax control */
+/* Parallax bg: outer div handles TRANSFORM only (GPU composited layer) */
 .parallax-bg {
   position: absolute;
-  /* Extra size so background never shows edges when translating */
   inset: -12%;
-  background-image: url('/how-birthday/images/crumpled_pink_newspaper.png');
+  z-index: 0;
+  pointer-events: none;
+  transition: transform 3.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  /* Force GPU layer — no filter here, so compositor doesn't repaint */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+/* Inner div handles FILTER only (static, never animated = no repaint cost) */
+.parallax-bg-inner {
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: center;
   filter: sepia(45%) hue-rotate(292deg) saturate(1.0) brightness(0.72);
-  z-index: 0;
   pointer-events: none;
-  /* Parallax transition — slower than camera (3s) to feel deeper */
-  transition: transform 3.5s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
 }
-
 
 .content-scaler {
   max-width: 1100px;
@@ -665,9 +671,11 @@
   margin-top: 20px;
   z-index: 10;
 
-  /* Smooth cinematic camera pan — only the gallery moves, not individual photos */
+  /* GPU-composited camera pan — only transform changes, no repaint */
   transition: transform 3s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .photo-card {
@@ -679,15 +687,15 @@
   box-shadow: 0 16px 38px rgba(186, 118, 134, 0.25), 0 6px 18px rgba(0, 0, 0, 0.07);
   border-radius: 12px;
   opacity: 0;
+  /* Only animate opacity + box-shadow — transform is set statically via nth-child */
   transition:
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.5s ease;
+    opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.6s ease,
+    border-color 0.4s ease;
   border: 1px solid #ffd1dc;
   box-sizing: content-box;
-  will-change: transform, filter;
+  will-change: opacity;
+  backface-visibility: hidden;
 }
 
 /* Washi tape effect at the top of polaroids */

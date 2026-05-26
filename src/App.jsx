@@ -478,16 +478,16 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* Parallax newspaper background — moves counter to camera for depth illusion */}
-      <div
-        className="parallax-bg"
-        style={{
-          backgroundImage: `url(${import.meta.env.BASE_URL}images/crumpled_pink_newspaper.png)`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          ...getBgParallaxStyle()
-        }}
-      />
+      {/* Parallax outer: TRANSFORM only (GPU layer, no filter = no repaint) */}
+      <div className="parallax-bg" style={getBgParallaxStyle()}>
+        {/* Inner: FILTER only (static, never animated) */}
+        <div
+          className="parallax-bg-inner"
+          style={{
+            backgroundImage: `url(${import.meta.env.BASE_URL}images/crumpled_pink_newspaper.png)`,
+          }}
+        />
+      </div>
       {/* Audio Element */}
       <audio
         ref={audioRef}
