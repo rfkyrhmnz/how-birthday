@@ -414,30 +414,34 @@ export default function App() {
 
   const getCameraStyle = () => {
     if (focusIndex === -1) {
+      // Show all photos — camera at origin, slight zoom out to see all
       return {
-        transform: "scale(1) translate(0, 0)"
+        transform: "scale(1) translate(0px, 0px)"
       };
     }
 
     const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
 
-    // Negative offset coordinate of each card's transform to focus it perfectly in the viewport center
+    // Camera offsets: negate each photo's own translate so it lands at viewport center.
+    // Desktop photo positions: (1)→(-240,-70) (2)→(220,-90) (3)→(-200,110) (4)→(210,130) (5)→(0,20)
+    // Camera translates the WORLD by the NEGATIVE of that → brings each photo to center
     const offsets = isMobile ? [
-      { x: 90, y: 50 },   // Card 1: translate(-90px, -50px)
-      { x: -80, y: 60 },  // Card 2: translate(80px, -60px)
-      { x: 70, y: -70 },  // Card 3: translate(-70px, 70px)
-      { x: -85, y: -80 }, // Card 4: translate(85px, 80px)
-      { x: 0, y: -15 }    // Card 5: translate(0px, 15px)
+      { x: 70,  y: 40  },  // Photo 1: at (-70,-40) → camera translate (+70,+40)
+      { x: -65, y: 48  },  // Photo 2: at (65,-48)  → camera translate (-65,+48)
+      { x: 55,  y: -56 },  // Photo 3: at (-55,56)  → camera translate (+55,-56)
+      { x: -60, y: -62 },  // Photo 4: at (60,62)   → camera translate (-60,-62)
+      { x: 0,   y: -10 }   // Photo 5: at (0,10)    → camera translate (0,-10)
     ] : [
-      { x: 240, y: 70 },   // Card 1: translate(-240px, -70px)
-      { x: -220, y: 90 },  // Card 2: translate(220px, -90px)
-      { x: 200, y: -110 }, // Card 3: translate(-200px, 110px)
-      { x: -210, y: -130 },// Card 4: translate(210px, 130px)
-      { x: 0, y: -20 }     // Card 5: translate(0px, 20px)
+      { x: 240,  y: 70  },  // Photo 1
+      { x: -220, y: 90  },  // Photo 2
+      { x: 200,  y: -110 }, // Photo 3
+      { x: -210, y: -130 }, // Photo 4
+      { x: 0,    y: -20  }  // Photo 5
     ];
 
     const offset = offsets[focusIndex] || { x: 0, y: 0 };
-    const scale = isMobile ? 1.4 : 1.45;
+    // Subtle zoom: just enough to feel "closer" without distorting layout
+    const scale = isMobile ? 1.5 : 1.18;
 
     return {
       transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`

@@ -663,8 +663,8 @@
   margin-top: 20px;
   z-index: 10;
 
-  /* GPU-Accelerated buttery smooth cinematic transitions */
-  transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  /* Smooth cinematic camera pan — only the gallery moves, not individual photos */
+  transition: transform 3s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 
@@ -735,6 +735,7 @@
   text-overflow: ellipsis;
 }
 
+/* Hover: only elevate box-shadow + z-index, NO position/rotation change */
 .photo-card:hover {
   z-index: 50 !important;
   box-shadow: 0 28px 60px rgba(186, 118, 134, 0.38), 0 10px 25px rgba(0, 0, 0, 0.12);
@@ -742,18 +743,7 @@
   border-color: #ffb3c1;
 }
 
-/* DSLR Focal Bokeh Effects */
-.photo-card.blurred-out {
-  filter: blur(3px) brightness(0.85) grayscale(20%);
-  opacity: 0.42 !important;
-  pointer-events: none;
-  /* Smooth blur-in */
-  transition:
-    transform 1s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 1s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
+/* active-focus: only visual emphasis — NO transform change, photo stays at its coordinate */
 .photo-card.active-focus {
   filter: none !important;
   opacity: 1 !important;
@@ -761,42 +751,21 @@
   box-shadow: 0 35px 80px rgba(186, 118, 134, 0.48), 0 15px 35px rgba(0, 0, 0, 0.15);
   border-color: #ffcbd5;
   transition:
-    transform 1s cubic-bezier(0.16, 1, 0.3, 1),
     filter 1s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .photo-card.active-focus img {
-  transform: scale(1.04);
   filter: contrast(1.03) brightness(1.02) saturate(1.08);
-  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s ease;
+  transition: filter 1s ease;
 }
 
+/* Desktop: hover on active photo — subtle image zoom only */
 .photo-card:hover img,
 .photo-card.active-focus:hover img {
-  transform: scale(1.05);
+  transform: scale(1.03);
   filter: contrast(1.04) brightness(1.03) saturate(1.1);
-}
-
-.photo-card:nth-child(1):hover {
-  transform: translate(-240px, -70px) scale(1.15) rotate(0deg) !important;
-}
-
-.photo-card:nth-child(2):hover {
-  transform: translate(220px, -90px) scale(1.15) rotate(0deg) !important;
-}
-
-.photo-card:nth-child(3):hover {
-  transform: translate(-200px, 110px) scale(1.15) rotate(0deg) !important;
-}
-
-.photo-card:nth-child(4):hover {
-  transform: translate(210px, 130px) scale(1.15) rotate(0deg) !important;
-}
-
-.photo-card:nth-child(5):hover {
-  transform: translate(0px, 20px) scale(1.15) rotate(0deg) !important;
 }
 
 .photo-placeholder {
@@ -1029,24 +998,14 @@
     z-index: 5;
   }
 
-  .photo-card:nth-child(1):hover {
-    transform: translate(-70px, -40px) scale(1.05) rotate(0deg) !important;
-  }
-
-  .photo-card:nth-child(2):hover {
-    transform: translate(65px, -48px) scale(1.05) rotate(0deg) !important;
-  }
-
-  .photo-card:nth-child(3):hover {
-    transform: translate(-55px, 56px) scale(1.05) rotate(0deg) !important;
-  }
-
-  .photo-card:nth-child(4):hover {
-    transform: translate(60px, 62px) scale(1.05) rotate(0deg) !important;
-  }
-
+  /* Mobile hover: NO transform change, photo stays at its coordinate */
+  .photo-card:nth-child(1):hover,
+  .photo-card:nth-child(2):hover,
+  .photo-card:nth-child(3):hover,
+  .photo-card:nth-child(4):hover,
   .photo-card:nth-child(5):hover {
-    transform: translate(0px, 10px) scale(1.05) rotate(0deg) !important;
+    box-shadow: 0 20px 40px rgba(186, 118, 134, 0.35);
+    border-color: #ffb3c1;
   }
 
   /* Runner game mobile */
