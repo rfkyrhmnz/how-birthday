@@ -26,18 +26,20 @@
   box-sizing: border-box;
 }
 
-/* Newspaper background — sepia shifted to pink (hue-rotate 292°) for rosy vintage feel */
-.app-container::before {
-  content: '';
+/* Newspaper background moved to .parallax-bg real div for JS parallax control */
+.parallax-bg {
   position: absolute;
-  inset: 0;
-  background-image: url('/images/crumpled_pink_newspaper.png');
+  /* Extra size so background never shows edges when translating */
+  inset: -12%;
+  background-image: url('/how-birthday/images/crumpled_pink_newspaper.png');
   background-size: cover;
   background-position: center;
-  /* sepia → pink: hue-rotate shifts yellow-brown sepia toward rose/pink */
   filter: sepia(45%) hue-rotate(292deg) saturate(1.0) brightness(0.72);
   z-index: 0;
   pointer-events: none;
+  /* Parallax transition — slower than camera (3s) to feel deeper */
+  transition: transform 3.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
 

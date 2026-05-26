@@ -455,8 +455,39 @@ export default function App() {
     };
   };
 
+  // Parallax BG: moves OPPOSITE direction at 15% of camera speed → creates depth illusion
+  const getBgParallaxStyle = () => {
+    if (page !== 1 || focusIndex === -1) return {};
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
+    const bgOffsets = isMobile ? [
+      { x: -10, y: -6  },
+      { x:  10, y: -7  },
+      { x:  -8, y:  8  },
+      { x:   9, y:  9  },
+      { x:   0, y:  1  }
+    ] : [
+      { x: -36, y: -10 },
+      { x:  33, y: -13 },
+      { x: -30, y:  16 },
+      { x:  31, y:  19 },
+      { x:   0, y:   3 }
+    ];
+    const o = bgOffsets[focusIndex] || { x: 0, y: 0 };
+    return { transform: `translate(${o.x}px, ${o.y}px)` };
+  };
+
   return (
     <div className="app-container">
+      {/* Parallax newspaper background — moves counter to camera for depth illusion */}
+      <div
+        className="parallax-bg"
+        style={{
+          backgroundImage: `url(${import.meta.env.BASE_URL}images/crumpled_pink_newspaper.png)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          ...getBgParallaxStyle()
+        }}
+      />
       {/* Audio Element */}
       <audio
         ref={audioRef}
