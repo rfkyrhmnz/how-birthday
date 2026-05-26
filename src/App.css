@@ -223,7 +223,13 @@
 /* Lightbox / modal for enlarged photo */
 .lightbox {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  /* iOS Safari fallback — fills actual visible area including notch */
+  min-height: -webkit-fill-available;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -235,10 +241,14 @@
 .lightbox img {
   width: 100%;
   height: 100%;
+  max-width: 100vw;
+  max-height: 100vh;
+  max-height: 100dvh;
   border-radius: 0;
   box-shadow: none;
   background: #000;
   object-fit: contain;
+  display: block;
 }
 
 .lightbox-close {
@@ -260,7 +270,7 @@
   justify-content: center;
 }
 
-/* On larger screens, keep a bit of max-width so it doesn't stretch too wide */
+/* On larger screens, keep padding + border-radius */
 @media (min-width: 600px) {
   .lightbox {
     padding: 24px;
@@ -270,7 +280,8 @@
     width: auto;
     height: auto;
     max-width: 90%;
-    max-height: 88%;
+    max-height: 88vh;
+    max-height: 88dvh;
     border-radius: 12px;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
   }
@@ -361,6 +372,11 @@
 @media (max-width: 600px) {
   .scrapbook-card {
     padding: 28px 18px;
+    /* iOS Safari: allow scroll if content taller than viewport */
+    max-height: 90vh;
+    max-height: 90dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -1069,12 +1085,16 @@
   }
 }
 
+/* iOS Safari fix: use position:fixed so clouds position relative to viewport, not parent */
 .side-clouds {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   pointer-events: none;
   z-index: 5;
   transition: opacity 2s ease-in-out;
