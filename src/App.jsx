@@ -324,6 +324,16 @@ export default function App() {
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [fadeTransition, setFadeTransition] = useState(false);
 
+  // Remove HTML loader once React has mounted
+  useEffect(() => {
+    const loader = document.getElementById('html-loader');
+    if (loader) {
+      loader.style.opacity = '0';
+      const t = setTimeout(() => loader.remove(), 650);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
   // Preload all images so they appear instantly during the animation
   useEffect(() => {
     const imagesToPreload = [
