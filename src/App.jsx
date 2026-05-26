@@ -33,31 +33,40 @@ function secondaryButtonStyle(disabled = false) {
 
 
 
-// ────────────────────────────────────
-// 🏛️  LYRIC ANIMATION SETTINGS — edit sesuka hati
-// ────────────────────────────────────
-
-/** Durasi pop-in tiap kata (ms). Lebih kecil = lebih cepat. */
-const WORD_POP_DURATION_MS = 900;
-
-/** Jeda antar kata muncul satu per satu (ms). Lebih kecil = lebih rapat. */
-const WORD_STAGGER_MS = 110;
-
-/** Berapa kali teks lirik naik-turun sebelum berhenti. 0 = tidak bergerak sama sekali. */
-const LYRIC_FLOAT_CYCLES = 2;
-
-/** Durasi 1 siklus naik-turun (ms). */
-const LYRIC_FLOAT_DURATION_MS = 4000;
-
-// ────────────────────────────────────
-
-// Approximate lyrics timings for the short chorus snippet
+// ─────────────────────────────────────────────────────────────────────
+// 🎛️  LYRIC DATA — edit animasi per kalimat di sini
+//
+//  wordPop   : durasi pop-in tiap kata (ms). Kecil = cepat.
+//  stagger   : jeda antar kata (ms). Kecil = lebih serempak.
+//  floatCycles: berapa kali teks naik-turun. 0 = diam.
+//  floatMs   : durasi 1 siklus naik-turun (ms).
+// ─────────────────────────────────────────────────────────────────────
 const lyricsData = [
-  { time: 0, text: "I'm lookin' back on things I've done" },
-  { time: 5.7, text: "I never wanna play the same old part" },
-  { time: 11.5, text: "I'll keep you in the dark" },
-  { time: 14.5, text: "Now let me show you the shape of my heart" },
-  { time: 19.0, text: "Happy Birthday! 💖" }
+  {
+    time: 0,
+    text: "I'm lookin' back on things I've done",
+    wordPop: 900, stagger: 110, floatCycles: 2, floatMs: 4000,
+  },
+  {
+    time: 5.7,
+    text: "I never wanna play the same old part",
+    wordPop: 750, stagger: 90, floatCycles: 2, floatMs: 4000,
+  },
+  {
+    time: 11.5,
+    text: "I'll keep you in the dark",
+    wordPop: 1100, stagger: 150, floatCycles: 1, floatMs: 5000,
+  },
+  {
+    time: 14.5,
+    text: "Now let me show you the shape of my heart",
+    wordPop: 700, stagger: 80, floatCycles: 2, floatMs: 3500,
+  },
+  {
+    time: 19.0,
+    text: "Happy Birthday! 💖",
+    wordPop: 1200, stagger: 200, floatCycles: 0, floatMs: 4000,
+  },
 ];
 
 const photoData = [
@@ -400,8 +409,9 @@ export default function App() {
       return currentTime >= lyric.time && currentTime < nextLyricTime;
     });
 
-  const currentLyric =
-    currentLyricIndex !== -1 ? lyricsData[currentLyricIndex].text : "";
+  const currentLyricData =
+    currentLyricIndex !== -1 ? lyricsData[currentLyricIndex] : null;
+  const currentLyric = currentLyricData?.text ?? "";
 
   // Generate floating notes that only change when the current lyric changes
   const currentNotes = useMemo(() => {
@@ -723,8 +733,8 @@ export default function App() {
                 <h2
                   className="lyric-text"
                   key={currentLyricIndex}
-                  style={LYRIC_FLOAT_CYCLES > 0 ? {
-                    animation: `floatLyrics ${LYRIC_FLOAT_DURATION_MS}ms ease-in-out ${LYRIC_FLOAT_CYCLES} forwards`
+                  style={currentLyricData?.floatCycles > 0 ? {
+                    animation: `floatLyrics ${currentLyricData.floatMs}ms ease-in-out ${currentLyricData.floatCycles} forwards`
                   } : {}}
                 >
                   {currentLyric ? (
@@ -733,8 +743,8 @@ export default function App() {
                         key={i}
                         className="word-span"
                         style={{
-                          animationDelay: `${i * WORD_STAGGER_MS}ms`,
-                          animationDuration: `${WORD_POP_DURATION_MS}ms`,
+                          animationDelay: `${i * (currentLyricData?.stagger ?? 110)}ms`,
+                          animationDuration: `${currentLyricData?.wordPop ?? 900}ms`,
                         }}
                       >
                         {word}
