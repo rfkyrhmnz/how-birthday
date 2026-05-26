@@ -424,37 +424,37 @@ export default function App() {
 
   const getCameraStyle = () => {
     if (focusIndex === -1) {
-      // Show all photos — camera at origin, slight zoom out to see all
       return {
-        transform: "scale(1) translate(0px, 0px)"
+        transform: "scale(1) rotate(0deg) translate(0px, 0px)",
+        transition: "transform 2.8s cubic-bezier(0.16, 1, 0.3, 1)"
       };
     }
 
     const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
 
-    // Camera offsets: negate each photo's own translate so it lands at viewport center.
-    // Desktop photo positions: (1)→(-240,-70) (2)→(220,-90) (3)→(-200,110) (4)→(210,130) (5)→(0,20)
-    // Camera translates the WORLD by the NEGATIVE of that → brings each photo to center
-    const offsets = isMobile ? [
-      { x: 70,  y: 40  },  // Photo 1: at (-70,-40) → camera translate (+70,+40)
-      { x: -65, y: 48  },  // Photo 2: at (65,-48)  → camera translate (-65,+48)
-      { x: 55,  y: -56 },  // Photo 3: at (-55,56)  → camera translate (+55,-56)
-      { x: -60, y: -62 },  // Photo 4: at (60,62)   → camera translate (-60,-62)
-      { x: 0,   y: -10 }   // Photo 5: at (0,10)    → camera translate (0,-10)
+    // Each shot = unique translate + camera tilt (rotate) + zoom + transition speed
+    // Variety makes it feel like a film director picking different angles
+    const shots = isMobile ? [
+      // mobile shots
+      { x:  70, y:  40, r: -1.5, scale: 1.55, dur: "2.6s", ease: "cubic-bezier(0.22, 1, 0.36, 1)" },  // slow drift, slight left tilt
+      { x: -65, y:  48, r:  1.2, scale: 1.5,  dur: "1.8s", ease: "cubic-bezier(0.87, 0, 0.13, 1)" },  // snappy cut, right tilt
+      { x:  55, y: -56, r: -0.8, scale: 1.6,  dur: "3.2s", ease: "cubic-bezier(0.16, 1, 0.3, 1)"  },  // slow cinematic pull
+      { x: -60, y: -62, r:  2.0, scale: 1.52, dur: "2.0s", ease: "cubic-bezier(0.76, 0, 0.24, 1)" },  // medium, dynamic angle
+      { x:   0, y: -10, r:  0.0, scale: 1.45, dur: "3.5s", ease: "cubic-bezier(0.16, 1, 0.3, 1)"  },  // slow, straight final shot
     ] : [
-      { x: 240,  y: 70  },  // Photo 1
-      { x: -220, y: 90  },  // Photo 2
-      { x: 200,  y: -110 }, // Photo 3
-      { x: -210, y: -130 }, // Photo 4
-      { x: 0,    y: -20  }  // Photo 5
+      // desktop shots
+      { x:  240, y:  70, r: -2.0, scale: 1.22, dur: "2.8s", ease: "cubic-bezier(0.22, 1, 0.36, 1)" },  // wide pan, left tilt
+      { x: -220, y:  90, r:  1.5, scale: 1.18, dur: "1.8s", ease: "cubic-bezier(0.87, 0, 0.13, 1)" },  // snappy right swing
+      { x:  200, y: -110, r: -1.2, scale: 1.25, dur: "3.4s", ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, // slow cinematic float
+      { x: -210, y: -130, r:  2.2, scale: 1.20, dur: "2.2s", ease: "cubic-bezier(0.76, 0, 0.24, 1)" },// sharp angle
+      { x:    0, y:  -20, r:  0.0, scale: 1.14, dur: "3.6s", ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, // slow, level finale
     ];
 
-    const offset = offsets[focusIndex] || { x: 0, y: 0 };
-    // Subtle zoom: just enough to feel "closer" without distorting layout
-    const scale = isMobile ? 1.5 : 1.18;
+    const s = shots[focusIndex] || { x: 0, y: 0, r: 0, scale: 1.15, dur: "3s", ease: "cubic-bezier(0.16, 1, 0.3, 1)" };
 
     return {
-      transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`
+      transform: `scale(${s.scale}) rotate(${s.r}deg) translate(${s.x}px, ${s.y}px)`,
+      transition: `transform ${s.dur} ${s.ease}`
     };
   };
 

@@ -758,12 +758,26 @@
   filter: none !important;
   opacity: 1 !important;
   z-index: 40 !important;
-  box-shadow: 0 35px 80px rgba(186, 118, 134, 0.48), 0 15px 35px rgba(0, 0, 0, 0.15);
   border-color: #ffcbd5;
+  /* Glow pulse: shadow "breathes" to feel alive while camera is focused */
+  animation: activeFocusGlow 2.8s ease-in-out infinite;
   transition:
-    filter 1s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 1s cubic-bezier(0.16, 1, 0.3, 1);
+    filter 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes activeFocusGlow {
+  0%, 100% {
+    box-shadow:
+      0 28px 60px rgba(186, 118, 134, 0.32),
+      0 10px 25px rgba(0, 0, 0, 0.10);
+  }
+  50% {
+    box-shadow:
+      0 40px 90px rgba(207, 140, 165, 0.55),
+      0 16px 40px rgba(0, 0, 0, 0.14),
+      0 0 40px rgba(255, 200, 215, 0.25);
+  }
 }
 
 .photo-card.active-focus img {
