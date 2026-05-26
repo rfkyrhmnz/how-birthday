@@ -583,7 +583,7 @@
   gap: 4px 10px;
   line-height: 1.4;
   z-index: 10;
-  animation: floatLyrics 4s ease-in-out infinite;
+  /* animation applied via JSX inline style so JS constants control it */
 }
 
 @keyframes floatLyrics {
@@ -604,7 +604,10 @@
   transform: translateY(18px) scale(0.85);
   color: #ffffff;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
-  animation: popWord 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  /* duration set per-element via JSX animationDuration */
+  animation-name: popWord;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: forwards;
 }
 
 @keyframes popWord {

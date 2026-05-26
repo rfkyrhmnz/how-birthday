@@ -33,6 +33,24 @@ function secondaryButtonStyle(disabled = false) {
 
 
 
+// ────────────────────────────────────
+// 🏛️  LYRIC ANIMATION SETTINGS — edit sesuka hati
+// ────────────────────────────────────
+
+/** Durasi pop-in tiap kata (ms). Lebih kecil = lebih cepat. */
+const WORD_POP_DURATION_MS = 900;
+
+/** Jeda antar kata muncul satu per satu (ms). Lebih kecil = lebih rapat. */
+const WORD_STAGGER_MS = 110;
+
+/** Berapa kali teks lirik naik-turun sebelum berhenti. 0 = tidak bergerak sama sekali. */
+const LYRIC_FLOAT_CYCLES = 2;
+
+/** Durasi 1 siklus naik-turun (ms). */
+const LYRIC_FLOAT_DURATION_MS = 4000;
+
+// ────────────────────────────────────
+
 // Approximate lyrics timings for the short chorus snippet
 const lyricsData = [
   { time: 0, text: "I'm lookin' back on things I've done" },
@@ -702,13 +720,22 @@ export default function App() {
             <div className="main-content" style={{ padding: 0, justifyContent: "center", position: "relative" }}>
               {/* Lyrics Layer (On top of photos) */}
               <div className="lyrics-overlay" style={getLyricStyle()}>
-                <h2 className="lyric-text" key={currentLyricIndex}>
+                <h2
+                  className="lyric-text"
+                  key={currentLyricIndex}
+                  style={LYRIC_FLOAT_CYCLES > 0 ? {
+                    animation: `floatLyrics ${LYRIC_FLOAT_DURATION_MS}ms ease-in-out ${LYRIC_FLOAT_CYCLES} forwards`
+                  } : {}}
+                >
                   {currentLyric ? (
                     currentLyric.split(" ").map((word, i) => (
                       <span
                         key={i}
                         className="word-span"
-                        style={{ animationDelay: `${i * 0.12}s` }}
+                        style={{
+                          animationDelay: `${i * WORD_STAGGER_MS}ms`,
+                          animationDuration: `${WORD_POP_DURATION_MS}ms`,
+                        }}
                       >
                         {word}
                       </span>
