@@ -424,37 +424,31 @@ export default function App() {
 
   const getCameraStyle = () => {
     if (focusIndex === -1) {
-      return {
-        transform: "scale(1) rotate(0deg) translate(0px, 0px)",
-        transition: "transform 2.8s cubic-bezier(0.16, 1, 0.3, 1)"
-      };
+      return { transform: "scale(1) translate3d(0px, 0px, 0)" };
     }
 
     const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
 
-    // Each shot = unique translate + camera tilt (rotate) + zoom + transition speed
-    // Variety makes it feel like a film director picking different angles
+    // Only translate + scale — NO rotation (rotation in transform chain causes
+    // non-linear interpolation path which looks janky).
+    // Variety via scale: each shot feels slightly closer/farther.
     const shots = isMobile ? [
-      // mobile shots
-      { x:  70, y:  40, r: -1.5, scale: 1.55, dur: "2.6s", ease: "cubic-bezier(0.22, 1, 0.36, 1)" },  // slow drift, slight left tilt
-      { x: -65, y:  48, r:  1.2, scale: 1.5,  dur: "1.8s", ease: "cubic-bezier(0.87, 0, 0.13, 1)" },  // snappy cut, right tilt
-      { x:  55, y: -56, r: -0.8, scale: 1.6,  dur: "3.2s", ease: "cubic-bezier(0.16, 1, 0.3, 1)"  },  // slow cinematic pull
-      { x: -60, y: -62, r:  2.0, scale: 1.52, dur: "2.0s", ease: "cubic-bezier(0.76, 0, 0.24, 1)" },  // medium, dynamic angle
-      { x:   0, y: -10, r:  0.0, scale: 1.45, dur: "3.5s", ease: "cubic-bezier(0.16, 1, 0.3, 1)"  },  // slow, straight final shot
+      { x:  70, y:  40, scale: 1.55 },
+      { x: -65, y:  48, scale: 1.50 },
+      { x:  55, y: -56, scale: 1.60 },
+      { x: -60, y: -62, scale: 1.52 },
+      { x:   0, y: -10, scale: 1.45 },
     ] : [
-      // desktop shots
-      { x:  240, y:  70, r: -2.0, scale: 1.22, dur: "2.8s", ease: "cubic-bezier(0.22, 1, 0.36, 1)" },  // wide pan, left tilt
-      { x: -220, y:  90, r:  1.5, scale: 1.18, dur: "1.8s", ease: "cubic-bezier(0.87, 0, 0.13, 1)" },  // snappy right swing
-      { x:  200, y: -110, r: -1.2, scale: 1.25, dur: "3.4s", ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, // slow cinematic float
-      { x: -210, y: -130, r:  2.2, scale: 1.20, dur: "2.2s", ease: "cubic-bezier(0.76, 0, 0.24, 1)" },// sharp angle
-      { x:    0, y:  -20, r:  0.0, scale: 1.14, dur: "3.6s", ease: "cubic-bezier(0.16, 1, 0.3, 1)" }, // slow, level finale
+      { x:  240, y:  70, scale: 1.22 },
+      { x: -220, y:  90, scale: 1.17 },
+      { x:  200, y: -110, scale: 1.26 },
+      { x: -210, y: -130, scale: 1.19 },
+      { x:    0, y:  -20, scale: 1.13 },
     ];
 
-    const s = shots[focusIndex] || { x: 0, y: 0, r: 0, scale: 1.15, dur: "3s", ease: "cubic-bezier(0.16, 1, 0.3, 1)" };
-
+    const s = shots[focusIndex] || { x: 0, y: 0, scale: 1.15 };
     return {
-      transform: `scale(${s.scale}) rotate(${s.r}deg) translate(${s.x}px, ${s.y}px)`,
-      transition: `transform ${s.dur} ${s.ease}`
+      transform: `scale(${s.scale}) translate3d(${s.x}px, ${s.y}px, 0)`
     };
   };
 

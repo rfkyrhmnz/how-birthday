@@ -671,8 +671,8 @@
   margin-top: 20px;
   z-index: 10;
 
-  /* GPU-composited camera pan — only transform changes, no repaint */
-  transition: transform 3s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Single smooth transition — only transform changes, easing never changes = buttery */
+  transition: transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
