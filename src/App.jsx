@@ -616,21 +616,21 @@ export default function App() {
             </button>
 
             {/* For you card — horizontal strip at bottom, hidden on mobile */}
-            <div className="for-you-card" style={{ width: "100%", marginTop: "32px" }}>
+            <div className="for-you-card mobile-visible" style={{ width: "100%", marginTop: "16px" }}>
               <div style={{
                 background: "linear-gradient(135deg, #fdf6f8 0%, #fff 100%)",
                 border: "1px solid #f0e1e5",
-                borderRadius: "18px",
-                padding: "20px 28px",
+                borderRadius: "14px",
+                padding: "clamp(10px, 2vw, 20px) clamp(12px, 3vw, 28px)",
                 display: "flex",
                 alignItems: "center",
-                gap: "20px",
+                gap: "12px",
                 textAlign: "left",
               }}>
-                <div style={{ fontSize: "28px", flexShrink: 0 }}>🌸</div>
+                <div style={{ fontSize: "22px", flexShrink: 0 }}>🌸</div>
                 <div style={{ flex: 1 }}>
-                  <p style={{ margin: 0, fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#b38c97" }}>For you</p>
-                  <p style={{ margin: "4px 0 0", fontSize: "clamp(13px, 3vw, 15px)", lineHeight: 1.7, color: "#6d5a60" }}>
+                  <p style={{ margin: 0, fontSize: "9px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#b38c97" }}>For you</p>
+                  <p style={{ margin: "3px 0 0", fontSize: "clamp(11px, 2.8vw, 15px)", lineHeight: 1.55, color: "#6d5a60" }}>
                     on your <span style={{ fontFamily: "'Pacifico', cursive", color: "#cfa7b3", fontWeight: 400 }}>special</span> day —{" "}
                     Semoga hari ini jadi satu dari banyak hari baik yang masih menunggumu.
                   </p>

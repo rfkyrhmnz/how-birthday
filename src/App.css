@@ -62,9 +62,14 @@
     padding: 10px 8px;
   }
 
-  /* Hide secondary "For you" card on mobile — saves a lot of vertical space */
+  /* On mobile: hide For You card by default, show compact version via separate rule */
   .for-you-card {
     display: none;
+  }
+
+  /* Show compact For You card on mobile */
+  .for-you-card.mobile-visible {
+    display: block;
   }
 
   /* Welcome page font tweaks */
@@ -371,12 +376,7 @@
 
 @media (max-width: 600px) {
   .scrapbook-card {
-    padding: 28px 18px;
-    /* iOS Safari: allow scroll if content taller than viewport */
-    max-height: 90vh;
-    max-height: 90dvh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    padding: 20px 14px;
   }
 }
 
