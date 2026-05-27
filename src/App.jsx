@@ -149,6 +149,43 @@ function RunnerGame({ onComplete, onSurrender }) {
     osc.stop(audioCtxRef.current.currentTime + 0.5);
   };
 
+  // 🔔 Gong defeat sound — layered sine oscillators with long decay
+  const playGongSound = () => {
+    if (!audioCtxRef.current) return;
+    const ctx = audioCtxRef.current;
+    const now = ctx.currentTime;
+
+    // Helper: one gong layer
+    const gongLayer = (freq, gainPeak, decayTime, delayStart = 0) => {
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now + delayStart);
+      // Slight pitch drop — classic gong characteristic
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.92, now + delayStart + decayTime);
+      gainNode.gain.setValueAtTime(0, now + delayStart);
+      gainNode.gain.linearRampToValueAtTime(gainPeak, now + delayStart + 0.02); // sharp attack
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + delayStart + decayTime);
+      osc.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      osc.start(now + delayStart);
+      osc.stop(now + delayStart + decayTime + 0.1);
+    };
+
+    // Low fundamental — the heavy GONG body
+    gongLayer(80,   0.45, 3.5);
+    // Second harmonic — adds warmth
+    gongLayer(160,  0.25, 2.8);
+    // Third harmonic — shimmer
+    gongLayer(320,  0.12, 1.8);
+    // High shimmer burst — the "hit" transient
+    gongLayer(640,  0.08, 0.9);
+    // Sub rumble — dramatic weight
+    gongLayer(42,   0.30, 4.0);
+    // Echo layer — slight delay for depth
+    gongLayer(80,   0.15, 3.0, 0.08);
+  };
+
   const bgmRef = useRef(null);
 
   // Chiptune melody: a cheerful looping 8-bit tune using Web Audio API
@@ -260,7 +297,11 @@ function RunnerGame({ onComplete, onSurrender }) {
       playHitSound();
       setLoseCount(prev => {
         const next = prev + 1;
-        if (next >= 3) setShowSurrenderModal(true);
+        if (next >= 3) {
+          setShowSurrenderModal(true);
+          // Small delay so hit sound finishes before gong kicks in
+          setTimeout(() => playGongSound(), 350);
+        }
         return next;
       });
     }
