@@ -659,7 +659,7 @@ export default function App() {
   // Generate floating notes that only change when the current lyric changes
   const currentNotes = useMemo(() => {
     if (!currentLyric) return [];
-    return [...Array(6)].map((_, i) => ({
+    return [...Array(10)].map((_, i) => ({
       id: `note-${currentLyricIndex}-${i}`,
       left: Math.random() * 100, // 0 to 100%
       top: 30 + Math.random() * 70, // 30% to 100%
@@ -1045,25 +1045,24 @@ export default function App() {
                     <div
                       key={index}
                       className={cardClass}
-                      style={{
-                        animationDelay: `${(index % 5) * 0.1}s`,
-                      }}
                     >
-                      <div className="photo-card-tape"></div>
-                      <img
-                        src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
-                        alt={`Memory ${index + 1}`}
-                        onClick={() => { setLightboxSrc(`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`); setLightboxIndex(index); }}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                          e.target.parentElement.innerHTML = `
-                          <div class="photo-placeholder">
-                            <span class="emoji">📸</span>
-                            <p>Photo ${index + 1}</p>
-                          </div>
-                        `;
-                        }}
-                      />
+                      <div className="photo-card-float">
+                        <div className="photo-card-tape"></div>
+                        <img
+                          src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
+                          alt={`Memory ${index + 1}`}
+                          onClick={() => { setLightboxSrc(`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`); setLightboxIndex(index); }}
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            e.target.parentElement.innerHTML = `
+                            <div class="photo-placeholder">
+                              <span class="emoji">📸</span>
+                              <p>Photo ${index + 1}</p>
+                            </div>
+                          `;
+                          }}
+                        />
+                      </div>
                     </div>
                   );
                 })}
