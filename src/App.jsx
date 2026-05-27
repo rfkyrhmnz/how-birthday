@@ -149,41 +149,79 @@ function RunnerGame({ onComplete, onSurrender }) {
     osc.stop(audioCtxRef.current.currentTime + 0.5);
   };
 
-  // 🔔 Gong defeat sound — layered sine oscillators with long decay
-  const playGongSound = () => {
+  // 😢 Dramatic defeat music — classic sad trombone "wah wah wah wahhhh"
+  const playDefeatSound = () => {
     if (!audioCtxRef.current) return;
     const ctx = audioCtxRef.current;
     const now = ctx.currentTime;
 
-    // Helper: one gong layer
-    const gongLayer = (freq, gainPeak, decayTime, delayStart = 0) => {
+    // Sad trombone descending notes: Bb4 → A4 → Ab4 → F3 (the classic loser sequence)
+    const notes = [
+      { freq: 466.16, t: 0.0,  dur: 0.42 },  // Bb4  "wah"
+      { freq: 440.00, t: 0.40, dur: 0.42 },  // A4   "wah"
+      { freq: 415.30, t: 0.78, dur: 0.42 },  // Ab4  "wah"
+      { freq: 174.61, t: 1.15, dur: 1.60 },  // F3   "wahhhhhh" (long, low, defeated)
+    ];
+
+    notes.forEach(({ freq, t, dur }) => {
       const osc = ctx.createOscillator();
       const gainNode = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, now + delayStart);
-      // Slight pitch drop — classic gong characteristic
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.92, now + delayStart + decayTime);
-      gainNode.gain.setValueAtTime(0, now + delayStart);
-      gainNode.gain.linearRampToValueAtTime(gainPeak, now + delayStart + 0.02); // sharp attack
-      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + delayStart + decayTime);
+
+      // Vibrato LFO — gives the "trombone wobble"
+      const lfo = ctx.createOscillator();
+      const lfoGain = ctx.createGain();
+      lfo.type = "sine";
+      lfo.frequency.value = 5.5;
+      lfoGain.gain.value = freq * 0.018; // ~1.8% pitch wobble
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+
+      // Sawtooth = brassy trombone timbre
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(freq, now + t);
+      // Slight portamento downward at end of each note (sad slide)
+      osc.frequency.linearRampToValueAtTime(freq * 0.97, now + t + dur);
+
+      // Envelope: quick attack, held, soft release
+      gainNode.gain.setValueAtTime(0, now + t);
+      gainNode.gain.linearRampToValueAtTime(0.18, now + t + 0.06);
+      gainNode.gain.setValueAtTime(0.16, now + t + dur - 0.12);
+      gainNode.gain.linearRampToValueAtTime(0, now + t + dur);
+
       osc.connect(gainNode);
       gainNode.connect(ctx.destination);
-      osc.start(now + delayStart);
-      osc.stop(now + delayStart + decayTime + 0.1);
-    };
+      osc.start(now + t);
+      osc.stop(now + t + dur + 0.05);
+      lfo.start(now + t);
+      lfo.stop(now + t + dur + 0.05);
+    });
 
-    // Low fundamental — the heavy GONG body
-    gongLayer(80,   0.45, 3.5);
-    // Second harmonic — adds warmth
-    gongLayer(160,  0.25, 2.8);
-    // Third harmonic — shimmer
-    gongLayer(320,  0.12, 1.8);
-    // High shimmer burst — the "hit" transient
-    gongLayer(640,  0.08, 0.9);
-    // Sub rumble — dramatic weight
-    gongLayer(42,   0.30, 4.0);
-    // Echo layer — slight delay for depth
-    gongLayer(80,   0.15, 3.0, 0.08);
+    // Bass drum hit at the start — emphasizes the moment of defeat
+    const noise = ctx.createOscillator();
+    const noiseGain = ctx.createGain();
+    noise.type = "sine";
+    noise.frequency.setValueAtTime(120, now);
+    noise.frequency.exponentialRampToValueAtTime(30, now + 0.25);
+    noiseGain.gain.setValueAtTime(0.5, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+    noise.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + 0.35);
+
+    // Low reverb swell underneath the melody — dramatic depth
+    const swell = ctx.createOscillator();
+    const swellGain = ctx.createGain();
+    swell.type = "sine";
+    swell.frequency.value = 87; // low E — ominous
+    swellGain.gain.setValueAtTime(0, now);
+    swellGain.gain.linearRampToValueAtTime(0.12, now + 0.8);
+    swellGain.gain.linearRampToValueAtTime(0.08, now + 2.0);
+    swellGain.gain.linearRampToValueAtTime(0, now + 3.0);
+    swell.connect(swellGain);
+    swellGain.connect(ctx.destination);
+    swell.start(now);
+    swell.stop(now + 3.1);
   };
 
   const bgmRef = useRef(null);
@@ -300,7 +338,7 @@ function RunnerGame({ onComplete, onSurrender }) {
         if (next >= 3) {
           setShowSurrenderModal(true);
           // Small delay so hit sound finishes before gong kicks in
-          setTimeout(() => playGongSound(), 350);
+          setTimeout(() => playDefeatSound(), 300);
         }
         return next;
       });
