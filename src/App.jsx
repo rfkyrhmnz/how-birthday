@@ -77,12 +77,14 @@ const photoData = [
   { time: 17, src: "/images/Untitled design (84).png" },
 ];
 
-function RunnerGame({ onComplete }) {
+function RunnerGame({ onComplete, onSurrender }) {
   const [isJumping, setIsJumping] = useState(false);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [obstaclePos, setObstaclePos] = useState(100);
+  const [loseCount, setLoseCount] = useState(0);
+  const [showSurrenderModal, setShowSurrenderModal] = useState(false);
 
   const gameLoopRef = useRef(null);
   const audioCtxRef = useRef(null);
@@ -251,12 +253,16 @@ function RunnerGame({ onComplete }) {
 
   // Collision detection
   useEffect(() => {
-    // Tighter/wider hitbox for more challenge. The cat must jump exactly when the obstacle is near.
     if (obstaclePos > 8 && obstaclePos < 28 && !isJumping) {
       stopBgm();
       setGameOver(true);
       setGameStarted(false);
       playHitSound();
+      setLoseCount(prev => {
+        const next = prev + 1;
+        if (next >= 3) setShowSurrenderModal(true);
+        return next;
+      });
     }
   }, [obstaclePos, isJumping]);
 
@@ -268,8 +274,8 @@ function RunnerGame({ onComplete }) {
   return (
     <div
       className="page-card-enter scrapbook-card"
-      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto", padding: "40px", cursor: "pointer", userSelect: "none" }}
-      onClick={jump}
+      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto", padding: "40px", cursor: "pointer", userSelect: "none", position: "relative" }}
+      onClick={showSurrenderModal ? undefined : jump}
     >
       <div className="scrapbook-tape-tl"></div>
       <div className="scrapbook-tape-br"></div>
@@ -287,6 +293,11 @@ function RunnerGame({ onComplete }) {
       <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
         <div style={{ background: "#ffeaef", padding: "8px 24px", borderRadius: "20px", fontWeight: "bold", color: "#cfa7b3", fontSize: "18px" }}>
           Score: {score} / {maxScore}
+          {loseCount > 0 && (
+            <span style={{ marginLeft: "12px", fontSize: "13px", color: "#e07a8f" }}>
+              💔 {loseCount}/3
+            </span>
+          )}
         </div>
       </div>
 
@@ -337,6 +348,152 @@ function RunnerGame({ onComplete }) {
           </div>
         )}
       </div>
+
+      {/* ── Surrender Modal ── */}
+      {showSurrenderModal && (
+        <div
+          style={{
+            position: "absolute", inset: 0,
+            background: "rgba(253, 240, 244, 0.96)",
+            backdropFilter: "blur(6px)",
+            borderRadius: "inherit",
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            gap: "16px", zIndex: 50, padding: "32px",
+          }}
+          onClick={e => e.stopPropagation()}
+        >
+          <div style={{ fontSize: "48px" }}>😿</div>
+          <h3 style={{ fontFamily: "'Pacifico', cursive", color: "#cfa7b3", margin: 0, fontSize: "22px" }}>
+            Sudah 3 kali kalah...
+          </h3>
+          <p style={{ color: "#8a747a", margin: 0, fontSize: "14px", lineHeight: 1.6, textAlign: "center" }}>
+            Masih mau coba lagi, atau menyerah aja?
+          </p>
+          <div style={{ display: "flex", gap: "12px", marginTop: "8px", flexWrap: "wrap", justifyContent: "center" }}>
+            <button
+              onClick={() => {
+                setShowSurrenderModal(false);
+                setGameOver(false);
+                setGameStarted(false);
+                setScore(0);
+                setObstaclePos(100);
+                setLoseCount(0);
+              }}
+              style={secondaryButtonStyle()}
+            >
+              Tidak, coba lagi! 💪
+            </button>
+            <button
+              onClick={() => onSurrender()}
+              style={{ ...primaryButtonStyle(), background: "#e07a8f" }}
+            >
+              Menyerah 🏳️
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Question Page — unlocks main content with correct answer ──
+function QuestionPage({ onCorrect }) {
+  const [answer, setAnswer] = useState("");
+  const [status, setStatus] = useState("idle"); // idle | wrong | shake
+  const [attempts, setAttempts] = useState(0);
+
+  const hints = [
+    "Petunjuk: ada di judul halaman utama. 😉",
+    "Petunjuk: namanya ada 5 huruf, diawali C. 🌸",
+    "Petunjuk: nama lengkapnya Cindy... (hampir ketauan 😅)",
+  ];
+
+  const handleSubmit = () => {
+    const clean = answer.trim().toLowerCase();
+    // Accept: cindy, 4 juni, 04 juni
+    const correct = ["cindy", "4 juni", "04 juni", "4juni", "04juni"].includes(clean);
+    if (correct) {
+      setStatus("correct");
+      setTimeout(() => onCorrect(), 1200);
+    } else {
+      setStatus("shake");
+      setAttempts(a => a + 1);
+      setTimeout(() => setStatus("wrong"), 400);
+    }
+  };
+
+  const handleKey = (e) => {
+    if (e.key === "Enter") handleSubmit();
+  };
+
+  return (
+    <div
+      className="page-card-enter scrapbook-card"
+      style={{
+        textAlign: "center", maxWidth: "560px", margin: "0 auto",
+        padding: "clamp(28px, 6vw, 52px) clamp(24px, 6vw, 52px)",
+        display: "flex", flexDirection: "column", alignItems: "center", gap: "20px",
+      }}
+    >
+      <div className="scrapbook-tape-tl"></div>
+      <div className="scrapbook-tape-br"></div>
+
+      <div style={{ fontSize: "40px" }}>🔐</div>
+
+      <p style={{ margin: 0, fontSize: "11px", letterSpacing: "0.26em", textTransform: "uppercase", color: "#b38c97" }}>
+        Satu pertanyaan terakhir
+      </p>
+
+      <h2 style={{
+        fontFamily: "'Pacifico', cursive", color: "#cfa7b3",
+        margin: 0, fontSize: "clamp(20px, 5vw, 28px)", lineHeight: 1.3,
+      }}>
+        Siapa nama yang berulang tahun di website ini?
+      </h2>
+
+      <p style={{ margin: 0, fontSize: "13px", color: "#a88a92", lineHeight: 1.6 }}>
+        Jawab dengan benar untuk membuka website-nya. 🌸
+      </p>
+
+      <div style={{ width: "100%", maxWidth: "320px", display: "flex", flexDirection: "column", gap: "12px" }}>
+        <input
+          type="text"
+          value={answer}
+          onChange={e => setAnswer(e.target.value)}
+          onKeyDown={handleKey}
+          placeholder="Tulis jawabanmu..."
+          style={{
+            padding: "12px 18px",
+            borderRadius: "12px",
+            border: `2px solid ${status === "wrong" || status === "shake" ? "#e07a8f" : status === "correct" ? "#7ec8a0" : "#f0dde3"}`,
+            fontSize: "15px",
+            fontFamily: "'Quicksand', sans-serif",
+            outline: "none",
+            textAlign: "center",
+            background: "#fff",
+            color: "#5a4248",
+            transition: "border-color 0.3s ease",
+            animation: status === "shake" ? "shakeInput 0.35s ease" : "none",
+          }}
+        />
+        <button
+          onClick={handleSubmit}
+          style={{
+            ...primaryButtonStyle(status === "correct"),
+            background: status === "correct" ? "#7ec8a0" : "linear-gradient(135deg, #d4a0b0, #cfa7b3)",
+          }}
+        >
+          {status === "correct" ? "Benar! ✓ Membuka..." : "Jawab →"}
+        </button>
+      </div>
+
+      {/* Wrong answer feedback */}
+      {status === "wrong" && (
+        <p style={{ margin: 0, color: "#e07a8f", fontSize: "13px" }}>
+          Hmm, bukan itu... {attempts < hints.length ? hints[attempts - 1] : "Coba lagi ya! 💪"}
+        </p>
+      )}
     </div>
   );
 }
@@ -558,7 +715,14 @@ export default function App() {
 
       <div className="content-scaler">
         {page === -1 && (
-          <RunnerGame onComplete={() => setPage(0)} />
+          <RunnerGame
+            onComplete={() => setPage(0)}
+            onSurrender={() => setPage(-2)}
+          />
+        )}
+
+        {page === -2 && (
+          <QuestionPage onCorrect={() => setPage(0)} />
         )}
 
         {page === 0 && (
