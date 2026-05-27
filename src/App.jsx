@@ -587,13 +587,6 @@ export default function App() {
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [fadeTransition, setFadeTransition] = useState(false);
 
-  // Spring camera refs — animate DOM directly (no React re-renders per frame)
-  const galleryRef = useRef(null);
-  const bgRef      = useRef(null);
-  const camRafRef  = useRef(null);
-  const cameraSpring = useRef({ x: 0, y: 0, scale: 1, vx: 0, vy: 0, vs: 0 });
-  const bgSpring     = useRef({ x: 0, y: 0, vx: 0, vy: 0 });
-
   // Remove HTML loader once React has mounted
   useEffect(() => {
     const loader = document.getElementById('html-loader');
@@ -659,7 +652,7 @@ export default function App() {
   // Generate floating notes that only change when the current lyric changes
   const currentNotes = useMemo(() => {
     if (!currentLyric) return [];
-    return [...Array(10)].map((_, i) => ({
+    return [...Array(6)].map((_, i) => ({
       id: `note-${currentLyricIndex}-${i}`,
       left: Math.random() * 100, // 0 to 100%
       top: 30 + Math.random() * 70, // 30% to 100%
@@ -693,84 +686,68 @@ export default function App() {
     }
   }
 
-  // ──── Camera spring target per shot ────
-  // Varied scale + positions to feel like a real cinematographer
-  const getCameraTarget = (idx) => {
-    if (idx === -1) return { x: 0, y: 0, scale: 1 };
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
+  const getCameraStyle = () => {
+    if (focusIndex === -1) {
+      return { transform: "scale(1) translate3d(0px, 0px, 0)" };
+    }
+
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
+
+    // Only translate + scale — NO rotation (rotation in transform chain causes
+    // non-linear interpolation path which looks janky).
+    // Variety via scale: each shot feels slightly closer/farther.
     const shots = isMobile ? [
-      { x:  82, y:  55, scale: 1.65 },  // tight zoom-in, lower-left
-      { x: -72, y: -68, scale: 1.48 },  // pull back, upper-right
-      { x:  58, y: -85, scale: 1.72 },  // deepest zoom, upper-left
-      { x: -78, y:  75, scale: 1.52 },  // medium, lower-right
-      { x:   0, y: -22, scale: 1.42 },  // centred, intimate zoom
+      { x:  70, y:  40, scale: 1.55 },
+      { x: -65, y:  48, scale: 1.50 },
+      { x:  55, y: -56, scale: 1.60 },
+      { x: -60, y: -62, scale: 1.52 },
+      { x:   0, y: -10, scale: 1.45 },
     ] : [
-      { x:  290, y:  40, scale: 1.38 },  // wide sweep left, slight zoom
-      { x: -270, y: -95, scale: 1.14 },  // pull way back, upper-right
-      { x:  175, y: -145, scale: 1.48 }, // deepest zoom, upper-left
-      { x: -245, y:  130, scale: 1.18 }, // medium, lower-right swing
-      { x:    0, y:  -45, scale: 1.30 }, // centred finale
+      { x:  240, y:  70, scale: 1.22 },
+      { x: -220, y:  90, scale: 1.17 },
+      { x:  200, y: -110, scale: 1.26 },
+      { x: -210, y: -130, scale: 1.19 },
+      { x:    0, y:  -20, scale: 1.13 },
     ];
-    return shots[idx] ?? { x: 0, y: 0, scale: 1.2 };
-  };
 
-  const getBgTarget = (idx) => {
-    if (idx === -1) return { x: 0, y: 0 };
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 600;
-    const offsets = isMobile ? [
-      { x: -12, y: -8 }, { x: 11, y: 10 }, { x: -9, y: 13 }, { x: 12, y: -11 }, { x: 0, y: 3 }
-    ] : [
-      { x: -44, y: -6 }, { x: 41, y: 14 }, { x: -26, y: 22 }, { x: 37, y: -20 }, { x: 0, y: 7 }
-    ];
-    return offsets[idx] ?? { x: 0, y: 0 };
-  };
-
-  // Spring animation — runs when focusIndex changes
-  useEffect(() => {
-    const camTarget = getCameraTarget(focusIndex);
-    const bgTarget  = getBgTarget(focusIndex);
-    const STIFF = 0.055, DAMP = 0.78;        // camera: responsive but smooth
-    const BG_STIFF = 0.022, BG_DAMP = 0.86; // bg: lazier, more inertia
-
-    const tick = () => {
-      const c = cameraSpring.current;
-      const b = bgSpring.current;
-
-      c.vx = c.vx * DAMP + (camTarget.x     - c.x)     * STIFF;
-      c.vy = c.vy * DAMP + (camTarget.y     - c.y)     * STIFF;
-      c.vs = c.vs * DAMP + (camTarget.scale - c.scale) * STIFF;
-      c.x += c.vx; c.y += c.vy; c.scale += c.vs;
-
-      b.vx = b.vx * BG_DAMP + (bgTarget.x - b.x) * BG_STIFF;
-      b.vy = b.vy * BG_DAMP + (bgTarget.y - b.y) * BG_STIFF;
-      b.x += b.vx; b.y += b.vy;
-
-      if (galleryRef.current)
-        galleryRef.current.style.transform =
-          `scale(${c.scale.toFixed(5)}) translate3d(${c.x.toFixed(3)}px,${c.y.toFixed(3)}px,0)`;
-      if (bgRef.current)
-        bgRef.current.style.transform =
-          `translate3d(${b.x.toFixed(3)}px,${b.y.toFixed(3)}px,0)`;
-
-      const settled =
-        Math.abs(c.vx) < 0.015 && Math.abs(c.vy) < 0.015 && Math.abs(c.vs) < 0.0004 &&
-        Math.abs(b.vx) < 0.015 && Math.abs(b.vy) < 0.015;
-      if (!settled) camRafRef.current = requestAnimationFrame(tick);
+    const s = shots[focusIndex] || { x: 0, y: 0, scale: 1.15 };
+    return {
+      transform: `scale(${s.scale}) translate3d(${s.x}px, ${s.y}px, 0)`
     };
+  };
 
-    if (camRafRef.current) cancelAnimationFrame(camRafRef.current);
-    camRafRef.current = requestAnimationFrame(tick);
-    return () => { if (camRafRef.current) cancelAnimationFrame(camRafRef.current); };
-  }, [focusIndex, page]);
+  const getLyricStyle = () => {
+    // Stably centered at the top: no erratic left-right movement. Completely structured and smooth!
+    return {
+      transform: "translate(-50%, -50%)"
+    };
+  };
 
-  const getLyricStyle = () => ({
-    transform: "translate(-50%, -50%)"
-  });
+  // Parallax BG: moves OPPOSITE direction at 15% of camera speed → creates depth illusion
+  const getBgParallaxStyle = () => {
+    if (page !== 1 || focusIndex === -1) return {};
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
+    const bgOffsets = isMobile ? [
+      { x: -10, y: -6  },
+      { x:  10, y: -7  },
+      { x:  -8, y:  8  },
+      { x:   9, y:  9  },
+      { x:   0, y:  1  }
+    ] : [
+      { x: -36, y: -10 },
+      { x:  33, y: -13 },
+      { x: -30, y:  16 },
+      { x:  31, y:  19 },
+      { x:   0, y:   3 }
+    ];
+    const o = bgOffsets[focusIndex] || { x: 0, y: 0 };
+    return { transform: `translate(${o.x}px, ${o.y}px)` };
+  };
 
   return (
     <div className="app-container">
-      {/* Parallax outer: spring-animated TRANSFORM only (GPU layer) */}
-      <div className="parallax-bg" ref={bgRef}>
+      {/* Parallax outer: TRANSFORM only (GPU layer, no filter = no repaint) */}
+      <div className="parallax-bg" style={getBgParallaxStyle()}>
         {/* Inner: FILTER only (static, never animated) */}
         <div
           className="parallax-bg-inner"
@@ -1040,7 +1017,7 @@ export default function App() {
               </div>
 
               {/* Photo Gallery Layer (Under lyrics) */}
-              <div className="photo-gallery" ref={galleryRef}>
+              <div className="photo-gallery" style={getCameraStyle()}>
                 {visiblePhotos.map((photo, index) => {
                   const isActive = focusIndex === index;
                   const isBlur = focusIndex !== -1 && !isActive;
@@ -1049,24 +1026,25 @@ export default function App() {
                     <div
                       key={index}
                       className={cardClass}
+                      style={{
+                        animationDelay: `${(index % 5) * 0.1}s`,
+                      }}
                     >
-                      <div className="photo-card-float">
-                        <div className="photo-card-tape"></div>
-                        <img
-                          src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
-                          alt={`Memory ${index + 1}`}
-                          onClick={() => { setLightboxSrc(`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`); setLightboxIndex(index); }}
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                            e.target.parentElement.innerHTML = `
-                            <div class="photo-placeholder">
-                              <span class="emoji">📸</span>
-                              <p>Photo ${index + 1}</p>
-                            </div>
-                          `;
-                          }}
-                        />
-                      </div>
+                      <div className="photo-card-tape"></div>
+                      <img
+                        src={`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`}
+                        alt={`Memory ${index + 1}`}
+                        onClick={() => { setLightboxSrc(`${import.meta.env.BASE_URL}${photo.src.replace(/^\//, '')}`); setLightboxIndex(index); }}
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          e.target.parentElement.innerHTML = `
+                          <div class="photo-placeholder">
+                            <span class="emoji">📸</span>
+                            <p>Photo ${index + 1}</p>
+                          </div>
+                        `;
+                        }}
+                      />
                     </div>
                   );
                 })}
