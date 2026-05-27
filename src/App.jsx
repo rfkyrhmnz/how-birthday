@@ -1173,7 +1173,9 @@ export default function App() {
                   marginTop: "20px",
                   display: "block",
                   marginLeft: "auto",
-                  marginRight: "auto"
+                  marginRight: "auto",
+                  mixBlendMode: "multiply",   /* white areas → transparent */
+                  background: "transparent",
                 }}
                 onError={(e) => {
                   console.error("GIF failed to load", e);
