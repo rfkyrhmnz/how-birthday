@@ -763,6 +763,10 @@ export default function App() {
     return () => { if (camRafRef.current) cancelAnimationFrame(camRafRef.current); };
   }, [focusIndex, page]);
 
+  const getLyricStyle = () => ({
+    transform: "translate(-50%, -50%)"
+  });
+
   return (
     <div className="app-container">
       {/* Parallax outer: spring-animated TRANSFORM only (GPU layer) */}
