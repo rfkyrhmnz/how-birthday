@@ -17,51 +17,101 @@
 
 </div>
 
----
+<br/>
 
-## ✨ What Is This?
+<div align="center">
+  ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿
+</div>
 
-A handcrafted, cinematic **birthday scrapbook website** built especially for **Cindy's birthday on 04 Juni** — featuring a fully interactive experience with music, animations, photos, and a mini-game.
+<br/>
 
----
+## 🌸 What Is This?
 
-## 🎮 Features
+> A handcrafted, cinematic **birthday scrapbook website** built especially for **Cindy's birthday on 04 Juni** — featuring a fully interactive experience with music, animations, photos, and a mini-game.
 
-### 🐈 Runner Mini-Game (Pre-Loader)
+<br/>
+
+<div align="center">
+  ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿
+</div>
+
+<br/>
+
+## 🎀 Features
+
+<details>
+<summary><b>🐈 Runner Mini-Game (Pre-Loader)</b> — click to expand!</summary>
+<br/>
+
 > Help the cat jump over birthday gift boxes before entering the scrapbook!
-- Difficulty scales dynamically — **gets faster as your score climbs**
-- Chiptune **8-bit background music** generated entirely via Web Audio API
-- Sound effects: **jump**, **hit**, and a **win jingle** 🎵
-- Score target: **10 boxes** to unlock the scrapbook
 
-### 📰 Cinematic Newspaper Landing Page
+| | |
+|---|---|
+| 🎮 **Difficulty** | Scales dynamically — gets faster as your score climbs |
+| 🎵 **BGM** | Chiptune 8-bit music via Web Audio API — zero libraries |
+| 💥 **SFX** | Jump, hit, win jingle & a dramatic **sad trombone** on 3 losses |
+| 🏳️ **Surrender** | After 3 losses → answer a secret question to unlock the site |
+| 🎯 **Target** | 10 gift boxes to unlock the scrapbook |
+
+</details>
+
+<details>
+<summary><b>📰 Cinematic Newspaper Landing Page</b> — click to expand!</summary>
+<br/>
+
 - Vintage **"The Morning Post Times"** aesthetic
 - Handwritten typography with **Pacifico** font
 - Scrapbook polaroid tape details & botanical doodles
 - Fully responsive for **mobile & desktop**
 
-### 🎵 Lyric Sync Page
-- Song lyrics sync to the audio — **word by word, in real time**
-- **5 polaroid photo cards** scattered across the screen, each with a personal memory
-- Cinematic full-screen **background photos** with `mix-blend-mode: multiply`
+</details>
+
+<details>
+<summary><b>🎵 Lyric Sync Page</b> — click to expand!</summary>
+<br/>
+
+- Song lyrics sync to audio — **word by word, in real time**
+- **5 polaroid photo cards** scattered & floating on screen
+- Cards **tilt when idle**, **straighten on hover** ✨
 - Floating musical notes drift across the screen
+- Cinematic full-screen **background photos** on the finale
 - **Lightbox** on photo tap/click
 
-### 🌸 Happy Birthday Finale
-- When the last lyric hits — **16 flower & heart decorations burst from behind** each polaroid frame
-- Each bloom pops out with a bouncy spring animation, then **gently sways or floats** forever
+</details>
 
-### 💌 Closing Page
+<details>
+<summary><b>🌸 Happy Birthday Finale</b> — click to expand!</summary>
+<br/>
+
+- When the last lyric hits — **16 flower & heart decorations burst from behind** each polaroid
+- Each bloom pops with a bouncy spring animation, then **gently sways forever**
+
+</details>
+
+<details>
+<summary><b>💌 Closing Page</b> — click to expand!</summary>
+<br/>
+
 - A heartfelt prayer/wish page
 - Personal photo with a custom animated WebP
 - Back & Home navigation
 
----
+</details>
 
-## 🛠️ Tech Stack
+<br/>
+
+<div align="center">
+  ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿
+</div>
+
+<br/>
+
+## 🛠️ Built With
+
+<div align="center">
 
 | Tech | Purpose |
-|------|---------|
+|:----:|:--------|
 | ⚛️ **React + Vite** | Frontend framework & build tool |
 | 🎨 **Vanilla CSS** | Animations, glassmorphism, layout |
 | 🎵 **Web Audio API** | Chiptune BGM & SFX — no libraries |
@@ -69,29 +119,44 @@ A handcrafted, cinematic **birthday scrapbook website** built especially for **C
 | 📱 **dvh / safe-area-inset** | iOS fullscreen & notch support |
 | 🚀 **GitHub Pages** | Deployment |
 
----
+</div>
+
+<br/>
+
+<div align="center">
+  ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿
+</div>
+
+<br/>
 
 ## 🎨 Design Highlights
 
 ```
-✦ Vintage newspaper aesthetic — sepia + pink hue-rotate filter
-✦ Pink & rose color palette (#cfa7b3, #f5d0dc, #8a747a)
-✦ Pacifico + Quicksand typography
-✦ Polaroid photo cards with scotch tape detail
-✦ Smooth page transitions with blur + slide
-✦ Micro-animations on every interactive element
-✦ mix-blend-mode: multiply for photo-newspaper fusion
-✦ Compressed assets — ~6.8 MB total
+  ✦  Vintage newspaper aesthetic — sepia + pink hue-rotate filter
+  ✦  Pink & rose color palette  →  #cfa7b3 · #f5d0dc · #8a747a
+  ✦  Pacifico + Quicksand typography
+  ✦  Polaroid photo cards with washi tape detail
+  ✦  Smooth page transitions with blur + slide
+  ✦  Micro-animations on every interactive element
+  ✦  mix-blend-mode: multiply for photo-newspaper fusion
+  ✦  Floating photo cards with per-card organic movement
+  ✦  Compressed assets — ~6.8 MB total
 ```
 
----
+<br/>
+
+<div align="center">
+  ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿
+</div>
+
+<br/>
 
 ## 📁 Project Structure
 
 ```
 how-birthday/
 ├── public/
-│   └── images/          # Photos, animated WebP, newspaper background
+│   └── images/          # Photos, animated WebP, newspaper bg
 ├── src/
 │   ├── App.jsx          # Main app — pages, game, audio logic
 │   ├── App.css          # All animations & styles
@@ -100,7 +165,13 @@ how-birthday/
 └── vite.config.js
 ```
 
----
+<br/>
+
+<div align="center">
+  ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿
+</div>
+
+<br/>
 
 ## 🚀 Run Locally
 
@@ -111,9 +182,13 @@ npm install
 npm run dev
 ```
 
----
+<br/>
 
 <div align="center">
+
+✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿
+
+<br/>
 
 **Cindy** — on your birthday, 04 Juni 🎂
 
@@ -123,6 +198,8 @@ npm run dev
 
 **Happy Birthday! 💖**
 
-<sub>Built with React, Vite & a lot of care</sub>
+<sub>Built with React, Vite & a lot of care 🌸</sub>
+
+✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿ ·  · ✿
 
 </div>
