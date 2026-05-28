@@ -832,33 +832,52 @@
   }
 }
 
+/* ── Float keyframes using CSS individual `translate` property ──
+   This composites ON TOP of the nth-child `transform` (no conflict).
+   Each card gets its own path: slight x + y variation for organic feel. */
+@keyframes floatP1 { 0%,100%{translate:0 0}       50%{translate:-4px -11px} }
+@keyframes floatP2 { 0%,100%{translate:0 0}        50%{translate: 4px -13px} }
+@keyframes floatP3 { 0%,100%{translate:0 0}        50%{translate: 0px  -9px} }
+@keyframes floatP4 { 0%,100%{translate:0 0}        50%{translate: 3px -12px} }
+@keyframes floatP5 { 0%,100%{translate:0 0}        50%{translate:-3px  -8px} }
+
 .photo-card:nth-child(1) {
   transform: translate(-240px, -70px) rotate(-16deg);
-  animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation:
+    fadeInCard 1.5s 0.00s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    floatP1    3.8s 1.50s ease-in-out infinite;
   z-index: 1;
 }
 
 .photo-card:nth-child(2) {
   transform: translate(220px, -90px) rotate(14deg);
-  animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation:
+    fadeInCard 1.5s 0.10s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    floatP2    4.4s 1.60s ease-in-out infinite;
   z-index: 2;
 }
 
 .photo-card:nth-child(3) {
   transform: translate(-200px, 110px) rotate(-8deg);
-  animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation:
+    fadeInCard 1.5s 0.20s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    floatP3    3.2s 1.70s ease-in-out infinite;
   z-index: 3;
 }
 
 .photo-card:nth-child(4) {
   transform: translate(210px, 130px) rotate(16deg);
-  animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation:
+    fadeInCard 1.5s 0.30s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    floatP4    4.9s 1.80s ease-in-out infinite;
   z-index: 4;
 }
 
 .photo-card:nth-child(5) {
   transform: translate(0px, 20px) rotate(-2deg);
-  animation: fadeInCard 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation:
+    fadeInCard 1.5s 0.40s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    floatP5    3.6s 1.90s ease-in-out infinite;
   z-index: 5;
 }
 
