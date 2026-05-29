@@ -1194,23 +1194,24 @@ export default function App() {
               <p style={{ marginTop: "14px", fontSize: "20px", fontWeight: 600 }}>
                 Happy Birthday.
               </p>
-              <div className="closing-gif-wrapper">
-                <img
-                  className="closing-gif"
-                  src={`${import.meta.env.BASE_URL}images/Untitled design.webp`}
-                  alt="gif"
-                  style={{
-                    width: "180px",
-                    display: "block",
-                    mixBlendMode: "multiply",
-                    background: "transparent",
-                  }}
-                  onError={(e) => {
-                    console.error("GIF failed to load", e);
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
+              <img
+                className="closing-gif"
+                src={`${import.meta.env.BASE_URL}images/Untitled design.webp`}
+                alt="gif"
+                style={{
+                  width: "180px",
+                  marginTop: "20px",
+                  display: "block",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  mixBlendMode: "multiply",   /* white areas → transparent */
+                  background: "transparent",
+                }}
+                onError={(e) => {
+                  console.error("GIF failed to load", e);
+                  e.target.style.display = 'none';
+                }}
+              />
 
               <div
                 style={{

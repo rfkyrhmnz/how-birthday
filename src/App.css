@@ -8,39 +8,6 @@
   80%       { transform: translateX(6px); }
 }
 
-/* ── Polaroid glint sweep — white light crosses the photo ── */
-@keyframes glintSweep {
-  0%   { transform: translateX(-160%) skewX(-18deg); opacity: 0; }
-  5%   { opacity: 1; }
-  45%  { opacity: 0.7; }
-  50%  { transform: translateX(320%) skewX(-18deg); opacity: 0; }
-  100% { transform: translateX(-160%) skewX(-18deg); opacity: 0; }
-}
-
-.closing-gif-wrapper {
-  position: relative;
-  display: block;
-  width: 180px;
-  margin: 20px auto 0;
-  overflow: hidden;
-  border-radius: 6px;
-}
-
-.closing-gif-wrapper::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  width: 45%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.72) 50%,
-    transparent 100%
-  );
-  animation: glintSweep 4s ease-in-out 1.5s infinite;
-  pointer-events: none;
-}
-
 .app-container {
   width: 100vw;
   width: 100svw;
@@ -154,13 +121,10 @@
     margin-top: 6px !important;
   }
 
-  /* Gif wrapper + gif */
-  .closing-gif-wrapper {
-    width: 90px !important;
-    margin-top: 8px !important;
-  }
+  /* Gif */
   .closing-gif {
     width: 90px !important;
+    margin-top: 8px !important;
   }
 
   /* Divider + date + buttons spacing */
