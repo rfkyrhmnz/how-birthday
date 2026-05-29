@@ -587,21 +587,51 @@ export default function App() {
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [fadeTransition, setFadeTransition] = useState(false);
 
-  // Remove HTML loader once React has mounted
+  // Remove HTML loader only after ALL images are loaded — no visible rendering
   useEffect(() => {
     const loader = document.getElementById('html-loader');
-    if (loader) {
+    if (!loader) return;
+
+    let tid;
+    let cancelled = false;
+
+    const srcs = [
+      ...photoData.map(p => `${import.meta.env.BASE_URL}${p.src.replace(/^\//, '')}`),
+      `${import.meta.env.BASE_URL}images/cute_cloud.png`,
+      `${import.meta.env.BASE_URL}images/Untitled design.webp`,
+      `${import.meta.env.BASE_URL}images/crumpled_pink_newspaper.png`,
+    ];
+
+    const promises = srcs.map(src => new Promise(resolve => {
+      const img = new Image();
+      img.onload = img.onerror = resolve; // resolve on both — never hang on broken image
+      img.src = src;
+    }));
+
+    // Safety timeout: hide loader after 6s max even if some images fail
+    const maxWait = setTimeout(() => {
+      if (!cancelled) { loader.style.opacity = '0'; tid = setTimeout(() => loader.remove(), 650); }
+    }, 6000);
+
+    Promise.all(promises).then(() => {
+      if (cancelled) return;
+      clearTimeout(maxWait);
       loader.style.opacity = '0';
-      const t = setTimeout(() => loader.remove(), 650);
-      return () => clearTimeout(t);
-    }
+      tid = setTimeout(() => loader.remove(), 650);
+    });
+
+    return () => {
+      cancelled = true;
+      clearTimeout(tid);
+      clearTimeout(maxWait);
+    };
   }, []);
 
-  // Preload all images so they appear instantly during the animation
+  // Preload all images (secondary pass — ensures browser cache is warm)
   useEffect(() => {
     const imagesToPreload = [
       ...photoData.map(p => p.src),
-      "/images/cute_cloud.png"
+      '/images/cute_cloud.png',
     ];
     imagesToPreload.forEach(src => {
       const img = new Image();
