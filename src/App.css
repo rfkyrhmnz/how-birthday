@@ -84,7 +84,7 @@
   inset: -12%;
   z-index: 0;
   pointer-events: none;
-  transition: transform 4.5s cubic-bezier(0.76, 0, 0.24, 1);
+  transition: transform 3.8s cubic-bezier(0.45, 0, 0.25, 1);
   will-change: transform;
   /* Force GPU layer — no filter here, so compositor doesn't repaint */
   transform: translate3d(0, 0, 0);
@@ -619,7 +619,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 3.8s cubic-bezier(0.76, 0, 0.24, 1) !important;
+  transition: transform 2.4s cubic-bezier(0.45, 0, 0.25, 1) !important;
   will-change: transform;
 }
 
@@ -726,8 +726,8 @@
   margin-top: 20px;
   z-index: 10;
 
-  /* Cinematic S-curve: slow build → fast travel → gentle settle — like a real camera operator */
-  transition: transform 4.0s cubic-bezier(0.76, 0, 0.24, 1);
+  /* Cinematic: mild ease-in → fast travel → smooth landing — responsive on entry, elegant on settle */
+  transition: transform 2.8s cubic-bezier(0.45, 0, 0.25, 1);
   will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
