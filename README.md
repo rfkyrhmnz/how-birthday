@@ -17,119 +17,121 @@
 
 </div>
 
----
-
-## 🌸 About
-
-A handcrafted, cinematic **birthday scrapbook website** built especially for **Cindy's birthday on 04 Juni** — featuring a fully interactive experience with music, animations, photos, and a mini-game.
-
----
-
-## 🎀 Features
-
-<details>
-<summary><b>🐈 Runner Mini-Game</b></summary>
 <br/>
 
-Help the cat jump over birthday gift boxes before entering the scrapbook!
+## 🌸 &nbsp; What Is This?
 
-- Difficulty scales dynamically — **gets faster as score climbs**
-- Chiptune **8-bit BGM** generated entirely via Web Audio API
-- Sound effects: jump, hit, win jingle & a **sad trombone** on 3 losses 😢
-- After **3 losses** → surrender option → answer a secret question to unlock the site
-- Score target: **10 gift boxes** to unlock the scrapbook
+A handcrafted, cinematic **birthday scrapbook website** built especially for **Cindy's birthday on 04 Juni** —
+featuring a fully interactive experience with music, animations, polaroid photos, and a mini-game that you *have* to earn your way through. No skipping. (okay maybe a little 🐾)
 
-</details>
-
-<details>
-<summary><b>📰 Cinematic Newspaper Landing Page</b></summary>
 <br/>
 
-- Vintage **"The Morning Post Times"** aesthetic
-- Handwritten typography with **Pacifico** font
-- Scrapbook polaroid tape details & botanical doodles
-- Fully responsive for **mobile & desktop**
+## 🎀 &nbsp; Features
 
-</details>
+### 🐈 &nbsp; Runner Mini-Game — *earn your way in*
 
-<details>
-<summary><b>🎵 Lyric Sync Page</b></summary>
+> Before you get to see anything cute, you gotta work for it 😤
+
+- Help a little cat jump over birthday gift boxes 🎁
+- Difficulty **scales dynamically** — gets faster as score climbs
+- **8-bit chiptune BGM** built from scratch using Web Audio API only
+- SFX for everything: jump 🦘, hit 💥, win jingle 🎉, and a very dramatic **sad trombone** on 3 losses 📯😢
+- After **3 losses** → surrender → answer a secret question to unlock the site 🔐
+- Target: **10 gift boxes** to enter 🎊
+
 <br/>
 
-- Song lyrics sync to audio — **word by word, in real time**
-- **5 polaroid photo cards** scattered & floating on screen
-- Cards **tilt when idle**, **straighten on hover**
-- Floating musical notes drift across the screen
-- Cinematic full-screen **background photos** on the finale
-- **Lightbox** on photo tap/click
+### 📰 &nbsp; Vintage Newspaper Landing Page — *first impressions*
 
-</details>
+> Feels like a handmade scrapbook someone left on your doorstep 📮
 
-<details>
-<summary><b>🌸 Happy Birthday Finale</b></summary>
+- **"The Morning Post Times"** aesthetic — sepia + pink hue filter
+- Handwritten titles with **Pacifico** font
+- Polaroid tape details 📎 & botanical branch doodles 🌿
+- Fully responsive across mobile & desktop
+
 <br/>
 
-- When the last lyric hits — **16 flower & heart decorations burst** from behind each polaroid
-- Each bloom pops with a bouncy spring animation, then **gently sways forever**
+### 🎵 &nbsp; Lyric Sync Page — *the main act*
 
-</details>
+> Lyrics appear word-by-word, synced to the actual song timestamp 🎙️
 
-<details>
-<summary><b>💌 Closing Page</b></summary>
+- **5 polaroid photo cards** floating with organic per-card animations
+- Cards **tilt naturally when idle**, then **straighten when you hover** 🖱️
+- Cinematic camera panning between each photo — smooth S-curve easing 🎬
+- Floating musical notes drift across the screen 🎶
+- **Lightbox** on photo tap / click 🖼️
+- Finale: full-screen photo slideshow fades in on the last lyric ✨
+
 <br/>
 
-- A heartfelt prayer/wish page
-- Personal photo with a custom animated WebP
+### 🌸 &nbsp; Happy Birthday Finale — *the bloom*
+
+> When the last lyric hits, things get dramatic (in a cute way)
+
+- **16 flowers & hearts burst** from behind each polaroid card 💐
+- Each decoration pops with a bouncy spring animation, then sways forever 🌊
+- Full-screen cinematic background takes over
+
+<br/>
+
+### 💌 &nbsp; Closing Page — *the letter*
+
+> The petals fall here. Literally.
+
+- A heartfelt birthday wish / doa
+- Personal animated photo (custom WebP)
+- **16 rose petals** drift down the entire screen 🌹
 - Back & Home navigation
 
-</details>
+<br/>
 
----
+## 🛠️ &nbsp; Tech Stack
 
-## 🛠️ Tech Stack
+| | Tech | What it does |
+|:--:|:--|:--|
+| ⚛️ | React + Vite | Frontend framework & build tool |
+| 🎨 | Vanilla CSS | All animations, layout, transitions |
+| 🎵 | Web Audio API | Chiptune BGM & SFX — zero audio libraries |
+| 📱 | dvh / safe-area-inset | iOS fullscreen & notch support |
+| 🚀 | GitHub Pages | Deployment |
 
-| Tech | Purpose |
-|:--|:--|
-| ⚛️ React + Vite | Frontend framework & build tool |
-| 🎨 Vanilla CSS | Animations, glassmorphism, layout |
-| 🎵 Web Audio API | Chiptune BGM & SFX — zero libraries |
-| 📱 dvh / safe-area-inset | iOS fullscreen & notch support |
-| 🚀 GitHub Pages | Deployment |
+<br/>
 
----
-
-## 🎨 Design Highlights
+## 🎨 &nbsp; Design at a Glance
 
 ```
-✦  Vintage newspaper aesthetic — sepia + pink hue-rotate filter
-✦  Pink & rose palette  →  #cfa7b3 · #f5d0dc · #8a747a
-✦  Pacifico + Quicksand typography
-✦  Polaroid photo cards with washi tape detail
-✦  Floating cards with per-card organic movement
-✦  Hover → card straightens; mouse leave → tilts back
-✦  mix-blend-mode: multiply for transparent GIF/WebP
-✦  Compressed assets — ~6.8 MB total
+ ✦  Vintage newspaper aesthetic — sepia + pink hue-rotate filter
+ ✦  Pink & rose palette  →  #cfa7b3 · #f5d0dc · #8a747a
+ ✦  Pacifico + Quicksand typography
+ ✦  Polaroid photo cards with washi tape details
+ ✦  Floating cards with per-card organic float animations
+ ✦  Hover → card straightens; mouse leave → tilts back naturally
+ ✦  mix-blend-mode: multiply for transparent GIF/WebP on any bg
+ ✦  Compressed assets — ~6.8 MB total
+ ✦  rel=preload + Promise.all loader → no visible asset rendering
 ```
 
----
+<br/>
 
-## 📁 Project Structure
+## 📁 &nbsp; Project Structure
 
 ```
 how-birthday/
 ├── public/
-│   └── images/          # Photos, animated WebP, newspaper bg
+│   ├── images/          # Photos, animated WebP, newspaper bg
+│   └── music/           # Background track
 ├── src/
-│   ├── App.jsx          # Main app — pages, game, audio logic
-│   ├── App.css          # All animations & styles
+│   ├── App.jsx          # Main app — pages, game, audio, camera logic
+│   ├── App.css          # All animations & styles (~1300 lines)
 │   └── main.jsx
-├── index.html
+├── index.html           # Preload directives for all critical assets
 └── vite.config.js
 ```
 
----
+<br/>
 
-## 🚀 Run Locally
+## 🚀 &nbsp; Run Locally
 
 ```bash
 git clone https://github.com/rfkyrhmnz/how-birthday.git
@@ -137,6 +139,8 @@ cd how-birthday
 npm install
 npm run dev
 ```
+
+<br/>
 
 ---
 
