@@ -1254,6 +1254,15 @@ export default function App() {
           </div>
         )}
       </div>
+
+      {/* ── Falling petals — only on closing page ── */}
+      {page === 2 && (
+        <div className="closing-petals-bg" aria-hidden="true">
+          {[...Array(16)].map((_, i) => (
+            <div key={i} className="closing-petal" />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,50 @@
   80%       { transform: translateX(6px); }
 }
 
+/* ── Falling Rose Petals — Closing Page ── */
+.closing-petals-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 180;
+  overflow: hidden;
+}
+
+.closing-petal {
+  position: absolute;
+  top: -30px;
+  border-radius: 50% 0 50% 0;
+  opacity: 0;
+  animation: petalFall linear infinite;
+}
+
+@keyframes petalFall {
+  0%   { transform: translateY(0)    rotate(0deg)   translateX(0px);  opacity: 0;    }
+  8%   {                                                                opacity: 0.75; }
+  35%  { transform: translateY(35vh) rotate(260deg) translateX(22px);               }
+  65%  { transform: translateY(70vh) rotate(500deg) translateX(-12px);              }
+  92%  {                                                                opacity: 0.45; }
+  100% { transform: translateY(112vh) rotate(720deg) translateX(8px); opacity: 0;    }
+}
+
+/* Per-petal: position, size, duration, delay, color */
+.closing-petal:nth-child(1)  { left:6%;  width:11px; height:15px; animation-duration:8.1s;  animation-delay:0.0s;  background:linear-gradient(135deg,#ffb3c6,#ff85a1); }
+.closing-petal:nth-child(2)  { left:14%; width:14px; height:19px; animation-duration:10.4s; animation-delay:1.4s;  background:linear-gradient(135deg,#f9c6d4,#e8a0b0); }
+.closing-petal:nth-child(3)  { left:22%; width:9px;  height:12px; animation-duration:7.8s;  animation-delay:3.1s;  background:linear-gradient(135deg,#ffccd5,#ffaabc); }
+.closing-petal:nth-child(4)  { left:30%; width:13px; height:17px; animation-duration:9.2s;  animation-delay:0.7s;  background:linear-gradient(135deg,#ff85a1,#e06080); }
+.closing-petal:nth-child(5)  { left:39%; width:12px; height:16px; animation-duration:8.6s;  animation-delay:4.2s;  background:linear-gradient(135deg,#ffb3c6,#f4879e); }
+.closing-petal:nth-child(6)  { left:48%; width:15px; height:20px; animation-duration:7.5s;  animation-delay:2.0s;  background:linear-gradient(135deg,#ffd6e0,#ffaabc); }
+.closing-petal:nth-child(7)  { left:57%; width:10px; height:13px; animation-duration:11.0s; animation-delay:5.3s;  background:linear-gradient(135deg,#f9c6d4,#ff85a1); }
+.closing-petal:nth-child(8)  { left:65%; width:13px; height:17px; animation-duration:8.9s;  animation-delay:1.0s;  background:linear-gradient(135deg,#ffb3c6,#e8a0b0); }
+.closing-petal:nth-child(9)  { left:73%; width:11px; height:14px; animation-duration:9.7s;  animation-delay:3.8s;  background:linear-gradient(135deg,#ffccd5,#ff85a1); }
+.closing-petal:nth-child(10) { left:81%; width:14px; height:18px; animation-duration:7.3s;  animation-delay:6.0s;  background:linear-gradient(135deg,#ff85a1,#d96882); }
+.closing-petal:nth-child(11) { left:89%; width:12px; height:15px; animation-duration:10.1s; animation-delay:2.5s;  background:linear-gradient(135deg,#ffd6e0,#ffb3c6); }
+.closing-petal:nth-child(12) { left:3%;  width:16px; height:21px; animation-duration:8.4s;  animation-delay:4.7s;  background:linear-gradient(135deg,#f9c6d4,#e8a0b0); }
+.closing-petal:nth-child(13) { left:45%; width:9px;  height:11px; animation-duration:7.0s;  animation-delay:7.1s;  background:linear-gradient(135deg,#ffccd5,#ffaabc); }
+.closing-petal:nth-child(14) { left:70%; width:13px; height:17px; animation-duration:9.5s;  animation-delay:1.8s;  background:linear-gradient(135deg,#ffb3c6,#ff85a1); }
+.closing-petal:nth-child(15) { left:27%; width:10px; height:14px; animation-duration:8.2s;  animation-delay:5.9s;  background:linear-gradient(135deg,#ffd6e0,#f4879e); }
+.closing-petal:nth-child(16) { left:55%; width:15px; height:19px; animation-duration:10.8s; animation-delay:3.3s;  background:linear-gradient(135deg,#ff85a1,#e8a0b0); }
+
 .app-container {
   width: 100vw;
   width: 100svw;
