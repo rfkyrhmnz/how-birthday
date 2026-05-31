@@ -802,7 +802,7 @@
 }
 
 /* Hover: straighten card + elevate.
-   @media (hover: hover) → only real pointer devices (mouse), never mobile touch. */
+   (hover: hover) AND (pointer: fine) = real mouse ONLY, never touch screens. */
 .photo-card:hover {
   z-index: 50 !important;
   box-shadow: 0 28px 60px rgba(186, 118, 134, 0.38), 0 10px 25px rgba(0, 0, 0, 0.12);
@@ -810,7 +810,24 @@
   border-color: #ffb3c1;
 }
 
-@media (hover: hover) {
+/* Touch guard: on touch devices, tapping a card should NEVER trigger translate.
+   pointer: coarse = finger/stylus. Explicitly keep cards in their resting position. */
+@media (pointer: coarse) {
+  .photo-card:hover {
+    box-shadow: 0 20px 40px rgba(186, 118, 134, 0.28);
+    border-color: #ffb3c1;
+  }
+  .photo-card:nth-child(1):hover,
+  .photo-card:nth-child(2):hover,
+  .photo-card:nth-child(3):hover,
+  .photo-card:nth-child(4):hover,
+  .photo-card:nth-child(5):hover {
+    /* Preserve each card's mobile translate exactly — no movement on tap */
+    transform: unset;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
   .photo-card:nth-child(1):hover { transform: translate(-240px, -70px)  rotate(0deg); }
   .photo-card:nth-child(2):hover { transform: translate( 220px, -90px)  rotate(0deg); }
   .photo-card:nth-child(3):hover { transform: translate(-200px,  110px) rotate(0deg); }
