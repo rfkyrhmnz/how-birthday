@@ -165,10 +165,10 @@
     margin-top: 6px !important;
   }
 
-  /* Gif */
+  /* Gif — slightly larger so it reads well at small scale */
   .closing-gif {
-    width: 90px !important;
-    margin-top: 8px !important;
+    width: 120px !important;
+    margin-top: 10px !important;
   }
 
   /* Divider + date + buttons spacing */
@@ -1173,7 +1173,7 @@
 
 .cloud-corner {
   position: absolute;
-  width: clamp(150px, 30vw, 350px);
+  width: clamp(100px, 22vw, 350px);
   height: auto;
   animation: floatCloudCorner 6s ease-in-out infinite alternate;
 }
@@ -1302,5 +1302,58 @@
 /* Mobile: smaller blooms */
 @media (max-width: 600px) {
   .bloom { font-size: 16px; }
+}
+
+/* ─── Mobile comprehensive polish ──────────────────────────────────────── */
+@media (max-width: 600px) {
+
+  /* Clouds: much smaller so they frame rather than dominate */
+  .cloud-corner {
+    width: clamp(80px, 22vw, 140px) !important;
+  }
+
+  /* Lyrics overlay: nudge down so it doesn't sit too high above photos */
+  .lyrics-overlay {
+    top: 18%;
+  }
+
+  /* Lyric text: slightly tighter sizing & spacing on narrow screens */
+  .lyric-text {
+    font-size: clamp(18px, 5.5vw, 28px);
+    padding: 10px 6px;
+    gap: 2px 6px;
+    line-height: 1.3;
+  }
+
+  /* Musical notes: smaller so they don’t crowd small screens */
+  .music-note {
+    font-size: 18px !important;
+  }
+
+  /* Welcome page: tighten description paragraph vertical spacing */
+  .scrapbook-card > p {
+    line-height: 1.65 !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* Welcome divider: less vertical breathing room */
+  .scrapbook-card > div[style*="340px"] {
+    margin: 14px 0 12px !important;
+  }
+
+  /* Closing page: compact button row */
+  .closing-page > div:last-of-type {
+    margin-top: 16px !important;
+  }
+
+  /* Closing date line: less top spacing */
+  .closing-page > p:last-of-type {
+    margin-top: 8px !important;
+  }
+
+  /* All nav buttons: meet 44 × 44px minimum touch target */
+  button {
+    min-height: 44px;
+  }
 }
 
