@@ -111,9 +111,11 @@ function RunnerGame({ onComplete, onSurrender }) {
   const [obstaclePos, setObstaclePos] = useState(100);
   const [loseCount, setLoseCount] = useState(0);
   const [showSurrenderModal, setShowSurrenderModal] = useState(false);
+  const [confetti, setConfetti] = useState([]);
 
   const gameLoopRef = useRef(null);
   const audioCtxRef = useRef(null);
+  const prevScoreRef = useRef(0);
 
   // Game difficulty (speed increases as score gets higher)
   const currentSpeed = 1.6 + (score * 0.3);
@@ -376,6 +378,22 @@ function RunnerGame({ onComplete, onSurrender }) {
     return () => stopBgm();
   }, []);
 
+  // A: Confetti burst on each successful jump (score increase)
+  useEffect(() => {
+    if (score > prevScoreRef.current && score > 0) {
+      const colors = ['#ff9eb5','#ffd6e0','#ffb3c6','#f9c6d4','#ffe0b3','#d4b8e0'];
+      const particles = Array.from({ length: 10 }, (_, i) => ({
+        id: `${Date.now()}-${i}`,
+        angle: i * 36,
+        color: colors[i % colors.length],
+        size: 6 + (i % 3) * 3,
+      }));
+      setConfetti(particles);
+      setTimeout(() => setConfetti([]), 900);
+    }
+    prevScoreRef.current = score;
+  }, [score]);
+
   return (
     <div
       className="page-card-enter scrapbook-card"
@@ -424,8 +442,26 @@ function RunnerGame({ onComplete, onSurrender }) {
             zIndex: 10
           }}
         >
-          {gameOver ? "🙀" : (score >= maxScore ? "😻" : "🐈")}
+          {gameOver ? "\uD83D\uDE40" : (score >= maxScore ? "\uD83D\uDE3B" : "\uD83D\uDC08")}
         </div>
+
+        {/* A: Confetti burst at cat position */}
+        {confetti.map(p => (
+          <div
+            key={p.id}
+            className="game-confetti"
+            style={{
+              '--angle': `${p.angle}deg`,
+              '--bg': p.color,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              position: 'absolute',
+              bottom: '38px',
+              left: '20%',
+              zIndex: 25,
+            }}
+          />
+        ))}
 
         {/* Obstacle Gift */}
         {gameStarted && !gameOver && score < maxScore && (
@@ -978,6 +1014,7 @@ export default function App() {
 
             {/* Open button */}
             <button
+              className="open-btn-glow"
               onClick={() => {
                 playUiSound('forward');
                 setPage(1);
@@ -1319,11 +1356,20 @@ export default function App() {
         )}
       </div>
 
-      {/* ── Falling petals — only on closing page ── */}
+      {/* Falling petals — only on closing page */}
       {page === 2 && (
         <div className="closing-petals-bg" aria-hidden="true">
           {[...Array(16)].map((_, i) => (
             <div key={i} className="closing-petal" />
+          ))}
+        </div>
+      )}
+
+      {/* H: Floating sakura — only on landing page */}
+      {page === 0 && (
+        <div className="landing-sakura-bg" aria-hidden="true">
+          {[...Array(12)].map((_, i) => (
+            <div key={i} className="landing-petal" />
           ))}
         </div>
       )}

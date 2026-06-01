@@ -851,15 +851,27 @@
 @keyframes activeFocusGlow {
   0%, 100% {
     box-shadow:
+      0 0 0 2px rgba(207, 167, 179, 0.65),   /* visible ring */
+      0 0 18px rgba(255, 200, 215, 0.35),     /* inner halo */
       0 28px 60px rgba(186, 118, 134, 0.32),
       0 10px 25px rgba(0, 0, 0, 0.10);
   }
   50% {
     box-shadow:
+      0 0 0 4px rgba(207, 167, 179, 0.90),   /* ring expands + brighter */
+      0 0 32px rgba(255, 200, 215, 0.55),     /* halo blooms */
       0 40px 90px rgba(207, 140, 165, 0.55),
-      0 16px 40px rgba(0, 0, 0, 0.14),
-      0 0 40px rgba(255, 200, 215, 0.25);
+      0 16px 40px rgba(0, 0, 0, 0.14);
   }
+}
+
+/* L — Depth glow: non-focused cards fade into dark blur */
+.photo-card.blurred-out {
+  filter: blur(2.5px) brightness(0.58) saturate(0.5) !important;
+  opacity: 0.6 !important;
+  transition:
+    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .photo-card.active-focus img {
@@ -1373,4 +1385,54 @@
     min-height: 44px;
   }
 }
-
+
+/* F: Open button pulse-glow ring */
+.open-btn-glow {
+  animation: btnGlowPulse 2.6s ease-in-out infinite;
+}
+@keyframes btnGlowPulse {
+  0%   { box-shadow: 0 6px 24px rgba(207,167,179,0.35), 0 0 0 0px rgba(207,167,179,0.55); }
+  55%  { box-shadow: 0 9px 30px rgba(207,167,179,0.45), 0 0 0 14px rgba(207,167,179,0.00); }
+  100% { box-shadow: 0 6px 24px rgba(207,167,179,0.35), 0 0 0 0px rgba(207,167,179,0.00); }
+}
+
+/* H: Landing page floating sakura */
+.landing-sakura-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  overflow: hidden;
+}
+.landing-petal {
+  position: absolute;
+  top: -28px;
+  border-radius: 50% 0 50% 0;
+  opacity: 0;
+  animation: petalFall linear infinite;
+}
+.landing-petal:nth-child(1)  { left: 4%;  width: 9px;  height: 12px; animation-duration: 10.1s; animation-delay: 0.0s;  background: linear-gradient(135deg,#fce4ec,#f8bbd0); }
+.landing-petal:nth-child(2)  { left: 13%; width: 12px; height: 16px; animation-duration: 8.4s;  animation-delay: 1.6s;  background: linear-gradient(135deg,#fff0f4,#ffd6e0); }
+.landing-petal:nth-child(3)  { left: 23%; width: 8px;  height: 11px; animation-duration: 11.2s; animation-delay: 3.3s;  background: linear-gradient(135deg,#fce4ec,#f3e5f5); }
+.landing-petal:nth-child(4)  { left: 34%; width: 11px; height: 15px; animation-duration: 9.7s;  animation-delay: 0.9s;  background: linear-gradient(135deg,#fff0f4,#fce4ec); }
+.landing-petal:nth-child(5)  { left: 44%; width: 10px; height: 13px; animation-duration: 8.0s;  animation-delay: 4.5s;  background: linear-gradient(135deg,#f3e5f5,#e8d5f0); }
+.landing-petal:nth-child(6)  { left: 55%; width: 13px; height: 17px; animation-duration: 10.6s; animation-delay: 2.1s;  background: linear-gradient(135deg,#fff0f4,#ffd6e0); }
+.landing-petal:nth-child(7)  { left: 64%; width: 9px;  height: 12px; animation-duration: 9.3s;  animation-delay: 5.8s;  background: linear-gradient(135deg,#fce4ec,#f8bbd0); }
+.landing-petal:nth-child(8)  { left: 74%; width: 11px; height: 15px; animation-duration: 8.8s;  animation-delay: 1.2s;  background: linear-gradient(135deg,#f3e5f5,#fce4ec); }
+.landing-petal:nth-child(9)  { left: 83%; width: 8px;  height: 11px; animation-duration: 11.5s; animation-delay: 3.9s;  background: linear-gradient(135deg,#fff0f4,#e8d5f0); }
+.landing-petal:nth-child(10) { left: 92%; width: 10px; height: 14px; animation-duration: 9.0s;  animation-delay: 6.7s;  background: linear-gradient(135deg,#fce4ec,#ffd6e0); }
+.landing-petal:nth-child(11) { left: 8%;  width: 14px; height: 18px; animation-duration: 10.3s; animation-delay: 7.4s;  background: linear-gradient(135deg,#fff0f4,#f8bbd0); }
+.landing-petal:nth-child(12) { left: 49%; width: 8px;  height: 10px; animation-duration: 8.6s;  animation-delay: 2.8s;  background: linear-gradient(135deg,#f3e5f5,#fce4ec); }
+
+/* A: Game confetti burst */
+.game-confetti {
+  border-radius: 50%;
+  background: var(--bg, #ffb3c6);
+  animation: confettiBurst 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  pointer-events: none;
+}
+@keyframes confettiBurst {
+  0%   { transform: rotate(var(--angle)) translateY(0px)   scale(1);   opacity: 1; }
+  60%  { opacity: 0.8; }
+  100% { transform: rotate(var(--angle)) translateY(-70px) scale(0.3); opacity: 0; }
+}
