@@ -84,10 +84,13 @@ function RunnerGame({ onComplete, onSurrender }) {
   const [loseCount, setLoseCount] = useState(0);
   const [showSurrenderModal, setShowSurrenderModal] = useState(false);
   const [confetti, setConfetti] = useState([]);
+  const [isShaking, setIsShaking] = useState(false); // B
+  const [trailParticles, setTrailParticles] = useState([]); // E
 
   const gameLoopRef = useRef(null);
   const audioCtxRef = useRef(null);
   const prevScoreRef = useRef(0);
+  const trailTimerRef = useRef(null); // E
 
   // Game difficulty (speed increases as score gets higher)
   const currentSpeed = 1.6 + (score * 0.3);
@@ -333,17 +336,37 @@ function RunnerGame({ onComplete, onSurrender }) {
       setGameOver(true);
       setGameStarted(false);
       playHitSound();
+      // B: screen shake on hit
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 420);
       setLoseCount(prev => {
         const next = prev + 1;
         if (next >= 3) {
           setShowSurrenderModal(true);
-          // Small delay so hit sound finishes before gong kicks in
           setTimeout(() => playDefeatSound(), 300);
         }
         return next;
       });
     }
   }, [obstaclePos, isJumping]);
+
+  // E: cat trail particles while running
+  useEffect(() => {
+    const colors = ['#ffb3c6','#ffd6e0','#f9c6d4','#e8d5f0','#cfa7b3'];
+    if (gameStarted && !gameOver && score < maxScore) {
+      trailTimerRef.current = setInterval(() => {
+        setTrailParticles(prev => [
+          ...prev.slice(-7),
+          { id: Date.now(), size: 4 + Math.random() * 5, color: colors[Math.floor(Math.random() * colors.length)] },
+        ]);
+        setTimeout(() => setTrailParticles(p => p.slice(1)), 420);
+      }, 65);
+    } else {
+      clearInterval(trailTimerRef.current);
+      setTrailParticles([]);
+    }
+    return () => clearInterval(trailTimerRef.current);
+  }, [gameStarted, gameOver, score]);
 
   // Cleanup bgm on unmount
   useEffect(() => {
@@ -396,11 +419,32 @@ function RunnerGame({ onComplete, onSurrender }) {
         </div>
       </div>
 
-      <div className="runner-container" style={{ position: "relative", width: "100%", height: "clamp(130px, 28vw, 200px)", borderBottom: "4px solid #f0e1e5", overflow: "hidden", borderRadius: "8px", background: "linear-gradient(to bottom, #fdf9fa 0%, #fff 100%)" }}>
+      <div
+        className={`runner-container ${isShaking ? 'runner-shaking' : ''}`}
+        style={{ position: "relative", width: "100%", height: "clamp(130px, 28vw, 200px)", borderBottom: "4px solid #f0e1e5", overflow: "hidden", borderRadius: "8px", background: "linear-gradient(to bottom, #fdf9fa 0%, #fff 100%)" }}
+      >
+        {/* D: Animated moving clouds */}
+        <div className="runner-cloud-layer">
+          <span className="runner-cloud-item">☁️</span>
+          <span className="runner-cloud-item">☁️</span>
+          <span className="runner-cloud-item">☁️</span>
+        </div>
 
-        {/* Decorative Background Elements */}
-        <div style={{ position: "absolute", top: "20px", right: "20px", fontSize: "40px", opacity: 0.6 }}>☁️</div>
-        <div style={{ position: "absolute", top: "50px", left: "40px", fontSize: "30px", opacity: 0.6 }}>☁️</div>
+        {/* E: Cat trail dots */}
+        {trailParticles.map((p, i) => (
+          <div
+            key={p.id}
+            className="cat-trail-dot"
+            style={{
+              width: p.size,
+              height: p.size,
+              background: p.color,
+              bottom: isJumping ? `${20 + (trailParticles.length - i) * 4}px` : '8px',
+              left: `calc(15% - ${(trailParticles.length - i) * 9}px)`,
+              transition: 'bottom 0.08s ease',
+            }}
+          />
+        ))}
 
         {/* Cat */}
         <div
@@ -504,6 +548,13 @@ function RunnerGame({ onComplete, onSurrender }) {
               Menyerah 🏳️
             </button>
           </div>
+        </div>
+      )}
+
+      {/* G: Envelope open animation overlay */}
+      {envelopeOpen && (
+        <div className="envelope-overlay" aria-hidden="true">
+          <span className="envelope-icon">✉️</span>
         </div>
       )}
     </div>
@@ -620,6 +671,8 @@ export default function App() {
   const [lightboxSrc, setLightboxSrc] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [fadeTransition, setFadeTransition] = useState(false);
+  const [envelopeOpen, setEnvelopeOpen] = useState(false); // G
+  const [audioDuration, setAudioDuration] = useState(30);  // I
 
 
   // Remove HTML loader only after ALL images are loaded — no visible rendering
@@ -845,6 +898,7 @@ export default function App() {
         ref={audioRef}
         src={`${import.meta.env.BASE_URL}music/shape-of-my-heart.mp3`}
         onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={() => setAudioDuration(audioRef.current?.duration || 30)}
         preload="auto"
         loop
       />
@@ -905,6 +959,13 @@ export default function App() {
             <div className="scrapbook-tape-tl"></div>
             <div className="scrapbook-tape-br"></div>
 
+            {/* H: Postal stamp badge */}
+            <div className="stamp-badge" title="04 Juni">
+              <span className="stamp-icon">🌸</span>
+              <span className="stamp-value">HBD</span>
+              <span className="stamp-text">04 Juni</span>
+            </div>
+
             {/* Corner star decorations */}
             <svg className="doodle-star" width="36" height="36" viewBox="0 0 40 40" fill="none" stroke="#d1b1bb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ top: '22px', right: '28px', transform: 'rotate(20deg)' }}>
               <path d="M20 5 L20 35 M5 20 L35 20 M10 10 L30 30 M10 30 L30 10" />
@@ -936,7 +997,7 @@ export default function App() {
               style={{
                 margin: 0,
                 fontSize: "clamp(32px, 7vw, 72px)",
-                lineHeight: 1.08,
+                lineHeight: 1.3,
                 fontWeight: 600,
               }}
             >
@@ -944,14 +1005,14 @@ export default function App() {
                 Happy Birthday,
               </span>
               <span
-                className="welcome-name"
+                className="welcome-name shimmer-cindy"
                 style={{
                   display: "block",
-                  marginTop: "5px",
-                  color: "#cfa7b3",
+                  marginTop: "8px",
                   fontFamily: "'Pacifico', cursive",
                   fontSize: "clamp(40px, 12vw, 82px)",
                   fontWeight: 400,
+                  lineHeight: 1.2,
                   letterSpacing: "2px",
                 }}
               >
@@ -978,18 +1039,22 @@ export default function App() {
               Ini dibuat untukmu — sederhana, tapi dengan niat yang serius.
             </p>
 
-            {/* Open button */}
+            {/* Open button — G: animate envelope before navigating */}
             <button
               className="open-btn-glow"
               onClick={() => {
-                setPage(1);
-                setCurrentTime(0);
-                setMaxTime(0);
-                setLyricsFinished(false);
-                if (audioRef.current) {
-                  audioRef.current.currentTime = 0;
-                  audioRef.current.play().catch(e => console.error("Play failed:", e));
-                }
+                setEnvelopeOpen(true);
+                setTimeout(() => {
+                  setEnvelopeOpen(false);
+                  setPage(1);
+                  setCurrentTime(0);
+                  setMaxTime(0);
+                  setLyricsFinished(false);
+                  if (audioRef.current) {
+                    audioRef.current.currentTime = 0;
+                    audioRef.current.play().catch(e => console.error("Play failed:", e));
+                  }
+                }, 1300);
               }}
               style={{
                 padding: "13px 40px",
@@ -1167,6 +1232,14 @@ export default function App() {
                 )}
               </div>
 
+
+              {/* I: Song progress bar */}
+              <div className="lyric-progress-bar">
+                <div
+                  className="lyric-progress-fill"
+                  style={{ width: `${Math.min((currentTime / audioDuration) * 100, 100)}%` }}
+                />
+              </div>
 
               {lightboxSrc && (
                 <div className="lightbox" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }}>
