@@ -620,7 +620,7 @@ export default function App() {
   const [lightboxSrc, setLightboxSrc] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [fadeTransition, setFadeTransition] = useState(false);
-  const [cardTilt, setCardTilt] = useState({ index: null, rx: 0, ry: 0 });
+
 
   // Remove HTML loader only after ALL images are loaded — no visible rendering
   useEffect(() => {
@@ -733,29 +733,23 @@ export default function App() {
     ? photoData
     : photoData.filter((photo) => currentTime >= photo.time || maxTime >= photo.time);
 
-  // ── 3D Card Tilt ──────────────────────────────────────────────────────────
-  // Mirror of the CSS nth-child hover translate positions (desktop)
-  const CARD_HOVER_POS = [
-    { tx: -240, ty:  -70 },
-    { tx:  220, ty:  -90 },
-    { tx: -200, ty:  110 },
-    { tx:  210, ty:  130 },
-    { tx:    0, ty:   20 },
-  ];
-
-  const handleCardMouseMove = (e, index) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const cx = rect.width  / 2;
-    const cy = rect.height / 2;
-    const rx = -((y - cy) / cy) * 12; // ±12° max, Y inverted for natural feel
-    const ry =  ((x - cx) / cx) * 12; // ±12° max
-    setCardTilt({ index, rx, ry });
+  // ── 3D Card Tilt — CSS-var approach (no inline transform, no conflict) ────
+  // JS updates --tilt-x/--tilt-y via setProperty directly on the DOM element.
+  // CSS hover rules include these vars, so position+tilt are one unified transform.
+  const handleCardPointerMove = (e) => {
+    if (e.pointerType !== 'mouse') return; // ignore touch/stylus — no glitch on mobile
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const rx = -(((e.clientY - rect.top)  / rect.height) - 0.5) * 24; // ±12°
+    const ry =  (((e.clientX - rect.left) / rect.width)  - 0.5) * 24; // ±12°
+    el.style.setProperty('--tilt-x', `${rx}deg`);
+    el.style.setProperty('--tilt-y', `${ry}deg`);
   };
 
-  const handleCardMouseLeave = () => {
-    setCardTilt({ index: null, rx: 0, ry: 0 });
+  const handleCardPointerLeave = (e) => {
+    if (e.pointerType !== 'mouse') return;
+    e.currentTarget.style.removeProperty('--tilt-x');
+    e.currentTarget.style.removeProperty('--tilt-y');
   };
 
   // Determine camera focus state dynamically based on playback time
@@ -1113,24 +1107,13 @@ export default function App() {
                   const isActive = focusIndex === index;
                   const isBlur = focusIndex !== -1 && !isActive;
                   const cardClass = `photo-card ${isActive ? "active-focus" : ""} ${isBlur ? "blurred-out" : ""}`;
-                  const isTilting = cardTilt.index === index;
-                  const hp = CARD_HOVER_POS[index] || { tx: 0, ty: 0 };
                   return (
                     <div
                       key={index}
                       className={cardClass}
-                      style={{
-                        animationDelay: `${(index % 5) * 0.1}s`,
-                        ...(isTilting && {
-                          transform: `translate(${hp.tx}px, ${hp.ty}px) perspective(700px) rotateX(${cardTilt.rx}deg) rotateY(${cardTilt.ry}deg)`,
-                          transition: 'transform 0.07s linear, box-shadow 0.3s ease, border-color 0.3s ease',
-                          boxShadow: '0 28px 60px rgba(186, 118, 134, 0.38), 0 10px 25px rgba(0, 0, 0, 0.12)',
-                          borderColor: '#ffb3c1',
-                          zIndex: 50,
-                        }),
-                      }}
-                      onMouseMove={(e) => handleCardMouseMove(e, index)}
-                      onMouseLeave={handleCardMouseLeave}
+                      style={{ animationDelay: `${(index % 5) * 0.1}s` }}
+                      onPointerMove={handleCardPointerMove}
+                      onPointerLeave={handleCardPointerLeave}
                     >
                       <div className="photo-card-tape"></div>
                       <img
