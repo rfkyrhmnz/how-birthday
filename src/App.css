@@ -1447,3 +1447,156 @@
   60%  { opacity: 0.8; }
   100% { transform: rotate(var(--angle)) translateY(-70px) scale(0.3); opacity: 0; }
 }
+
+/* ── B: Runner screen shake ───────────────────────────────────────────────── */
+@keyframes screenShake {
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  15%  { transform: translate(-5px, 2px) rotate(-0.4deg); }
+  30%  { transform: translate( 5px,-3px) rotate( 0.4deg); }
+  45%  { transform: translate(-4px, 3px) rotate(-0.3deg); }
+  60%  { transform: translate( 4px,-2px) rotate( 0.3deg); }
+  75%  { transform: translate(-2px, 1px) rotate(-0.2deg); }
+}
+.runner-shaking {
+  animation: screenShake 0.38s cubic-bezier(0.36,0.07,0.19,0.97) forwards !important;
+}
+
+/* ── D: Moving clouds in game ─────────────────────────────────────────────── */
+.runner-cloud-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.runner-cloud-item {
+  position: absolute;
+  opacity: 0;
+  animation: cloudDrift linear infinite;
+}
+.runner-cloud-item:nth-child(1) { top: 8%;  font-size: 40px; animation-duration: 7.0s; animation-delay: 0.0s; }
+.runner-cloud-item:nth-child(2) { top: 35%; font-size: 30px; animation-duration: 5.2s; animation-delay:-2.1s; }
+.runner-cloud-item:nth-child(3) { top: 12%; font-size: 24px; animation-duration: 9.0s; animation-delay:-5.0s; }
+@keyframes cloudDrift {
+  0%   { left: 108%; opacity: 0.55; }
+  5%   { opacity: 0.55; }
+  95%  { opacity: 0.45; }
+  100% { left: -18%; opacity: 0; }
+}
+
+/* ── E: Cat trail dots ────────────────────────────────────────────────────── */
+.cat-trail-dot {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: trailFade 0.45s ease-out forwards;
+  z-index: 8;
+}
+@keyframes trailFade {
+  0%   { opacity: 0.65; transform: scale(1); }
+  100% { opacity: 0;    transform: scale(0.15); }
+}
+
+/* ── F: Cindy foil shimmer ────────────────────────────────────────────────── */
+.shimmer-cindy {
+  background: linear-gradient(
+    105deg,
+    #cfa7b3 20%,
+    #fff4f7 35%,
+    #f4bece 48%,
+    #ffeaf0 57%,
+    #cfa7b3 72%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerSlide 3.5s linear infinite;
+}
+@keyframes shimmerSlide {
+  0%   { background-position: 200% center; }
+  100% { background-position: -100% center; }
+}
+
+/* ── G: Envelope open overlay ─────────────────────────────────────────────── */
+.envelope-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(253,246,248,0);
+  animation: envBgFade 1.3s ease forwards;
+  pointer-events: none;
+}
+@keyframes envBgFade {
+  0%   { background: rgba(253,246,248,0); }
+  40%  { background: rgba(253,246,248,0.7); }
+  100% { background: rgba(253,246,248,1); }
+}
+.envelope-icon {
+  font-size: 90px;
+  display: block;
+  animation: envPop 1.3s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  transform-origin: center;
+  filter: drop-shadow(0 8px 24px rgba(207,167,179,0.5));
+}
+@keyframes envPop {
+  0%   { transform: scale(0.3) translateY(30px); opacity: 0; }
+  30%  { transform: scale(1.35) translateY(-8px); opacity: 1; }
+  55%  { transform: scale(0.95) rotate(-4deg); opacity: 1; }
+  75%  { transform: scale(1.1)  rotate(4deg); opacity: 0.9; }
+  100% { transform: scale(4.5) translateY(-20px); opacity: 0; }
+}
+
+/* ── H: Postal stamp ──────────────────────────────────────────────────────── */
+.stamp-badge {
+  position: absolute;
+  top: 18px;
+  right: 56px;
+  width: 52px;
+  height: 64px;
+  background: linear-gradient(135deg,#fff8fa,#fce9ee);
+  border: 1.5px solid #e4c8d0;
+  box-shadow: 0 0 0 3px #fdf6f8, 0 0 0 5px #e8cfd6;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  transform: rotate(3deg);
+  cursor: default;
+  transition: transform 0.3s ease;
+}
+.stamp-badge:hover {
+  transform: rotate(0deg) scale(1.08);
+}
+.stamp-badge .stamp-icon  { font-size: 20px; line-height: 1; }
+.stamp-badge .stamp-text  { font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; color: #b38c97; font-weight: 600; text-align: center; }
+.stamp-badge .stamp-value { font-size: 9px; color: #cfa7b3; font-weight: 700; font-family: 'Pacifico', cursive; }
+
+/* ── I: Lyric song progress bar ───────────────────────────────────────────── */
+.lyric-progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.15);
+  z-index: 200;
+}
+.lyric-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg,#cfa7b3,#ffb3c6,#ffd6e0,#ffb3c6);
+  background-size: 200% 100%;
+  transition: width 0.6s linear;
+  box-shadow: 0 0 10px rgba(207,167,179,0.7);
+  border-radius: 0 2px 2px 0;
+  animation: progressShimmer 2s linear infinite;
+}
+@keyframes progressShimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
