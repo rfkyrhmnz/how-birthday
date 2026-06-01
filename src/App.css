@@ -810,21 +810,31 @@
   border-color: #ffb3c1;
 }
 
-/* Touch guard: on touch devices, tapping a card should NEVER trigger translate.
-   pointer: coarse = finger/stylus. Explicitly keep cards in their resting position. */
+/* Touch guard: tapping should NEVER trigger a translate.
+   pointer:coarse = finger/stylus. For large touch screens (tablets), unset is safe.
+   For portrait phones (max-width:600px), explicitly restate each resting position
+   because unset would win specificity over the mobile nth-child transforms. */
 @media (pointer: coarse) {
   .photo-card:hover {
     box-shadow: 0 20px 40px rgba(186, 118, 134, 0.28);
     border-color: #ffb3c1;
   }
+  /* Tablet/large-touch: no explicit resting transform → unset is safe */
   .photo-card:nth-child(1):hover,
   .photo-card:nth-child(2):hover,
   .photo-card:nth-child(3):hover,
   .photo-card:nth-child(4):hover,
-  .photo-card:nth-child(5):hover {
-    /* Preserve each card's mobile translate exactly — no movement on tap */
-    transform: unset;
-  }
+  .photo-card:nth-child(5):hover { transform: unset; }
+}
+
+/* Portrait phone + touch: preserve EXACT mobile resting positions on tap.
+   specificity here (0-3-0) beats the unset above (same) due to source order. */
+@media (pointer: coarse) and (max-width: 600px) {
+  .photo-card:nth-child(1):hover { transform: translate(-70px, -40px) rotate(-16deg) !important; }
+  .photo-card:nth-child(2):hover { transform: translate( 65px, -48px) rotate( 14deg) !important; }
+  .photo-card:nth-child(3):hover { transform: translate(-55px,  56px) rotate( -8deg) !important; }
+  .photo-card:nth-child(4):hover { transform: translate( 60px,  62px) rotate( 16deg) !important; }
+  .photo-card:nth-child(5):hover { transform: translate(  0px,  10px) rotate( -2deg) !important; }
 }
 
 @media (hover: hover) and (pointer: fine) {
