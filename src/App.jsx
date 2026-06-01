@@ -550,13 +550,6 @@ function RunnerGame({ onComplete, onSurrender }) {
           </div>
         </div>
       )}
-
-      {/* G: Envelope open animation overlay */}
-      {envelopeOpen && (
-        <div className="envelope-overlay" aria-hidden="true">
-          <span className="envelope-icon">✉️</span>
-        </div>
-      )}
     </div>
   );
 }
@@ -1400,6 +1393,13 @@ export default function App() {
           ))}
         </div>
       )}
+
+      {/* G: Envelope open animation overlay */}
+      {envelopeOpen && (
+        <div className="envelope-overlay" aria-hidden="true">
+          <span className="envelope-icon">✉️</span>
+        </div>
+      )}
     </div>
   );
-}
+}
