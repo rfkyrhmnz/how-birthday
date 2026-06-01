@@ -101,6 +101,24 @@
       <p class="loader-text">Loading…</p>
     </div>
 
+    <!-- Failsafe & Error display -->
+    <script>
+      window.addEventListener('error', function(e) {
+        const errDiv = document.createElement('div');
+        errDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:red;color:white;z-index:10000;padding:20px;font-family:sans-serif;font-size:12px;';
+        errDiv.textContent = 'Error: ' + e.message + ' at ' + e.filename + ':' + e.lineno;
+        document.body.appendChild(errDiv);
+      });
+
+      setTimeout(() => {
+        const loader = document.getElementById('html-loader');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => loader.remove(), 650);
+        }
+      }, 7000);
+    </script>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
