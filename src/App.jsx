@@ -31,34 +31,6 @@ function secondaryButtonStyle(disabled = false) {
   };
 }
 
-// ── UI Sound Effects (Web Audio API — no extra files needed) ──────────────
-function playUiSound(type = 'pop') {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const now = ctx.currentTime;
-    const note = (freq, t, dur, vol = 0.13, wave = 'sine') => {
-      const osc  = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = wave;
-      osc.frequency.setValueAtTime(freq, t);
-      gain.gain.setValueAtTime(vol, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(t); osc.stop(t + dur + 0.01);
-    };
-    if (type === 'pop') {
-      note(880, now, 0.09); note(880, now, 0.09, 0.05, 'triangle');
-    } else if (type === 'forward') {
-      note(660, now, 0.10); note(990, now + 0.09, 0.13);
-    } else if (type === 'back') {
-      note(660, now, 0.08); note(495, now + 0.07, 0.10);
-    } else if (type === 'home') {
-      note(660, now, 0.09); note(880, now + 0.08, 0.09); note(1100, now + 0.16, 0.14);
-    }
-    setTimeout(() => ctx.close().catch(() => {}), 600);
-  } catch (_) {}
-}
-
 // ─────────────────────────────────────────────────────────────────────
 // 🎛️  LYRIC DATA — edit animasi per kalimat di sini
 //
@@ -1016,7 +988,6 @@ export default function App() {
             <button
               className="open-btn-glow"
               onClick={() => {
-                playUiSound('forward');
                 setPage(1);
                 setCurrentTime(0);
                 setMaxTime(0);
@@ -1217,7 +1188,7 @@ export default function App() {
               {lightboxSrc && (
                 <div className="lightbox" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }}>
                   <img src={lightboxSrc} alt="Enlarged" onClick={(e) => e.stopPropagation()} />
-                  <button className="lightbox-close" onClick={() => { playUiSound('pop'); setLightboxSrc(null); setLightboxIndex(null); }} aria-label="Close">×</button>
+                  <button className="lightbox-close" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }} aria-label="Close">×</button>
                 </div>
               )}
 
@@ -1225,7 +1196,7 @@ export default function App() {
               <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", marginBottom: "20px", minHeight: "50px", position: "relative", zIndex: 20 }}>
                 {currentLyricIndex === lyricsData.length - 1 && (
                   <button
-                    onClick={() => { playUiSound('forward'); setPage(2); }}
+                    onClick={() => setPage(2)}
                     style={primaryButtonStyle(false)}
                   >
                     Next
@@ -1339,14 +1310,14 @@ export default function App() {
               }}
             >
               <button
-                onClick={() => { playUiSound('back'); setPage(1); }}
+                onClick={() => setPage(1)}
                 style={secondaryButtonStyle(false)}
               >
                 Back
               </button>
 
               <button
-                onClick={() => { playUiSound('home'); setPage(0); }}
+                onClick={() => setPage(0)}
                 style={primaryButtonStyle(false)}
               >
                 Home
