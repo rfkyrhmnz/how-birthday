@@ -1104,7 +1104,7 @@ export default function App() {
                   <p style={{ margin: 0, fontSize: "9px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#b38c97" }}>For you</p>
                   <p style={{ margin: "3px 0 0", fontSize: "clamp(11px, 2.8vw, 15px)", lineHeight: 1.55, color: "#6d5a60" }}>
                     on your <span style={{ fontFamily: "'Pacifico', cursive", color: "#cfa7b3", fontWeight: 400 }}>special</span> day —{" "}
-                    Have a great one! Semoga ke depannya makin seru dan lancar terus urusannya.
+                    Wishing you the absolute best! May this year be filled with good health, growth, and everything you deserve.
                   </p>
                 </div>
               </div>
