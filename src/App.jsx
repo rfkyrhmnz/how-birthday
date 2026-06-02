@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+﻿import React, { useState, useRef, useEffect, useMemo } from "react";
 import "./App.css";
 
 function primaryButtonStyle(disabled = false) {
@@ -1053,7 +1053,7 @@ export default function App() {
                   paddingBottom: "0.2em", // Prevent descender clipping on 'y'
                 }}
               >
-                Cindy.
+                Cindy
               </span>
             </h1>
 
@@ -1490,4 +1490,4 @@ export default function App() {
       )}
     </div>
   );
-}
+}
