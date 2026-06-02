@@ -336,6 +336,12 @@ function RunnerGame({ onComplete, onSurrender }) {
       setGameOver(true);
       setGameStarted(false);
       playHitSound();
+      
+      // Vibrate device on hit (for mobile users)
+      if (typeof navigator !== "undefined" && navigator.vibrate) {
+        navigator.vibrate([150, 80, 250]); // short buzz, pause, long buzz
+      }
+      
       // B: screen shake on hit
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 420);
