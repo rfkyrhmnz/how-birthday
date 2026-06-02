@@ -1040,7 +1040,7 @@ export default function App() {
               fontStyle: "italic",
               margin: "0 0 28px",
             }}>
-              Ini dibuat untukmu — sederhana, tapi dengan niat yang serius.
+              Hadiah kecil khusus buat kamu. Semoga suka ya! ✨
             </p>
 
             {/* Open button — G: animate envelope before navigating */}
@@ -1104,7 +1104,7 @@ export default function App() {
                   <p style={{ margin: 0, fontSize: "9px", letterSpacing: "0.22em", textTransform: "uppercase", color: "#b38c97" }}>For you</p>
                   <p style={{ margin: "3px 0 0", fontSize: "clamp(11px, 2.8vw, 15px)", lineHeight: 1.55, color: "#6d5a60" }}>
                     on your <span style={{ fontFamily: "'Pacifico', cursive", color: "#cfa7b3", fontWeight: 400 }}>special</span> day —{" "}
-                    Semoga hari ini jadi satu dari banyak hari baik yang masih menunggumu.
+                    Have a great one! Semoga ke depannya makin seru dan lancar terus urusannya.
                   </p>
                 </div>
               </div>
