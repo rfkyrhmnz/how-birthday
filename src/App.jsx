@@ -994,11 +994,29 @@ export default function App() {
             <div className="scrapbook-tape-tl"></div>
             <div className="scrapbook-tape-br"></div>
 
-            {/* H: Postal stamp badge */}
-            <div className="stamp-badge" title="04 Juni">
-              <span className="stamp-icon">🌸</span>
-              <span className="stamp-value">HBD</span>
-              <span className="stamp-text">04 Juni</span>
+            {/* H: Postal stamp badge replaced with square image */}
+            <div title="04 Juni" style={{
+              position: 'absolute',
+              top: '18px',
+              right: '56px',
+              width: '64px',
+              height: '64px',
+              transform: 'rotate(6deg)',
+              borderRadius: '6px',
+              boxShadow: '0 4px 12px rgba(207, 167, 179, 0.4)',
+              border: '3px solid white',
+              overflow: 'hidden',
+              zIndex: 2,
+              transition: 'transform 0.3s ease'
+            }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'rotate(0deg) scale(1.1)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'rotate(6deg) scale(1)'}
+            >
+              <img 
+                src={`${import.meta.env.BASE_URL}images/Untitled design (84).png`} 
+                alt="Stamp"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             </div>
 
             {/* Corner star decorations */}
