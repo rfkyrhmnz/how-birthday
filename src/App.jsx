@@ -1013,7 +1013,7 @@ export default function App() {
             onMouseLeave={e => e.currentTarget.style.transform = 'rotate(6deg) scale(1)'}
             >
               <img 
-                src={`${import.meta.env.BASE_URL}images/Untitled design.webp`} 
+                src={`${import.meta.env.BASE_URL}Untitled design (3).gif`} 
                 alt="Stamp GIF"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
