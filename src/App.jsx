@@ -1048,8 +1048,9 @@ export default function App() {
                   fontFamily: "'Pacifico', cursive",
                   fontSize: "clamp(40px, 12vw, 82px)",
                   fontWeight: 400,
-                  lineHeight: 1.2,
+                  lineHeight: 1.4,
                   letterSpacing: "2px",
+                  paddingBottom: "0.2em", // Prevent descender clipping on 'y'
                 }}
               >
                 Cindy.
