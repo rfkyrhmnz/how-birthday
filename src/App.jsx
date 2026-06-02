@@ -667,6 +667,55 @@ export default function App() {
   const [maxTime, setMaxTime] = useState(0);
   const [lyricsFinished, setLyricsFinished] = useState(false);
   const audioRef = useRef(null);
+  const parallaxBgRef = useRef(null);
+
+  // Precise, fluid parallax based on mouse / device orientation
+  useEffect(() => {
+    if (page !== 1) return;
+
+    let rafId;
+    let currentX = 0;
+    let currentY = 0;
+    let targetX = 0;
+    let targetY = 0;
+
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      targetX = -x * 25; // max 25px offset
+      targetY = -y * 25;
+    };
+
+    const handleDeviceOrientation = (e) => {
+      if (e.gamma === null || e.beta === null) return;
+      const gamma = Math.max(-45, Math.min(45, e.gamma));
+      const beta = Math.max(-45, Math.min(45, e.beta - 45)); // Assumed 45deg base tilt
+      targetX = -(gamma / 45) * 15;
+      targetY = -(beta / 45) * 15;
+    };
+
+    const animate = () => {
+      // Lerp for buttery smooth fluid movement
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+      
+      if (parallaxBgRef.current) {
+        parallaxBgRef.current.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      }
+      rafId = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("deviceorientation", handleDeviceOrientation);
+    rafId = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("deviceorientation", handleDeviceOrientation);
+      cancelAnimationFrame(rafId);
+    };
+  }, [page]);
+
   const [lightboxSrc, setLightboxSrc] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [fadeTransition, setFadeTransition] = useState(false);
@@ -864,31 +913,13 @@ export default function App() {
     };
   };
 
-  // Parallax BG: moves OPPOSITE direction at 15% of camera speed → creates depth illusion
-  const getBgParallaxStyle = () => {
-    if (page !== 1 || focusIndex === -1) return {};
-    const isMobile = typeof window !== "undefined" && window.innerWidth <= 600;
-    const bgOffsets = isMobile ? [
-      { x: -10, y: -6  },
-      { x:  10, y: -7  },
-      { x:  -8, y:  8  },
-      { x:   9, y:  9  },
-      { x:   0, y:  1  }
-    ] : [
-      { x: -36, y: -10 },
-      { x:  33, y: -13 },
-      { x: -30, y:  16 },
-      { x:  31, y:  19 },
-      { x:   0, y:   3 }
-    ];
-    const o = bgOffsets[focusIndex] || { x: 0, y: 0 };
-    return { transform: `translate(${o.x}px, ${o.y}px)` };
-  };
-
   return (
     <div className="app-container">
       {/* Parallax outer: TRANSFORM only (GPU layer, no filter = no repaint) */}
-      <div className="parallax-bg" style={getBgParallaxStyle()}>
+      <div 
+        ref={parallaxBgRef}
+        className="parallax-bg"
+      >
         {/* Inner: FILTER only (static, never animated) */}
         <div
           className="parallax-bg-inner"
