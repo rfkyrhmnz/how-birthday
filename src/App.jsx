@@ -1119,6 +1119,42 @@ export default function App() {
               </svg>
             </div>
 
+            {/* Fallback overlay if browser blocks autoplay (especially iOS) */}
+            {audioBlocked && (
+              <div style={{
+                position: "absolute", zIndex: 9999, inset: 0,
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center",
+                background: "rgba(253, 240, 244, 0.8)",
+                backdropFilter: "blur(4px)",
+                padding: "20px"
+              }}>
+                <p style={{ fontFamily: "'Quicksand', sans-serif", color: "#b38c97", marginBottom: "20px", textAlign: "center", fontSize: "16px", fontWeight: "500" }}>
+                  Browser kamu membutuhkan izin untuk memutar lagu 🌸
+                </p>
+                <button
+                  onClick={() => {
+                    if (audioRef.current) {
+                      audioRef.current.play().then(() => setAudioBlocked(false)).catch(e => console.error("Play failed", e));
+                    }
+                  }}
+                  style={{
+                    padding: "14px 28px",
+                    borderRadius: "999px",
+                    border: "none",
+                    background: "linear-gradient(135deg, #d4a0b0, #cfa7b3)",
+                    color: "white",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    boxShadow: "0 6px 24px rgba(207,167,179,0.35)",
+                  }}
+                >
+                  Mulai Putar Lagu 🎵
+                </button>
+              </div>
+            )}
+
             <div className="main-content" style={{ padding: 0, justifyContent: "center", position: "relative" }}>
               {/* Lyrics Layer (On top of photos) */}
               <div className="lyrics-overlay" style={getLyricStyle()}>
