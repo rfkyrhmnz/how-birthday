@@ -995,27 +995,10 @@ export default function App() {
             <div className="scrapbook-tape-br"></div>
 
             {/* H: Postal stamp badge replaced with square animated GIF/Webp */}
-            <div title="04 Juni" style={{
-              position: 'absolute',
-              top: '16px',
-              right: '48px',
-              width: '86px',
-              height: '86px',
-              transform: 'rotate(6deg)',
-              borderRadius: '6px',
-              boxShadow: '0 4px 12px rgba(207, 167, 179, 0.4)',
-              border: '4px solid white',
-              overflow: 'hidden',
-              zIndex: 2,
-              transition: 'transform 0.3s ease'
-            }}
-            onMouseEnter={e => e.currentTarget.style.transform = 'rotate(0deg) scale(1.1)'}
-            onMouseLeave={e => e.currentTarget.style.transform = 'rotate(6deg) scale(1)'}
-            >
+            <div title="04 Juni" className="polaroid-stamp">
               <img 
                 src={`${import.meta.env.BASE_URL}Untitled design (3).gif`} 
                 alt="Stamp GIF"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </div>
 
