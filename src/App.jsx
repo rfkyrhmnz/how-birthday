@@ -672,6 +672,7 @@ export default function App() {
   const [fadeTransition, setFadeTransition] = useState(false);
   const [envelopeOpen, setEnvelopeOpen] = useState(false); // G
   const [audioDuration, setAudioDuration] = useState(30);  // I
+  const [audioBlocked, setAudioBlocked] = useState(false); // iOS autoplay block workaround
 
 
   // Remove HTML loader only after ALL images are loaded — no visible rendering
@@ -731,13 +732,17 @@ export default function App() {
     if (page === 1 && audioRef.current && audioRef.current.paused) {
       // Start from 0 since the audio file itself starts at the chorus
       audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(e => console.error("Auto-play failed:", e));
+      audioRef.current.play().catch(e => {
+        console.error("Auto-play failed:", e);
+        setAudioBlocked(true); // Tampilkan tombol play manual
+      });
     } else if (page === 0 && audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
       setCurrentTime(0);
       setMaxTime(0);
       setLyricsFinished(false);
+      setAudioBlocked(false);
     }
   }, [page]);
 
@@ -1042,6 +1047,14 @@ export default function App() {
             <button
               className="open-btn-glow"
               onClick={() => {
+                // Unlock audio playback on first interaction (fixes mobile autoplay block)
+                if (audioRef.current) {
+                  audioRef.current.play().then(() => {
+                    audioRef.current.pause();
+                    audioRef.current.currentTime = 0;
+                  }).catch(() => {});
+                }
+
                 setEnvelopeOpen(true);
                 setTimeout(() => {
                   setEnvelopeOpen(false);
