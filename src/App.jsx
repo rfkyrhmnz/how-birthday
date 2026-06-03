@@ -693,16 +693,12 @@ export default function App() {
   const handleGlobalInteraction = () => {
     if (!hasUnlockedAudio.current) {
       if (introAudioRef.current) {
-        introAudioRef.current.play().then(() => {
-          introAudioRef.current.pause();
-          introAudioRef.current.currentTime = 0;
-        }).catch(() => {});
+        introAudioRef.current.volume = 0;
+        introAudioRef.current.play().catch(() => {});
       }
       if (audioRef.current) {
-        audioRef.current.play().then(() => {
-          audioRef.current.pause();
-          audioRef.current.currentTime = 0;
-        }).catch(() => {});
+        audioRef.current.volume = 0;
+        audioRef.current.play().catch(() => {});
       }
       hasUnlockedAudio.current = true;
     }
@@ -820,19 +816,14 @@ export default function App() {
   useEffect(() => {
     if (page === 0) {
       if (introAudioRef.current) {
-        introAudioRef.current.volume = 0;
         introAudioRef.current.currentTime = 0;
-        introAudioRef.current.play().then(() => {
-          fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
-          setAudioBlocked(false);
-        }).catch(e => {
-          console.error("Intro auto-play failed:", e);
-          setAudioBlocked(true);
-        });
+        introAudioRef.current.play().catch(() => {}); // Just in case it wasn't playing
+        fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
+        setAudioBlocked(false);
       }
       if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+        audioRef.current.volume = 0;
+        // Keep playing silently in background
       }
       setCurrentTime(0);
       setMaxTime(0);
@@ -855,6 +846,7 @@ export default function App() {
   }, [page]);
 
   const handleTimeUpdate = () => {
+    if (page !== 1) return; // Prevent lyrics progression when playing silently in background
     if (audioRef.current) {
       const time = audioRef.current.currentTime;
       setCurrentTime(time);
