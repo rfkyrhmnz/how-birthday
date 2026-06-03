@@ -702,12 +702,30 @@ export default function App() {
     const handleGlobalInteraction = () => {
       if (!hasUnlockedAudio.current) {
         if (introAudioRef.current) {
-          introAudioRef.current.volume = 0;
-          introAudioRef.current.play().catch(() => { });
+          introAudioRef.current.muted = true;
+          const p = introAudioRef.current.play();
+          if (p !== undefined) {
+            p.then(() => {
+              setPage(currPage => {
+                if (currPage !== 0) introAudioRef.current.pause();
+                introAudioRef.current.muted = false;
+                return currPage;
+              });
+            }).catch(() => { introAudioRef.current.muted = false; });
+          }
         }
         if (audioRef.current) {
-          audioRef.current.volume = 0;
-          audioRef.current.play().catch(() => { });
+          audioRef.current.muted = true;
+          const p = audioRef.current.play();
+          if (p !== undefined) {
+            p.then(() => {
+              setPage(currPage => {
+                if (currPage !== 1) audioRef.current.pause();
+                audioRef.current.muted = false;
+                return currPage;
+              });
+            }).catch(() => { audioRef.current.muted = false; });
+          }
         }
         hasUnlockedAudio.current = true;
 
