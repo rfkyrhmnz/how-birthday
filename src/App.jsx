@@ -567,10 +567,10 @@ function QuestionPage({ onCorrect }) {
   const [attempts, setAttempts] = useState(0);
 
   const hints = [
-    "Bukan Mas Gibran atau Pak Jokowi ya... 🤫",
-    "Bukan juga Kaesang atau Erina... 😅",
-    "Dia ini sering sambat capek nugas di Solo...",
-    "Tinggal ketik 'Cindy' aja susah banget sih kak 😭",
+    "Tempat mahasiswa arsitektur/teknik sering meratapi nasib... 🏛️",
+    "Ada di salah satu kampus negeri terbesar di Solo...",
+    "Kawasan Kentingan, Kecamatan Jebres...",
+    "Tinggal ketik 'UNS' aja susah banget sih kak 😭",
   ];
 
   const handleSubmit = () => {
@@ -584,8 +584,8 @@ function QuestionPage({ onCorrect }) {
       return;
     }
 
-    // Accept: cindy, 4 juni, 04 juni
-    const correct = ["cindy", "4 juni", "04 juni", "4juni", "04juni"].includes(clean);
+    // Accept: uns, universitas sebelas maret, kentingan, jebres, jl ir sutami
+    const correct = ["uns", "universitas sebelas maret", "kentingan", "jebres", "jl ir sutami", "jalan ir sutami", "teknik uns", "fakultas teknik uns"].some(ans => clean.includes(ans));
     if (correct) {
       setStatus("correct");
       setTimeout(() => onCorrect(), 1200);
@@ -622,7 +622,7 @@ function QuestionPage({ onCorrect }) {
         fontFamily: "'Pacifico', cursive", color: "#cfa7b3",
         margin: 0, fontSize: "clamp(20px, 5vw, 24px)", lineHeight: 1.4,
       }}>
-        Siapa sosok penting di Solo (selain Mas Wapres) yang punya 'tembok ratapan' tugas kuliah dan hari ini ulang tahun?
+        Dimanakah alamat letak 'Tembok Ratapan' kearifan lokal tempat mahasiswa Solo sering sambat nugas?
       </h2>
 
       <p style={{ margin: 0, fontSize: "13px", color: "#a88a92", lineHeight: 1.6 }}>
