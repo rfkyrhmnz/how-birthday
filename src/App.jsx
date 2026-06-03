@@ -567,13 +567,23 @@ function QuestionPage({ onCorrect }) {
   const [attempts, setAttempts] = useState(0);
 
   const hints = [
-    "Petunjuk: ada di judul halaman utama. 😉",
-    "Petunjuk: namanya ada 5 huruf, diawali C. 🌸",
-    "Petunjuk: nama lengkapnya Cindy... (hampir ketauan 😅)",
+    "Bukan Mas Gibran atau Pak Jokowi ya... 🤫",
+    "Bukan juga Kaesang atau Erina... 😅",
+    "Dia ini sering sambat capek nugas di Solo...",
+    "Tinggal ketik 'Cindy' aja susah banget sih kak 😭",
   ];
 
   const handleSubmit = () => {
     const clean = answer.trim().toLowerCase();
+    
+    // Meme easter eggs
+    if (["jokowi", "gibran", "kaesang", "mulyono", "fufufafa", "erina"].includes(clean)) {
+      setStatus("shake");
+      alert("Hush! Jangan bawa-bawa nama itu di sini, nanti ada kang bakso bawa walkie-talkie nongkrong depan kosan! 🤫🚶‍♂️🍜");
+      setTimeout(() => setStatus("wrong"), 400);
+      return;
+    }
+
     // Accept: cindy, 4 juni, 04 juni
     const correct = ["cindy", "4 juni", "04 juni", "4juni", "04juni"].includes(clean);
     if (correct) {
@@ -602,21 +612,21 @@ function QuestionPage({ onCorrect }) {
       <div className="scrapbook-tape-tl"></div>
       <div className="scrapbook-tape-br"></div>
 
-      <div style={{ fontSize: "40px" }}>🔐</div>
+      <div style={{ fontSize: "40px" }}>🕵️‍♂️</div>
 
       <p style={{ margin: 0, fontSize: "11px", letterSpacing: "0.26em", textTransform: "uppercase", color: "#b38c97" }}>
-        Satu pertanyaan terakhir
+        Verifikasi Warga Solo
       </p>
 
       <h2 style={{
         fontFamily: "'Pacifico', cursive", color: "#cfa7b3",
-        margin: 0, fontSize: "clamp(20px, 5vw, 28px)", lineHeight: 1.3,
+        margin: 0, fontSize: "clamp(20px, 5vw, 24px)", lineHeight: 1.4,
       }}>
-        Siapa nama yang berulang tahun di website ini?
+        Siapa sosok penting di Solo (selain Mas Wapres) yang punya 'tembok ratapan' tugas kuliah dan hari ini ulang tahun?
       </h2>
 
       <p style={{ margin: 0, fontSize: "13px", color: "#a88a92", lineHeight: 1.6 }}>
-        Jawab dengan benar untuk membuka website-nya. 🌸
+        Jawab dengan benar untuk membuka file rahasia negara. 📁🌸
       </p>
 
       <div style={{ width: "100%", maxWidth: "320px", display: "flex", flexDirection: "column", gap: "12px" }}>
