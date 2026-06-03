@@ -695,19 +695,36 @@ export default function App() {
   const hasUnlockedAudio = useRef(false);
 
   // Globally unlock audio elements on first interaction to prevent autoplay blocking from async setTimeouts
-  const handleGlobalInteraction = () => {
-    if (!hasUnlockedAudio.current) {
-      if (introAudioRef.current) {
-        introAudioRef.current.volume = 0;
-        introAudioRef.current.play().catch(() => {});
+  useEffect(() => {
+    const handleGlobalInteraction = () => {
+      if (!hasUnlockedAudio.current) {
+        if (introAudioRef.current) {
+          introAudioRef.current.volume = 0;
+          introAudioRef.current.play().catch(() => {});
+        }
+        if (audioRef.current) {
+          audioRef.current.volume = 0;
+          audioRef.current.play().catch(() => {});
+        }
+        hasUnlockedAudio.current = true;
+        
+        // Clean up listeners once unlocked
+        document.removeEventListener("click", handleGlobalInteraction);
+        document.removeEventListener("touchstart", handleGlobalInteraction);
+        document.removeEventListener("keydown", handleGlobalInteraction);
       }
-      if (audioRef.current) {
-        audioRef.current.volume = 0;
-        audioRef.current.play().catch(() => {});
-      }
-      hasUnlockedAudio.current = true;
-    }
-  };
+    };
+
+    document.addEventListener("click", handleGlobalInteraction);
+    document.addEventListener("touchstart", handleGlobalInteraction);
+    document.addEventListener("keydown", handleGlobalInteraction);
+
+    return () => {
+      document.removeEventListener("click", handleGlobalInteraction);
+      document.removeEventListener("touchstart", handleGlobalInteraction);
+      document.removeEventListener("keydown", handleGlobalInteraction);
+    };
+  }, []);
 
   // Precise, fluid parallax based on mouse / device orientation
   useEffect(() => {
@@ -969,11 +986,7 @@ export default function App() {
   };
 
   return (
-    <div 
-      className="app-container"
-      onClick={handleGlobalInteraction}
-      onTouchStart={handleGlobalInteraction}
-    >
+    <div className="app-container">
       {/* Parallax outer: TRANSFORM only (GPU layer, no filter = no repaint) */}
       <div 
         ref={parallaxBgRef}
