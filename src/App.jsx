@@ -566,13 +566,6 @@ function QuestionPage({ onCorrect }) {
   const [status, setStatus] = useState("idle"); // idle | wrong | shake
   const [attempts, setAttempts] = useState(0);
 
-  const hints = [
-    "Tempat mahasiswa arsitektur/teknik sering meratapi nasib... 🏛️",
-    "Ada di salah satu kampus negeri terbesar di Solo...",
-    "Kawasan Kentingan, Kecamatan Jebres...",
-    "Tinggal ketik 'UNS' aja susah banget sih kak 😭",
-  ];
-
   const handleSubmit = () => {
     const clean = answer.trim().toLowerCase();
     
@@ -620,13 +613,13 @@ function QuestionPage({ onCorrect }) {
 
       <h2 style={{
         fontFamily: "'Pacifico', cursive", color: "#cfa7b3",
-        margin: 0, fontSize: "clamp(20px, 5vw, 24px)", lineHeight: 1.4,
+        margin: 0, fontSize: "clamp(24px, 6vw, 32px)", lineHeight: 1.4,
       }}>
-        Dimanakah alamat letak 'Tembok Ratapan' kearifan lokal tempat mahasiswa Solo sering sambat nugas?
+        Alamat tembok ratapan solo?
       </h2>
 
       <p style={{ margin: 0, fontSize: "13px", color: "#a88a92", lineHeight: 1.6 }}>
-        Jawab dengan benar untuk membuka file rahasia negara. 📁🌸
+        Jawab dengan benar untuk melanjutkan. 🌸
       </p>
 
       <div style={{ width: "100%", maxWidth: "320px", display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -664,7 +657,7 @@ function QuestionPage({ onCorrect }) {
       {/* Wrong answer feedback */}
       {status === "wrong" && (
         <p style={{ margin: 0, color: "#e07a8f", fontSize: "13px" }}>
-          Hmm, bukan itu... {attempts < hints.length ? hints[attempts - 1] : "Coba lagi ya! 💪"}
+          Hmm, sepertinya salah... Coba lagi! 💪
         </p>
       )}
     </div>
