@@ -398,7 +398,7 @@ function RunnerGame({ onComplete, onSurrender }) {
   return (
     <div
       className="page-card-enter scrapbook-card"
-      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto", padding: "40px", cursor: "pointer", userSelect: "none", position: "relative" }}
+      style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto", cursor: "pointer", userSelect: "none", position: "relative" }}
       onClick={showSurrenderModal ? undefined : jump}
     >
       <div className="scrapbook-tape-tl"></div>
