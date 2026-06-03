@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import "./App.css";
 
 function primaryButtonStyle(disabled = false) {
@@ -775,6 +775,75 @@ export default function App() {
       img.src = `${import.meta.env.BASE_URL}${src.replace(/^\//, '')}`;
     });
   }, []);
+
+  // Music Box BGM for Landing Page (page === 0)
+  useEffect(() => {
+    if (page !== 0) return;
+    
+    let timerId;
+    let ctx;
+    
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      
+      ctx = new AudioContext();
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+
+      // Happy Birthday Melody (Frequencies and Durations)
+      const notes = [
+        { f: 261.63, d: 0.5 }, { f: 261.63, d: 0.5 }, { f: 293.66, d: 1 }, { f: 261.63, d: 1 }, { f: 349.23, d: 1 }, { f: 329.63, d: 2 },
+        { f: 261.63, d: 0.5 }, { f: 261.63, d: 0.5 }, { f: 293.66, d: 1 }, { f: 261.63, d: 1 }, { f: 392.00, d: 1 }, { f: 349.23, d: 2 },
+        { f: 261.63, d: 0.5 }, { f: 261.63, d: 0.5 }, { f: 523.25, d: 1 }, { f: 440.00, d: 1 }, { f: 349.23, d: 1 }, { f: 329.63, d: 1 }, { f: 293.66, d: 1.5 },
+        { f: 466.16, d: 0.5 }, { f: 466.16, d: 0.5 }, { f: 440.00, d: 1 }, { f: 349.23, d: 1 }, { f: 392.00, d: 1 }, { f: 349.23, d: 2 },
+      ];
+
+      let index = 0;
+      const speed = 0.65; // Tempo (seconds per beat)
+
+      const playNote = () => {
+        if (page !== 0 || !ctx) return;
+        const note = notes[index];
+        
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        // Soft music box tone using sine wave
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note.f, ctx.currentTime);
+        
+        gain.gain.setValueAtTime(0, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.05); // Soft attack
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (note.d * speed) - 0.05); // Natural decay
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start();
+        osc.stop(ctx.currentTime + (note.d * speed));
+        
+        index = (index + 1) % notes.length;
+        
+        // Add 2 second pause at the end of the song before repeating
+        const delay = index === 0 ? 2500 : note.d * speed * 1000;
+        timerId = setTimeout(playNote, delay);
+      };
+      
+      // Start playing after 1 second
+      timerId = setTimeout(playNote, 1000);
+    } catch (e) {
+      console.error("Music box failed to play:", e);
+    }
+
+    return () => {
+      clearTimeout(timerId);
+      if (ctx && ctx.state !== 'closed') {
+        ctx.close().catch(() => {});
+      }
+    };
+  }, [page]);
 
   // Play music when entering page 1
   useEffect(() => {
