@@ -1437,19 +1437,29 @@ export default function App() {
                 </span>
               </h2>
 
-              <p
+              <div
                 style={{
                   marginTop: "28px",
                   fontSize: "clamp(14px, 4vw, 16px)",
                   lineHeight: 1.9,
                   color: "#6d5a60",
+                  padding: "0 clamp(10px, 4vw, 30px)",
+                  textAlign: "justify",
                 }}
               >
-                Selamat ulang tahun, Cindy! 🎉<br /><br />
-                Semoga di umur yang baru ini kamu sehat selalu, makin bahagia, dan terus dikelilingi hal-hal baik setiap harinya.<br /><br />
-                Semangat terus ya buat kuliahnya di Solo! Semoga semua urusan kampus dan tugas-tugasnya dilancarkan, nggak bikin terlalu stres, dan berjalan mulus. Kalau lagi capek, jangan lupa buat istirahat sejenak.<br /><br />
-                Kamu pasti bisa ngelewatin semuanya. You're doing great!
-              </p>
+                <p style={{ textAlign: "center", margin: "0 0 18px 0" }}>
+                  Selamat ulang tahun, Cindy! 🎉
+                </p>
+                <p style={{ margin: "0 0 18px 0" }}>
+                  Semoga di umur yang baru ini kamu sehat selalu, makin bahagia, dan terus dikelilingi hal-hal baik setiap harinya.
+                </p>
+                <p style={{ margin: "0 0 18px 0" }}>
+                  Semangat terus ya buat kuliahnya di Solo! Semoga semua urusan kampus dan tugas-tugasnya dilancarkan, nggak bikin terlalu stres, dan berjalan mulus. Kalau lagi capek, jangan lupa buat istirahat sejenak.
+                </p>
+                <p style={{ textAlign: "center", margin: 0 }}>
+                  Kamu pasti bisa ngelewatin semuanya. You're doing great!
+                </p>
+              </div>
 
               <p style={{ marginTop: "14px", fontSize: "20px", fontWeight: 600 }}>
                 Happy Birthday.
