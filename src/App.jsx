@@ -577,8 +577,8 @@ function QuestionPage({ onCorrect }) {
       return;
     }
 
-    // Accept: uns, universitas sebelas maret, kentingan, jebres, jl ir sutami
-    const correct = ["uns", "universitas sebelas maret", "kentingan", "jebres", "jl ir sutami", "jalan ir sutami", "teknik uns", "fakultas teknik uns"].some(ans => clean.includes(ans));
+    // Accept: jalan kutai utara, sumber, banjarsari
+    const correct = ["kutai", "sumber", "banjarsari", "kutai utara", "jalan kutai utara", "jl kutai utara", "jl. kutai utara"].some(ans => clean.includes(ans));
     if (correct) {
       setStatus("correct");
       setTimeout(() => onCorrect(), 1200);
