@@ -661,12 +661,31 @@ function QuestionPage({ onCorrect }) {
   );
 }
 
+const fadeAudio = (audioElement, targetVolume, durationMs) => {
+  if (!audioElement) return;
+  const startVolume = audioElement.volume;
+  const startTime = performance.now();
+
+  const animate = (currentTime) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / durationMs, 1);
+    audioElement.volume = startVolume + (targetVolume - startVolume) * progress;
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else if (targetVolume === 0) {
+      audioElement.pause();
+    }
+  };
+  requestAnimationFrame(animate);
+};
+
 export default function App() {
   const [page, setPage] = useState(-1);
   const [currentTime, setCurrentTime] = useState(0);
   const [maxTime, setMaxTime] = useState(0);
   const [lyricsFinished, setLyricsFinished] = useState(false);
   const audioRef = useRef(null);
+  const introAudioRef = useRef(null);
   const parallaxBgRef = useRef(null);
 
   // Precise, fluid parallax based on mouse / device orientation
@@ -777,100 +796,38 @@ export default function App() {
   }, []);
 
 
-  // Piano BGM (Shape of My Heart Riff) for Landing Page (page === 0)
+  // Handle audio crossfades
   useEffect(() => {
-    if (page !== 0) return;
-    
-    let timerId;
-    let ctx;
-    
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
-      
-      ctx = new AudioContext();
-      if (ctx.state === 'suspended') {
-        ctx.resume().catch(() => {});
+    if (page === 0) {
+      if (introAudioRef.current) {
+        introAudioRef.current.volume = 0;
+        introAudioRef.current.currentTime = 0;
+        introAudioRef.current.play().then(() => {
+          fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
+        }).catch(e => console.error("Intro auto-play failed:", e));
       }
-
-      // Shape of My Heart iconic riff (Approximation in F#m)
-      const notes = [
-        // F#m
-        { f: 185.00, d: 0.5 }, { f: 277.18, d: 0.5 }, { f: 369.99, d: 0.5 }, { f: 440.00, d: 0.5 },
-        { f: 369.99, d: 0.5 }, { f: 277.18, d: 0.5 }, { f: 185.00, d: 1.0 },
-        // E6
-        { f: 164.81, d: 0.5 }, { f: 246.94, d: 0.5 }, { f: 329.63, d: 0.5 }, { f: 415.30, d: 0.5 },
-        { f: 329.63, d: 0.5 }, { f: 246.94, d: 0.5 }, { f: 164.81, d: 1.0 },
-        // Dmaj7
-        { f: 146.83, d: 0.5 }, { f: 220.00, d: 0.5 }, { f: 293.66, d: 0.5 }, { f: 369.99, d: 0.5 },
-        { f: 293.66, d: 0.5 }, { f: 220.00, d: 0.5 }, { f: 146.83, d: 1.0 },
-        // C#
-        { f: 138.59, d: 0.5 }, { f: 207.65, d: 0.5 }, { f: 277.18, d: 0.5 }, { f: 329.63, d: 0.5 }, // C#m
-        { f: 349.23, d: 1.5 }, { f: 138.59, d: 0.5 }, // F (C# major 3rd)
-      ];
-
-      let index = 0;
-      const speed = 0.5; // Tempo (seconds per beat)
-
-      const playNote = () => {
-        if (page !== 0 || !ctx) return;
-        const note = notes[index];
-        
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        
-        // Piano-like tone using triangle wave
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(note.f, ctx.currentTime);
-        
-        gain.gain.setValueAtTime(0, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.02); // Quick attack (piano hammer)
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (note.d * speed) + 0.5); // Long natural decay
-        
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        
-        osc.start();
-        osc.stop(ctx.currentTime + (note.d * speed) + 1.0); // Let it ring slightly
-        
-        index = (index + 1) % notes.length;
-        
-        // Pause before looping the riff
-        const delay = index === 0 ? 1500 : note.d * speed * 1000;
-        timerId = setTimeout(playNote, delay);
-      };
-      
-      // Start playing after 1 second
-      timerId = setTimeout(playNote, 1000);
-    } catch (e) {
-      console.error("Piano BGM failed to play:", e);
-    }
-
-    return () => {
-      clearTimeout(timerId);
-      if (ctx && ctx.state !== 'closed') {
-        ctx.close().catch(() => {});
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
       }
-    };
-  }, [page]);
-
-  // Play music when entering page 1
-  useEffect(() => {
-    if (page === 1 && audioRef.current && audioRef.current.paused) {
-      // Start from 0 since the audio file itself starts at the chorus
-      audioRef.current.currentTime = 0;
-      audioRef.current.volume = 1.0;
-      audioRef.current.play().catch(e => {
-        console.error("Auto-play failed:", e);
-        setAudioBlocked(true); // Tampilkan tombol play manual
-      });
-    } else if (page === 0 && audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
       setCurrentTime(0);
       setMaxTime(0);
       setLyricsFinished(false);
       setAudioBlocked(false);
+    } else if (page === 1) {
+      if (introAudioRef.current && !introAudioRef.current.paused && introAudioRef.current.volume > 0) {
+        // Fallback if they jump directly to page 1 somehow
+        introAudioRef.current.pause();
+      }
+      
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.volume = 1.0;
+        audioRef.current.play().catch(e => {
+          console.error("Auto-play failed:", e);
+          setAudioBlocked(true); // Tampilkan tombol play manual
+        });
+      }
     }
   }, [page]);
 
@@ -1008,6 +965,12 @@ export default function App() {
         />
       </div>
       {/* Audio Element */}
+      <audio
+        ref={introAudioRef}
+        src={`${import.meta.env.BASE_URL}music/intro.MP3`}
+        preload="auto"
+        loop
+      />
       <audio
         ref={audioRef}
         src={`${import.meta.env.BASE_URL}music/shape-of-my-heart.mp3`}
@@ -1159,12 +1122,16 @@ export default function App() {
             <button
               className="open-btn-glow"
               onClick={() => {
-                // Unlock audio playback on first interaction (fixes mobile autoplay block)
+                // Crossfade: Fade out Intro, Fade in Main
+                if (introAudioRef.current) {
+                  fadeAudio(introAudioRef.current, 0, 1300);
+                }
+                
                 if (audioRef.current) {
-                  audioRef.current.play().then(() => {
-                    audioRef.current.pause();
-                    audioRef.current.currentTime = 0;
-                  }).catch(() => {});
+                  audioRef.current.volume = 0;
+                  audioRef.current.currentTime = 0; // Sync to beginning
+                  audioRef.current.play().catch(() => {});
+                  fadeAudio(audioRef.current, 1.0, 1300);
                 }
 
                 setEnvelopeOpen(true);
@@ -1174,10 +1141,7 @@ export default function App() {
                   setCurrentTime(0);
                   setMaxTime(0);
                   setLyricsFinished(false);
-                  if (audioRef.current) {
-                    audioRef.current.currentTime = 0;
-                    audioRef.current.play().catch(e => console.error("Play failed:", e));
-                  }
+                  // audioRef already crossfaded and playing!
                 }, 1300);
               }}
               style={{
