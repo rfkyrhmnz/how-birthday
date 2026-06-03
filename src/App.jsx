@@ -690,6 +690,7 @@ export default function App() {
   const [maxTime, setMaxTime] = useState(0);
   const [lyricsFinished, setLyricsFinished] = useState(false);
   const audioRef = useRef(null);
+  const introAudioRef = useRef(null);
   const parallaxBgRef = useRef(null);
   const hasUnlockedAudio = useRef(false);
 
@@ -697,6 +698,10 @@ export default function App() {
   useEffect(() => {
     const handleGlobalInteraction = () => {
       if (!hasUnlockedAudio.current) {
+        if (introAudioRef.current) {
+          introAudioRef.current.volume = 0;
+          introAudioRef.current.play().catch(() => { });
+        }
         if (audioRef.current) {
           audioRef.current.volume = 0;
           audioRef.current.play().catch(() => { });
@@ -832,16 +837,25 @@ export default function App() {
   // Handle audio crossfades
   useEffect(() => {
     if (page === 0) {
+      if (introAudioRef.current) {
+        introAudioRef.current.volume = 0;
+        try { introAudioRef.current.currentTime = 0; } catch(e) {}
+        introAudioRef.current.play().catch(() => {});
+        fadeAudio(introAudioRef.current, 0.4, 2000); // 2s fade in to 40% volume (calm bgm)
+      }
       if (audioRef.current) {
         audioRef.current.volume = 0;
-        try { audioRef.current.currentTime = 0; } catch(e) {}
-        audioRef.current.play().catch(() => {});
-        fadeAudio(audioRef.current, 0.2, 2000); // 2s fade in to 20% volume
+        // Keep playing silently in background
       }
       setCurrentTime(0);
       setMaxTime(0);
       setLyricsFinished(false);
     } else if (page === 1) {
+      if (introAudioRef.current && !introAudioRef.current.paused && introAudioRef.current.volume > 0) {
+        // Fallback if they jump directly to page 1 somehow
+        introAudioRef.current.pause();
+      }
+
       if (audioRef.current && audioRef.current.paused) {
         audioRef.current.currentTime = 0;
         audioRef.current.volume = 1.0;
@@ -988,6 +1002,12 @@ export default function App() {
         />
       </div>
       {/* Audio Element */}
+      <audio
+        ref={introAudioRef}
+        src={`${import.meta.env.BASE_URL}music/shape-of-my-heart.mp3`}
+        preload="auto"
+        loop
+      />
       <audio
         ref={audioRef}
         src={`${import.meta.env.BASE_URL}music/shape-of-my-heart.mp3`}
@@ -1139,10 +1159,20 @@ export default function App() {
             <button
               className="open-btn-glow"
               onClick={() => {
-                // Swell the main song from 20% to 100% volume over 1.5s
-                if (audioRef.current) {
-                  fadeAudio(audioRef.current, 1.0, 1500); // Swell to 100%
+                // Fade out intro music smoothly
+                if (introAudioRef.current) {
+                  fadeAudio(introAudioRef.current, 0, 1500);
                 }
+
+                // Delay the start of the main song to create a cinematic gap
+                setTimeout(() => {
+                  if (audioRef.current) {
+                    audioRef.current.volume = 0;
+                    audioRef.current.currentTime = 0;
+                    audioRef.current.play().catch(() => { });
+                    fadeAudio(audioRef.current, 1.0, 1500); // fade in over 1.5s
+                  }
+                }, 800);
 
                 setEnvelopeOpen(true);
                 setTimeout(() => {
