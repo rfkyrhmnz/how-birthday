@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+﻿import React, { useState, useRef, useEffect, useMemo } from "react";
 import "./App.css";
 
 function primaryButtonStyle(disabled = false) {
@@ -650,7 +650,7 @@ function QuestionPage({ onCorrect }) {
             background: status === "correct" ? "#7ec8a0" : "linear-gradient(135deg, #d4a0b0, #cfa7b3)",
           }}
         >
-          {status === "correct" ? "Benar! ✓ Membuka..." : "Jawab →"}
+          {status === "correct" ? "Benar! ✓" : "Jawab"}
         </button>
       </div>
 
