@@ -838,9 +838,10 @@ export default function App() {
   useEffect(() => {
     if (page === 0) {
       if (introAudioRef.current) {
-        introAudioRef.current.volume = 1.0;
+        introAudioRef.current.volume = 0;
         try { introAudioRef.current.currentTime = 0; } catch(e) {}
         introAudioRef.current.play().catch(() => {});
+        fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
       }
       if (audioRef.current) {
         audioRef.current.volume = 0;
