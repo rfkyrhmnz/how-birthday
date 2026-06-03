@@ -1003,7 +1003,7 @@ export default function App() {
       {/* Audio Element */}
       <audio
         ref={introAudioRef}
-        src={`${import.meta.env.BASE_URL}music/intro.MP3`}
+        src={`${import.meta.env.BASE_URL}music/intro.mp3`}
         preload="auto"
         loop
       />
