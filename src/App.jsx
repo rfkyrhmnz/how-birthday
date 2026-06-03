@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import "./App.css";
 
 function primaryButtonStyle(disabled = false) {
@@ -1359,14 +1359,6 @@ export default function App() {
                 )}
               </div>
 
-
-              {/* I: Song progress bar */}
-              <div className="lyric-progress-bar">
-                <div
-                  className="lyric-progress-fill"
-                  style={{ width: `${Math.min((currentTime / audioDuration) * 100, 100)}%` }}
-                />
-              </div>
 
 
 
