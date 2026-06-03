@@ -822,9 +822,13 @@ export default function App() {
     if (page === 0) {
       if (introAudioRef.current) {
         introAudioRef.current.currentTime = 0;
-        introAudioRef.current.play().catch(() => {}); // Just in case it wasn't playing
-        fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
-        setAudioBlocked(false);
+        introAudioRef.current.play().then(() => {
+          fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
+          setAudioBlocked(false);
+        }).catch(e => {
+          console.error("Intro auto-play failed:", e);
+          setAudioBlocked(true);
+        });
       }
       if (audioRef.current) {
         audioRef.current.volume = 0;
