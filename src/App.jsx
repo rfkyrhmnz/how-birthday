@@ -1442,10 +1442,10 @@ export default function App() {
                   color: "#6d5a60",
                 }}
               >
-                Selamat ulang tahun, Cindy.<br /><br />
-                Semoga tahun ini lebih ringan dari sebelumnya — bukan berarti tanpa tantangan, tapi karena kamu sudah lebih tahu cara menghadapinya.<br /><br />
-                Semoga apa yang sedang kamu perjuangkan di Solo perlahan menemukan jalannya. Dan di sela-sela itu semua, semoga kamu masih punya waktu untuk beristirahat dan merasa cukup.<br /><br />
-                Kamu layak untuk semua hal baik yang sedang menuju ke arahmu.
+                Selamat ulang tahun, Cindy! 🎉<br /><br />
+                Semoga di umur yang baru ini kamu sehat selalu, makin bahagia, dan terus dikelilingi hal-hal baik setiap harinya.<br /><br />
+                Semangat terus ya buat kuliahnya di Solo! Semoga semua urusan kampus dan tugas-tugasnya dilancarkan, nggak bikin terlalu stres, dan berjalan mulus. Kalau lagi capek, jangan lupa buat istirahat sejenak.<br /><br />
+                Kamu pasti bisa ngelewatin semuanya. You're doing great!
               </p>
 
               <p style={{ marginTop: "14px", fontSize: "20px", fontWeight: 600 }}>
