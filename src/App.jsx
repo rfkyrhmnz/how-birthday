@@ -160,7 +160,7 @@ function RunnerGame({ onComplete, onSurrender }) {
 
     // Sad trombone descending notes: Bb4 → A4 → Ab4 → F3 (the classic loser sequence)
     const notes = [
-      { freq: 466.16, t: 0.0,  dur: 0.42 },  // Bb4  "wah"
+      { freq: 466.16, t: 0.0, dur: 0.42 },  // Bb4  "wah"
       { freq: 440.00, t: 0.40, dur: 0.42 },  // A4   "wah"
       { freq: 415.30, t: 0.78, dur: 0.42 },  // Ab4  "wah"
       { freq: 174.61, t: 1.15, dur: 1.60 },  // F3   "wahhhhhh" (long, low, defeated)
@@ -336,12 +336,12 @@ function RunnerGame({ onComplete, onSurrender }) {
       setGameOver(true);
       setGameStarted(false);
       playHitSound();
-      
+
       // Vibrate device on hit (for mobile users)
       if (typeof navigator !== "undefined" && navigator.vibrate) {
         navigator.vibrate([150, 80, 250]); // short buzz, pause, long buzz
       }
-      
+
       // B: screen shake on hit
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 420);
@@ -358,7 +358,7 @@ function RunnerGame({ onComplete, onSurrender }) {
 
   // E: cat trail particles while running
   useEffect(() => {
-    const colors = ['#ffb3c6','#ffd6e0','#f9c6d4','#e8d5f0','#cfa7b3'];
+    const colors = ['#ffb3c6', '#ffd6e0', '#f9c6d4', '#e8d5f0', '#cfa7b3'];
     if (gameStarted && !gameOver && score < maxScore) {
       trailTimerRef.current = setInterval(() => {
         setTrailParticles(prev => [
@@ -382,7 +382,7 @@ function RunnerGame({ onComplete, onSurrender }) {
   // A: Confetti burst on each successful jump (score increase)
   useEffect(() => {
     if (score > prevScoreRef.current && score > 0) {
-      const colors = ['#ff9eb5','#ffd6e0','#ffb3c6','#f9c6d4','#ffe0b3','#d4b8e0'];
+      const colors = ['#ff9eb5', '#ffd6e0', '#ffb3c6', '#f9c6d4', '#ffe0b3', '#d4b8e0'];
       const particles = Array.from({ length: 10 }, (_, i) => ({
         id: `${Date.now()}-${i}`,
         angle: i * 36,
@@ -671,10 +671,10 @@ const fadeAudio = (audioElement, targetVolume, durationMs) => {
     const elapsed = Math.max(0, currentTime - startTime);
     const progress = Math.min(elapsed / durationMs, 1);
     const newVolume = startVolume + (targetVolume - startVolume) * progress;
-    
+
     // Safety clamp to strictly guarantee volume stays within [0, 1] range
     audioElement.volume = Math.max(0, Math.min(1, newVolume));
-    
+
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else if (targetVolume === 0) {
@@ -700,14 +700,14 @@ export default function App() {
       if (!hasUnlockedAudio.current) {
         if (introAudioRef.current) {
           introAudioRef.current.volume = 0;
-          introAudioRef.current.play().catch(() => {});
+          introAudioRef.current.play().catch(() => { });
         }
         if (audioRef.current) {
           audioRef.current.volume = 0;
-          audioRef.current.play().catch(() => {});
+          audioRef.current.play().catch(() => { });
         }
         hasUnlockedAudio.current = true;
-        
+
         // Clean up listeners once unlocked
         document.removeEventListener("click", handleGlobalInteraction);
         document.removeEventListener("touchstart", handleGlobalInteraction);
@@ -755,7 +755,7 @@ export default function App() {
       // Lerp for buttery smooth fluid movement
       currentX += (targetX - currentX) * 0.08;
       currentY += (targetY - currentY) * 0.08;
-      
+
       if (parallaxBgRef.current) {
         parallaxBgRef.current.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
       }
@@ -838,9 +838,16 @@ export default function App() {
   useEffect(() => {
     if (page === 0) {
       if (introAudioRef.current) {
-        introAudioRef.current.currentTime = 0;
-        introAudioRef.current.play().catch(() => {});
-        fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
+        introAudioRef.current.volume = 0;
+        const playPromise = introAudioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            try { introAudioRef.current.currentTime = 0; } catch(e) {}
+            fadeAudio(introAudioRef.current, 1.0, 2000);
+          }).catch(() => {
+            introAudioRef.current.volume = 1.0;
+          });
+        }
       }
       if (audioRef.current) {
         audioRef.current.volume = 0;
@@ -854,7 +861,7 @@ export default function App() {
         // Fallback if they jump directly to page 1 somehow
         introAudioRef.current.pause();
       }
-      
+
       if (audioRef.current && audioRef.current.paused) {
         audioRef.current.currentTime = 0;
         audioRef.current.volume = 1.0;
@@ -918,8 +925,8 @@ export default function App() {
     if (e.pointerType !== 'mouse') return; // ignore touch/stylus — no glitch on mobile
     const el = e.currentTarget;
     const rect = el.getBoundingClientRect();
-    const rx = -(((e.clientY - rect.top)  / rect.height) - 0.5) * 24; // ±12°
-    const ry =  (((e.clientX - rect.left) / rect.width)  - 0.5) * 24; // ±12°
+    const rx = -(((e.clientY - rect.top) / rect.height) - 0.5) * 24; // ±12°
+    const ry = (((e.clientX - rect.left) / rect.width) - 0.5) * 24; // ±12°
     el.style.setProperty('--tilt-x', `${rx}deg`);
     el.style.setProperty('--tilt-y', `${ry}deg`);
   };
@@ -959,17 +966,17 @@ export default function App() {
     // non-linear interpolation path which looks janky).
     // Variety via scale: each shot feels slightly closer/farther.
     const shots = isMobile ? [
-      { x:  70, y:  40, scale: 1.55 },
-      { x: -65, y:  48, scale: 1.50 },
-      { x:  55, y: -56, scale: 1.60 },
+      { x: 70, y: 40, scale: 1.55 },
+      { x: -65, y: 48, scale: 1.50 },
+      { x: 55, y: -56, scale: 1.60 },
       { x: -60, y: -62, scale: 1.52 },
-      { x:   0, y: -10, scale: 1.45 },
+      { x: 0, y: -10, scale: 1.45 },
     ] : [
-      { x:  240, y:  70, scale: 1.22 },
-      { x: -220, y:  90, scale: 1.17 },
-      { x:  200, y: -110, scale: 1.26 },
+      { x: 240, y: 70, scale: 1.22 },
+      { x: -220, y: 90, scale: 1.17 },
+      { x: 200, y: -110, scale: 1.26 },
       { x: -210, y: -130, scale: 1.19 },
-      { x:    0, y:  -20, scale: 1.13 },
+      { x: 0, y: -20, scale: 1.13 },
     ];
 
     const s = shots[focusIndex] || { x: 0, y: 0, scale: 1.15 };
@@ -988,7 +995,7 @@ export default function App() {
   return (
     <div className="app-container">
       {/* Parallax outer: TRANSFORM only (GPU layer, no filter = no repaint) */}
-      <div 
+      <div
         ref={parallaxBgRef}
         className="parallax-bg"
       >
@@ -1003,7 +1010,7 @@ export default function App() {
       {/* Audio Element */}
       <audio
         ref={introAudioRef}
-        src={`${import.meta.env.BASE_URL}music/intro.MP3`}
+        src={`${import.meta.env.BASE_URL}music/`}
         preload="auto"
         loop
       />
@@ -1074,8 +1081,8 @@ export default function App() {
 
             {/* H: Postal stamp badge replaced with square animated GIF/Webp */}
             <div title="04 Juni" className="polaroid-stamp">
-              <img 
-                src={`${import.meta.env.BASE_URL}Untitled design (3).gif`} 
+              <img
+                src={`${import.meta.env.BASE_URL}Untitled design (3).gif`}
                 alt="Stamp GIF"
               />
             </div>
@@ -1162,11 +1169,11 @@ export default function App() {
                 if (introAudioRef.current) {
                   fadeAudio(introAudioRef.current, 0, 1300);
                 }
-                
+
                 if (audioRef.current) {
                   audioRef.current.volume = 0;
                   audioRef.current.currentTime = 0; // Sync to beginning
-                  audioRef.current.play().catch(() => {});
+                  audioRef.current.play().catch(() => { });
                   fadeAudio(audioRef.current, 1.0, 1300);
                 }
 
