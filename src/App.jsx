@@ -1165,11 +1165,14 @@ export default function App() {
                 }
 
                 // Delay the start of the main song to create a cinematic gap
+                if (audioRef.current) {
+                  audioRef.current.volume = 0;
+                  audioRef.current.currentTime = 0;
+                  audioRef.current.play().catch(() => { });
+                }
+
                 setTimeout(() => {
                   if (audioRef.current) {
-                    audioRef.current.volume = 0;
-                    audioRef.current.currentTime = 0;
-                    audioRef.current.play().catch(() => { });
                     fadeAudio(audioRef.current, 1.0, 1500); // fade in over 1.5s
                   }
                 }, 800);
