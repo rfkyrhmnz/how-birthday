@@ -1235,7 +1235,7 @@ export default function App() {
         {page === 1 && (
           <>
             {/* Side Clouds Overlay */}
-            <div className={`side-clouds ${currentLyricIndex === lyricsData.length - 1 ? 'hidden' : ''}`}>
+            <div className="side-clouds">
               <img src={`${import.meta.env.BASE_URL}images/Untitled design (91).png`} className="cloud-corner tl-cloud" alt="cloud" />
               <img src={`${import.meta.env.BASE_URL}images/Untitled design (91).png`} className="cloud-corner tr-cloud" alt="cloud" />
               <img src={`${import.meta.env.BASE_URL}images/Untitled design (91).png`} className="cloud-corner bl-cloud" alt="cloud" />

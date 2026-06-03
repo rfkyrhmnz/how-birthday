@@ -1227,7 +1227,7 @@
 .tr-cloud {
   top: -5%;
   right: -5%;
-  transform: scaleX(-1);
+  --mirror: -1;
   animation-delay: -2s;
 }
 
@@ -1240,7 +1240,7 @@
 .br-cloud {
   bottom: -5%;
   right: -5%;
-  transform: scaleX(-1);
+  --mirror: -1;
   animation-delay: -1s;
 }
 
