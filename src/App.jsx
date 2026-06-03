@@ -667,9 +667,14 @@ const fadeAudio = (audioElement, targetVolume, durationMs) => {
   const startTime = performance.now();
 
   const animate = (currentTime) => {
-    const elapsed = currentTime - startTime;
+    // Prevent negative elapsed time if rAF timestamp is slightly behind performance.now()
+    const elapsed = Math.max(0, currentTime - startTime);
     const progress = Math.min(elapsed / durationMs, 1);
-    audioElement.volume = startVolume + (targetVolume - startVolume) * progress;
+    const newVolume = startVolume + (targetVolume - startVolume) * progress;
+    
+    // Safety clamp to strictly guarantee volume stays within [0, 1] range
+    audioElement.volume = Math.max(0, Math.min(1, newVolume));
+    
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else if (targetVolume === 0) {
