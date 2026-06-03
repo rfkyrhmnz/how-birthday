@@ -1365,12 +1365,7 @@ export default function App() {
                 />
               </div>
 
-              {lightboxSrc && (
-                <div className="lightbox" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }}>
-                  <img src={lightboxSrc} alt="Enlarged" onClick={(e) => e.stopPropagation()} />
-                  <button className="lightbox-close" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }} aria-label="Close">×</button>
-                </div>
-              )}
+
 
               {/* Button to go to the final page */}
               <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", marginBottom: "20px", minHeight: "50px", position: "relative", zIndex: 20 }}>
@@ -1460,6 +1455,7 @@ export default function App() {
                 className="closing-gif"
                 src={`${import.meta.env.BASE_URL}images/Untitled design.webp`}
                 alt="gif"
+                onClick={() => setLightboxSrc(`${import.meta.env.BASE_URL}images/Untitled design.webp`)}
                 style={{
                   width: "180px",
                   marginTop: "20px",
@@ -1468,6 +1464,7 @@ export default function App() {
                   marginRight: "auto",
                   mixBlendMode: "multiply",   /* white areas → transparent */
                   background: "transparent",
+                  cursor: "pointer"
                 }}
                 onError={(e) => {
                   console.error("GIF failed to load", e);
@@ -1540,6 +1537,14 @@ export default function App() {
       {envelopeOpen && (
         <div className="envelope-overlay" aria-hidden="true">
           <span className="envelope-icon">✉️</span>
+        </div>
+      )}
+
+      {/* Global Lightbox Overlay */}
+      {lightboxSrc && (
+        <div className="lightbox" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }}>
+          <img src={lightboxSrc} alt="Enlarged" onClick={(e) => e.stopPropagation()} />
+          <button className="lightbox-close" onClick={() => { setLightboxSrc(null); setLightboxIndex(null); }} aria-label="Close">×</button>
         </div>
       )}
     </div>
