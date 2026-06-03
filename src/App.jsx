@@ -796,19 +796,29 @@ export default function App() {
   }, []);
 
 
+  const playIntroAudio = () => {
+    if (introAudioRef.current && introAudioRef.current.paused) {
+      introAudioRef.current.volume = 0;
+      introAudioRef.current.currentTime = 0;
+      introAudioRef.current.play().then(() => {
+        fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
+        setAudioBlocked(false);
+      }).catch(e => {
+        console.error("Intro auto-play failed:", e);
+        setAudioBlocked(true);
+      });
+    }
+  };
+
+  const handleEnterPage0 = () => {
+    playIntroAudio();
+    setPage(0);
+  };
+
   // Handle audio crossfades
   useEffect(() => {
     if (page === 0) {
-      if (introAudioRef.current) {
-        introAudioRef.current.volume = 0;
-        introAudioRef.current.currentTime = 0;
-        introAudioRef.current.play().then(() => {
-          fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
-        }).catch(e => {
-          console.error("Intro auto-play failed:", e);
-          setAudioBlocked(true);
-        });
-      }
+      playIntroAudio(); // Fallback for hot reloads
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
@@ -816,7 +826,6 @@ export default function App() {
       setCurrentTime(0);
       setMaxTime(0);
       setLyricsFinished(false);
-      setAudioBlocked(false);
     } else if (page === 1) {
       if (introAudioRef.current && !introAudioRef.current.paused && introAudioRef.current.volume > 0) {
         // Fallback if they jump directly to page 1 somehow
@@ -1013,13 +1022,13 @@ export default function App() {
       <div className="content-scaler">
         {page === -1 && (
           <RunnerGame
-            onComplete={() => setPage(0)}
+            onComplete={handleEnterPage0}
             onSurrender={() => setPage(-2)}
           />
         )}
 
         {page === -2 && (
-          <QuestionPage onCorrect={() => setPage(0)} />
+          <QuestionPage onCorrect={handleEnterPage0} />
         )}
 
         {page === 0 && (
