@@ -1074,7 +1074,7 @@ export default function App() {
             <div className="scrapbook-tape-br"></div>
 
             {/* H: Postal stamp badge replaced with square animated GIF/Webp */}
-            <div title="04 Juni" className="polaroid-stamp">
+            <div title="04 Juni" className="polaroid-stamp" style={{ cursor: "pointer" }} onClick={() => setLightboxSrc(`${import.meta.env.BASE_URL}Untitled design (3).gif`)}>
               <img
                 src={`${import.meta.env.BASE_URL}Untitled design (3).gif`}
                 alt="Stamp GIF"
