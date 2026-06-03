@@ -862,7 +862,7 @@ export default function App() {
         introAudioRef.current.volume = 0;
         try { introAudioRef.current.currentTime = 0; } catch(e) {}
         introAudioRef.current.play().catch(() => {});
-        fadeAudio(introAudioRef.current, 0.04, 4000); // 4s fade in to 4% volume (almost silent)
+        fadeAudio(introAudioRef.current, 0.12, 4000); // 4s fade in to 12% volume
       }
       if (audioRef.current) {
         audioRef.current.volume = 0;
