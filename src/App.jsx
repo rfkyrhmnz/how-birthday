@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import "./App.css";
 
 function primaryButtonStyle(disabled = false) {
@@ -862,7 +862,7 @@ export default function App() {
         introAudioRef.current.volume = 0;
         try { introAudioRef.current.currentTime = 0; } catch(e) {}
         introAudioRef.current.play().catch(() => {});
-        fadeAudio(introAudioRef.current, 0.20, 4000); // 4s fade in to 20% volume
+        fadeAudio(introAudioRef.current, 0.12, 4000); // 4s fade in to 12% volume
       }
       if (audioRef.current) {
         audioRef.current.volume = 0;
