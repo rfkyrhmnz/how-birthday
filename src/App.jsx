@@ -1159,17 +1159,20 @@ export default function App() {
             <button
               className="open-btn-glow"
               onClick={() => {
-                // Crossfade: Fade out Intro, Fade in Main
+                // Fade out Intro over 1.5s
                 if (introAudioRef.current) {
-                  fadeAudio(introAudioRef.current, 0, 1300);
+                  fadeAudio(introAudioRef.current, 0, 1500);
                 }
 
-                if (audioRef.current) {
-                  audioRef.current.volume = 0;
-                  audioRef.current.currentTime = 0; // Sync to beginning
-                  audioRef.current.play().catch(() => { });
-                  fadeAudio(audioRef.current, 1.0, 1300);
-                }
+                // Delay the start of the main song to create a cinematic gap
+                setTimeout(() => {
+                  if (audioRef.current) {
+                    audioRef.current.volume = 0;
+                    audioRef.current.currentTime = 0;
+                    audioRef.current.play().catch(() => { });
+                    fadeAudio(audioRef.current, 1.0, 1500); // fade in over 1.5s
+                  }
+                }, 800);
 
                 setEnvelopeOpen(true);
                 setTimeout(() => {
@@ -1178,8 +1181,7 @@ export default function App() {
                   setCurrentTime(0);
                   setMaxTime(0);
                   setLyricsFinished(false);
-                  // audioRef already crossfaded and playing!
-                }, 1300);
+                }, 2500);
               }}
               style={{
                 padding: "13px 40px",
