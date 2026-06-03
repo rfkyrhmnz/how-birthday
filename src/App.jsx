@@ -687,6 +687,26 @@ export default function App() {
   const audioRef = useRef(null);
   const introAudioRef = useRef(null);
   const parallaxBgRef = useRef(null);
+  const hasUnlockedAudio = useRef(false);
+
+  // Globally unlock audio elements on first interaction to prevent autoplay blocking from async setTimeouts
+  const handleGlobalInteraction = () => {
+    if (!hasUnlockedAudio.current) {
+      if (introAudioRef.current) {
+        introAudioRef.current.play().then(() => {
+          introAudioRef.current.pause();
+          introAudioRef.current.currentTime = 0;
+        }).catch(() => {});
+      }
+      if (audioRef.current) {
+        audioRef.current.play().then(() => {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }).catch(() => {});
+      }
+      hasUnlockedAudio.current = true;
+    }
+  };
 
   // Precise, fluid parallax based on mouse / device orientation
   useEffect(() => {
@@ -796,29 +816,20 @@ export default function App() {
   }, []);
 
 
-  const playIntroAudio = () => {
-    if (introAudioRef.current && introAudioRef.current.paused) {
-      introAudioRef.current.volume = 0;
-      introAudioRef.current.currentTime = 0;
-      introAudioRef.current.play().then(() => {
-        fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
-        setAudioBlocked(false);
-      }).catch(e => {
-        console.error("Intro auto-play failed:", e);
-        setAudioBlocked(true);
-      });
-    }
-  };
-
-  const handleEnterPage0 = () => {
-    playIntroAudio();
-    setPage(0);
-  };
-
   // Handle audio crossfades
   useEffect(() => {
     if (page === 0) {
-      playIntroAudio(); // Fallback for hot reloads
+      if (introAudioRef.current) {
+        introAudioRef.current.volume = 0;
+        introAudioRef.current.currentTime = 0;
+        introAudioRef.current.play().then(() => {
+          fadeAudio(introAudioRef.current, 1.0, 2000); // 2s fade in
+          setAudioBlocked(false);
+        }).catch(e => {
+          console.error("Intro auto-play failed:", e);
+          setAudioBlocked(true);
+        });
+      }
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
@@ -962,7 +973,11 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
+    <div 
+      className="app-container"
+      onClick={handleGlobalInteraction}
+      onTouchStart={handleGlobalInteraction}
+    >
       {/* Parallax outer: TRANSFORM only (GPU layer, no filter = no repaint) */}
       <div 
         ref={parallaxBgRef}
@@ -1022,13 +1037,13 @@ export default function App() {
       <div className="content-scaler">
         {page === -1 && (
           <RunnerGame
-            onComplete={handleEnterPage0}
+            onComplete={() => setPage(0)}
             onSurrender={() => setPage(-2)}
           />
         )}
 
         {page === -2 && (
-          <QuestionPage onCorrect={handleEnterPage0} />
+          <QuestionPage onCorrect={() => setPage(0)} />
         )}
 
         {page === 0 && (
