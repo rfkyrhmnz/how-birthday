@@ -6,9 +6,10 @@
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/🌸_Live_Demo-Visit_Website-CFA7B3?style=for-the-badge&labelColor=fdf4f6)](https://rfkyrhmnz.github.io/how-birthday/)
+[![Live Demo](https://img.shields.io/badge/🌸_Live_Demo-Visit_Website-CFA7B3?style=for-the-badge&labelColor=fdf4f6)](https://rfkyrhmnz.github.io/cindys-birthday/)
 [![Made with Love](https://img.shields.io/badge/Made_with-💖_Love-e8b4c0?style=for-the-badge)](https://github.com/rfkyrhmnz)
-[![React](https://img.shields.io/badge/React-Vite-61DAFB?style=for-the-badge&logo=react&logoColor=white&labelColor=20232a)](https://vitejs.dev/)
+[![Version](https://img.shields.io/badge/Version-1.0.0-CFA7B3?style=for-the-badge&labelColor=fdf4f6)](https://github.com/rfkyrhmnz/cindys-birthday)
+[![React](https://img.shields.io/badge/React_19-Vite_8-61DAFB?style=for-the-badge&logo=react&logoColor=white&labelColor=20232a)](https://vitejs.dev/)
 
 <br/>
 
@@ -90,7 +91,7 @@ featuring a fully interactive experience with music, animations, polaroid photos
 
 | | Tech | What it does |
 |:--:|:--|:--|
-| ⚛️ | React + Vite | Frontend framework & build tool |
+| ⚛️ | React 19 + Vite 8 | Frontend framework & build tool |
 | 🎨 | Vanilla CSS | All animations, layout, transitions |
 | 🎵 | Web Audio API | Chiptune BGM & SFX — zero audio libraries |
 | 📱 | dvh / safe-area-inset | iOS fullscreen & notch support |
@@ -117,7 +118,7 @@ featuring a fully interactive experience with music, animations, polaroid photos
 ## 📁 &nbsp; Project Structure
 
 ```
-how-birthday/
+cindys-birthday/
 ├── public/
 │   ├── images/          # Photos, animated WebP, newspaper bg
 │   └── music/           # Background track
@@ -134,8 +135,8 @@ how-birthday/
 ## 🚀 &nbsp; Run Locally
 
 ```bash
-git clone https://github.com/rfkyrhmnz/how-birthday.git
-cd how-birthday
+git clone https://github.com/rfkyrhmnz/cindys-birthday.git
+cd cindys-birthday
 npm install
 npm run dev
 ```
