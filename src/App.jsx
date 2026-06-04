@@ -1447,17 +1447,17 @@ export default function App() {
                   textAlign: "justify",
                 }}
               >
-                <p style={{ textAlign: "center", margin: "0 0 18px 0" }}>
+                <p style={{ textAlign: "center", margin: "0 0 18px 0", fontSize: "1.1em", fontWeight: 600, color: "#b38c97" }}>
                   Selamat ulang tahun, Cindy! 🎉
                 </p>
-                <p style={{ margin: "0 0 18px 0" }}>
-                  Semoga di umur yang baru ini kamu sehat selalu, makin bahagia, dan terus dikelilingi hal-hal baik setiap harinya.
+                <p style={{ textAlign: "center", margin: "0 0 16px 0" }}>
+                  Sehat selalu ya. Semoga segala urusan kamu, terutama tugas dan perkuliahan di Solo, selalu dimudahkan dan dilancarkan.
                 </p>
-                <p style={{ margin: "0 0 18px 0" }}>
-                  Semangat terus ya buat kuliahnya di Solo! Semoga semua urusan kampus dan tugas-tugasnya dilancarkan, nggak bikin terlalu stres, dan berjalan mulus. Kalau lagi capek, jangan lupa buat istirahat sejenak.
+                <p style={{ textAlign: "center", margin: "0 0 18px 0" }}>
+                  Semangat terus buat ke depannya. Jangan lupa istirahat kalau lagi capek.
                 </p>
-                <p style={{ textAlign: "center", margin: 0 }}>
-                  Kamu pasti bisa ngelewatin semuanya. You're doing great!
+                <p style={{ textAlign: "center", margin: 0, fontWeight: 500, fontStyle: "italic" }}>
+                  Enjoy your special day! ✨
                 </p>
               </div>
 
